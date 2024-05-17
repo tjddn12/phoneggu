@@ -4,26 +4,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class MainController {
 
-        @GetMapping("/api1")
-        public ResponseEntity api1(){
-            return  new ResponseEntity("api 입니다", HttpStatus.OK);
 
-        }
-        @GetMapping("/api2")
-        public ResponseEntity api2(){
-            return  new ResponseEntity("ap2 입니다", HttpStatus.OK);
+    @GetMapping("/member/login")
+    public String login(){
 
-        }
-        @GetMapping("/user")
-        public ResponseEntity user(@AuthenticationPrincipal UserDetails userDetails){
-            return new ResponseEntity(userDetails.getUsername(),HttpStatus.OK);
-        }
+        return "로그인 성공";
+
+    }
+
+
+
+
 
 
 }
