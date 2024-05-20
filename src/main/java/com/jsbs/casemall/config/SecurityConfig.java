@@ -16,7 +16,7 @@ public class SecurityConfig {
 
     // 인증 인가 부여
     @Bean
-    public SecurityFilterChain basicSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain config(HttpSecurity http) throws Exception {
 
         http
             .csrf(AbstractHttpConfigurer::disable)
@@ -33,7 +33,8 @@ public class SecurityConfig {
                 })
                 .formLogin(login->login
                         .usernameParameter("userId")
-                        .loginPage("/member/login")
+                        .passwordParameter("userPw")
+                        .loginPage("/login")
                         .defaultSuccessUrl("/"))
                 ;
 
