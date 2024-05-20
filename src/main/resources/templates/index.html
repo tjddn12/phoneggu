@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <h1>메인</h1>
+<th:block>
+    <h2 th:text="${name}">.</h2>
+</th:block>
+<a href="/admin">관리자</a>
+<a href="/member">일반유저</a>
+<a href="/shop">일반유저</a>
+<!--<a href="/member">익명유저</a>-->
 </body>
 </html>
