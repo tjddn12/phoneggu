@@ -20,9 +20,8 @@ public class Order {
     private Long id;
 
 
-    // 주문아이템으로 빠지는데 여기 있어야하나?
-    @Column(name = "pr_id") // 참조할거임
-    private String prId; // 상품 아이디 = 상품이름
+    @Column(name = "pr_id")
+    private String prId; // 주문한 상품 아이디
 
 
     @Column(name = "pr_count")
@@ -30,11 +29,11 @@ public class Order {
 
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private Member member; // 주문한 고객 아이디
+    @JoinColumn(name = "user_id")
+    private Users users; // 주문한 고객 아이디
 
 
-    // 바로 주문시
+
     @Column(name = "pr_price")
     private int prPrice; // 상품의 가격
 
@@ -48,9 +47,9 @@ public class Order {
 
 
 
-
-    @OneToMany(mappedBy = "order" , cascade=CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<OrderDetail> itemList = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "order" , cascade=CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    private List<OrderDetail> itemList = new ArrayList<>();
 
 
 
