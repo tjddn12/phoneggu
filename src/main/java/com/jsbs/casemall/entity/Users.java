@@ -1,10 +1,8 @@
 package com.jsbs.casemall.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.jsbs.casemall.constant.Role;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,7 +21,7 @@ public class Users {
     private String name; // 이름
 
     @Column(name = "user_pw", nullable = false)
-    private String user_pw; // 비밀번호
+    private String userPw; // 비밀번호
 
     @Column(name = "email", nullable = false)
     private String email; // 이메일
@@ -42,4 +40,10 @@ public class Users {
 
     @Column(name = "detailAddr", nullable = false)
     private String detailAddr; // 우편 주소
+
+//    권한추가
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class MemberController {
+public class UserController {
     // 회원가입 페이지 출력 요청
     @GetMapping("/member/save")
     public String saveForm() {
@@ -20,5 +20,11 @@ public class MemberController {
         System.out.println("MemberController.save");
         System.out.println("user_id = " + user_id);
         return "member";
+    }
+
+    // 로그인 페이지
+    @GetMapping("/login")
+    public String login(){
+        return  ""; // 로그인 페이지
     }
 }
