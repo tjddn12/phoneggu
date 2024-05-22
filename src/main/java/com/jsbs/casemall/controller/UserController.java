@@ -1,30 +1,37 @@
 package com.jsbs.casemall.controller;
 
 
+import com.jsbs.casemall.dto.UserDTO;
+import com.jsbs.casemall.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
+
+    private final UserService userService;
     // 회원가입 페이지 출력 요청
-    @GetMapping("/member/save")
+    @GetMapping("/save")
     public String saveForm() {
 
         return "save";
     }
 
-    @PostMapping("/member/save")
-    public String save(@RequestParam("user_id") String user_id){
+    @PostMapping("/save")
+    public String save(@ModelAttribute UserDTO userDTO){
         System.out.println("MemberController.save");
-        System.out.println("user_id = " + user_id);
+        System.out.println("memberDTO" + userDTO);
+        userService.JoinUser(userDTO);
         return "member";
     }
 
     // 로그인 페이지
     @GetMapping("/login")
     public String login(){
-        return  ""; // 로그인 페이지
+        return  "login"; // 로그인 페이지
     }
 }
