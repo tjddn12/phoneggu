@@ -10,13 +10,13 @@ import org.modelmapper.ModelMapper;
 public class ProductImgDto {
     private Long prImgNo;
 
-    private String imgName;
+    private String prImgName;
 
-    private String oriImgName;
+    private String prImgOrginName;
 
     private String imgUrl;
 
-    private String repImgYn;
+    private String prMainImg;
     private static ModelMapper modelMapper = new ModelMapper();
 
     public static ProductImgDto of(ProductImg prImg){

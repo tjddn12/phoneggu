@@ -3,6 +3,9 @@ package com.jsbs.casemall.controller;
 import com.jsbs.casemall.dto.ProductFormDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+
+
 
 @Controller
 public class ProductController {
