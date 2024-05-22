@@ -3,9 +3,11 @@ package com.jsbs.casemall.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "order_detail")
 public class OrderDetail {
     // 주문상세
@@ -36,10 +38,7 @@ public class OrderDetail {
     private int count; //주문수량
 
 
-//    public static  OrderItem createOrderItem(Product product , int count){
-//
-//        return  orderItem;
-//    }
+
 
     public int getTotalPrice() {
         return orderPrice * count;
