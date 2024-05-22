@@ -19,10 +19,11 @@ public class UserService implements UserDetailsService {
 
 
     public void test(){
-        int s = 10;
+        int s = 10; 
+        boolean t = true;
 
 
-        String ss;
+        String ss = "테슽";
     }
 
     private final PasswordEncoder passwordEncoder; // 저장할떄 passwordEncoder.encode(넘어온비밀번호)
