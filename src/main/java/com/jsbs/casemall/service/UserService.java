@@ -17,6 +17,11 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+
+    public void test(){
+        int s = 10;
+    }
+
     private final PasswordEncoder passwordEncoder; // 저장할떄 passwordEncoder.encode(넘어온비밀번호)
 
     @Override
