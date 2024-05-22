@@ -26,7 +26,7 @@ public class UserController {
         System.out.println("MemberController.save");
         System.out.println("memberDTO" + userDTO);
         userService.JoinUser(userDTO);
-        return "member";
+        return "redirect:/";
     }
 
     // 로그인 페이지

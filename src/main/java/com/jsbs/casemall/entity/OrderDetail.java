@@ -18,9 +18,9 @@ public class OrderDetail {
     private Long id; // 고유 번호
 
     // 상품 고유 번호 가져오기
-    @ManyToOne(fetch=FetchType.LAZY) //지연로딩
-    @JoinColumn(name="pr_no")
-    private Product product; // 제품 아이디 조인
+//    @ManyToOne(fetch=FetchType.LAZY) //지연로딩
+//    @JoinColumn(name="pr_no")
+//    private Product product; // 제품 아이디 조인
 
 
     @ManyToOne(fetch=FetchType.LAZY)
@@ -39,16 +39,16 @@ public class OrderDetail {
 
 
     // 주문상세 객체 만들고 객체를 리턴
-    public static OrderDetail createOrderDetails(Product product,int count ){
-
-        OrderDetail orders = new OrderDetail();
-        orders.setProduct(product);
-        orders.setCount(count);
-        orders.setOrderPrice(product.getPrice());
-        product.removeStock(count);
-
-        return  orders;
-    }
+//    public static OrderDetail createOrderDetails(Product product,int count ){
+//
+//        OrderDetail orders = new OrderDetail();
+//        orders.setProduct(product);
+//        orders.setCount(count);
+//        orders.setOrderPrice(product.getPrice());
+//        product.removeStock(count);
+//
+//        return  orders;
+//    }
 
 
 
