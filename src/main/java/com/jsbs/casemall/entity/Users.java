@@ -31,7 +31,7 @@ public class Users {
     private String email; // 이메일
 
     @Column(name = "phone", nullable = false)
-    private int phone; // 전화번호
+    private String phone; // 전화번호
 
     @Column(name = "p_code", nullable = false)
     private String pCode; // 우편 주소
