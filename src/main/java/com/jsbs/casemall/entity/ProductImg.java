@@ -28,7 +28,7 @@ public class ProductImg extends BaseEntity {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="pr_no")
-    private Product product;
+    private Item item;
 
     public ProductImg(String prImgOriginName, String prImgName, String imgUrl) {
         this.prImgOriginName = prImgOriginName;

@@ -1,7 +1,7 @@
 package com.jsbs.casemall.entity;
 
 import com.jsbs.casemall.constant.ProductSell;
-import com.jsbs.casemall.dto.ProductFormDto;
+import com.jsbs.casemall.dto.ItemFormDto;
 import com.jsbs.casemall.exception.OutOfStockException;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,8 +12,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name = "product")
-public class Product extends BaseEntity{
+@Table(name = "item")
+public class Item extends BaseEntity{
 
     @Id
     @Column(name = "pr_no")
@@ -41,12 +41,12 @@ public class Product extends BaseEntity{
     @Column(name = "pr_sell")
     private ProductSell prSell; //상품 판매 상태
 
-    public void updateProduct(ProductFormDto productFormDto) {
-        this.prName = productFormDto.getPrName();
-        this.prPrice = productFormDto.getPrPrice();
-        this.prStock = productFormDto.getPrStock();
-        this.prDetail = productFormDto.getPrDetail();
-        this.prSell = productFormDto.getPrSell();
+    public void updateProduct(ItemFormDto itemFormDto) {
+        this.prName = itemFormDto.getPrName();
+        this.prPrice = itemFormDto.getPrPrice();
+        this.prStock = itemFormDto.getPrStock();
+        this.prDetail = itemFormDto.getPrDetail();
+        this.prSell = itemFormDto.getPrSell();
     }
 
     public void removeStock(int prStock){

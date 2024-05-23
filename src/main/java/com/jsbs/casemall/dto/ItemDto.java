@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ProductDto {
+public class ItemDto {
     private Long prNo;
     private int categoriesNo;
     private String prName;

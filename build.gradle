@@ -39,6 +39,16 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.3.8'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
+	// 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-auditing'
+	//Querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+	//spring-boot-starter-data-auditing 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-auditing'
 }
 
 tasks.named('bootBuildImage') {
@@ -48,3 +58,4 @@ tasks.named('bootBuildImage') {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
