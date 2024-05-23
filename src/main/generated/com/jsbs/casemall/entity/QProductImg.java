@@ -31,8 +31,6 @@ public class QProductImg extends EntityPathBase<ProductImg> {
 
     public final StringPath imgUrl = createString("imgUrl");
 
-    public final QItem item;
-
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
 
@@ -41,6 +39,8 @@ public class QProductImg extends EntityPathBase<ProductImg> {
     public final StringPath prImgOriginName = createString("prImgOriginName");
 
     public final StringPath prMainImg = createString("prMainImg");
+
+    public final QProduct product;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
@@ -66,7 +66,7 @@ public class QProductImg extends EntityPathBase<ProductImg> {
 
     public QProductImg(Class<? extends ProductImg> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.item = inits.isInitialized("item") ? new QItem(forProperty("item")) : null;
+        this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
     }
 
 }

@@ -21,14 +21,14 @@ public class UserController {
     @GetMapping("/save")
     public String saveForm() {
 
-        return "member/save";
+        return "user/save";
     }
 
     @PostMapping("/save")
     public String memberForm(@Valid  @ModelAttribute UserDTO userDTO,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "member/save";
+            return "user/save";
         }
         System.out.println("userDTO" + userDTO);
         userService.JoinUser(userDTO);
@@ -38,7 +38,7 @@ public class UserController {
     // 로그인 페이지
     @GetMapping("/login")
     public String login(){
-        return  "member/memberLoginForm"; // 로그인 페이지
+        return  "user/userLoginForm"; // 로그인 페이지
     }
 
 
