@@ -18,6 +18,8 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+
+
     private final PasswordEncoder passwordEncoder; // 저장할떄 passwordEncoder.encode(넘어온비밀번호)
 
     @Override
