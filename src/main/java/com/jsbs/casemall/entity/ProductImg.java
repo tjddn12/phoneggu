@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "product_img")
-public class ProductImg extends BaseEntity{
+public class ProductImg  {
 
     @Id
     @Column(name = "pr_img_no")
@@ -19,7 +19,7 @@ public class ProductImg extends BaseEntity{
     private String prImgName; //이미지 이름
 
     @Column(name = "pr_img_orgin_name")
-    private String prImgOrginName; //원본 이미지 이름
+    private String prImgOriginName; //원본 이미지 이름
 
     private String imgUrl; //이미지 주소
 
@@ -31,7 +31,7 @@ public class ProductImg extends BaseEntity{
     private Product product;
 
     public ProductImg(String prImgOrginName, String prImgName, String imgUrl) {
-        this.prImgOrginName = prImgOrginName;
+        this.prImgOriginName = prImgOrginName;
         this.prImgName = prImgName;
         this.imgUrl = imgUrl;
     }

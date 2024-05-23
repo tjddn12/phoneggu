@@ -12,7 +12,7 @@ public class ProductImgDto {
 
     private String prImgName;
 
-    private String prImgOrginName;
+    private String prImgOriginName;
 
     private String imgUrl;
 
