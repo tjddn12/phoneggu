@@ -2,8 +2,11 @@ package com.jsbs.casemall.dto;
 
 import com.jsbs.casemall.constant.ProductSell;
 import com.jsbs.casemall.entity.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
