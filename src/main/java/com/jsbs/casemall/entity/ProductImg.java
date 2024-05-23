@@ -8,12 +8,12 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "product_img")
-public class ProductImg  {
+public class ProductImg extends BaseEntity {
 
     @Id
     @Column(name = "pr_img_no")
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long prImgNo; //상품 이미지 번호
+    private Long id; //상품 이미지 번호
 
     @Column(name = "pr_img_name")
     private String prImgName; //이미지 이름
@@ -30,8 +30,8 @@ public class ProductImg  {
     @JoinColumn(name="pr_no")
     private Product product;
 
-    public ProductImg(String prImgOrginName, String prImgName, String imgUrl) {
-        this.prImgOriginName = prImgOrginName;
+    public ProductImg(String prImgOriginName, String prImgName, String imgUrl) {
+        this.prImgOriginName = prImgOriginName;
         this.prImgName = prImgName;
         this.imgUrl = imgUrl;
     }

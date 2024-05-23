@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 @Getter
 @Setter
 public class ProductImgDto {
-    private Long prImgNo;
+    private Long id;
 
     private String prImgName;
 

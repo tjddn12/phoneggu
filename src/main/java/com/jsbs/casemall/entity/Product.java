@@ -1,24 +1,24 @@
 package com.jsbs.casemall.entity;
 
 import com.jsbs.casemall.constant.ProductSell;
+import com.jsbs.casemall.dto.ProductFormDto;
+import com.jsbs.casemall.exception.OutOfStockException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product extends BaseEntity{
 
     @Id
     @Column(name = "pr_no")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long prNo; //상품 번호
+    private Long id; //상품 번호
 
     @Column(name = "categories_no")
     private int categoriesNo; //카테고리 번호
@@ -39,12 +39,27 @@ public class Product {
     private double discount; //할인율
 
     @Column(name = "pr_sell")
-    private ProductSell productsSell; //상품 판매 상태
+    private ProductSell prSell; //상품 판매 상태
 
-    @Column(name = "pr_regDate")
-    private LocalDateTime prRegDate; //상품 등록 시간
+    public void updateProduct(ProductFormDto productFormDto) {
+        this.prName = productFormDto.getPrName();
+        this.prPrice = productFormDto.getPrPrice();
+        this.prStock = productFormDto.getPrStock();
+        this.prDetail = productFormDto.getPrDetail();
+        this.prSell = productFormDto.getPrSell();
+    }
 
-    @Column(name = "pr_update")
-    private LocalDateTime prUpdate; //상품 수정 시간
-
+    public void removeStock(int prStock){
+        int restStock = this.prStock - prStock;
+        if(restStock < 0){
+            throw new OutOfStockException("상품의 재고가 부족합니다. " +
+                    "(현재 재고 수량 : "+ this.prStock + ")" );
+        }
+        this.prStock = restStock;
+    }
+    //재고가 0보다 적으면 예외 발생
+    // 재고 - 주문수량 = 재고
+    public void addStock(int prStock){
+        this.prStock += prStock;
+    }
 }
