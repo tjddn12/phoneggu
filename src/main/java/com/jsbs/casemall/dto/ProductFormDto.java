@@ -1,7 +1,7 @@
 package com.jsbs.casemall.dto;
 
 import com.jsbs.casemall.constant.ProductSell;
-import com.jsbs.casemall.entity.Item;
+import com.jsbs.casemall.entity.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,33 +13,33 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ItemFormDto {
+public class ProductFormDto {
     private Long id;
 
     @NotBlank(message = "상품명은 필수 입력 값입니다.")
-    private String itemNm;
+    private String prName;
 
     @NotNull(message = "가격은 필수 입력 값입니다.")
-    private Integer price;
+    private Integer prPrice;
 
     @NotBlank(message = "상품 설명는 필수 입력 값입니다.")
-    private String itemDetail;
+    private String prDetail;
 
     @NotNull(message = "재고는 필수 입력 값입니다.")
-    private Integer stockNumber;
+    private Integer prStock;
 
     private ProductSell prSell;
-    private List<ItemImgDto> prImgDtoList = new ArrayList<>();
+    private List<ProductImgDto> prImgDtoList = new ArrayList<>();
     private List<Long> prImgIds = new ArrayList<>();
 
     private static ModelMapper modelMapper = new ModelMapper();
-    public Item createItem(){
-        return modelMapper.map(this, Item.class);
+    public Product createProduct(){
+        return modelMapper.map(this, Product.class);
     }
     //ItemFormDto => Item
 
-    public static ItemFormDto of(Item item_obj){
-        return modelMapper.map(item_obj, ItemFormDto.class);
+    public static ProductFormDto of(Product product_obj){
+        return modelMapper.map(product_obj, ProductFormDto.class);
     }
     // Item =>ItemFormDto
 }

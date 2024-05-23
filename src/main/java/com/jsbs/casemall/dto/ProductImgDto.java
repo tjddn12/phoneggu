@@ -7,7 +7,7 @@ import org.modelmapper.ModelMapper;
 
 @Getter
 @Setter
-public class ItemImgDto {
+public class ProductImgDto {
     private Long id;
 
     private String prImgName;
@@ -19,7 +19,7 @@ public class ItemImgDto {
     private String prMainImg;
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static ItemImgDto of(ProductImg prImg){
-        return modelMapper.map(prImg, ItemImgDto.class);
+    public static ProductImgDto of(ProductImg prImg){
+        return modelMapper.map(prImg, ProductImgDto.class);
     }
 }

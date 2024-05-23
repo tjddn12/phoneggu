@@ -2,7 +2,7 @@ package com.jsbs.casemall.entity;
 
 
 import com.jsbs.casemall.constant.Role;
-import com.jsbs.casemall.dto.UserDTO;
+import com.jsbs.casemall.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,7 +50,7 @@ public class Users {
     private Role role;
 
 
-    public static Users createMember(UserDTO userDto,
+    public static Users createMember(UserDto userDto,
                                      PasswordEncoder passwordEncoder){
         Users users = new Users();
         users.setUserId(userDto.getUserId());

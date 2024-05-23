@@ -13,22 +13,22 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                    <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                        <a class="nav-link" href="/admin/item/new">상품등록</a>
+                    <li class="nav-product" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a class="nav-link" href="/admin/product/new">상품등록</a>
                     </li>
-                    <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                        <a class="nav-link" href="/admin/item/management">상품관리</a>
+                    <li class="nav-product" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a class="nav-link" href="/admin/product/management">상품관리</a>
                     </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <li class="nav-product" sec:authorize="isAuthenticated()">
                         <a class="nav-link" href="/cart">장바구니</a>
                     </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <li class="nav-product" sec:authorize="isAuthenticated()">
                         <a class="nav-link" href="/order">구매이력</a>
                     </li>
-                    <li class="nav-item" sec:authorize="isAnonymous()">
+                    <li class="nav-product" sec:authorize="isAnonymous()">
                         <a class="nav-link" href="/login">로그인</a>
                     </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <li class="nav-product" sec:authorize="isAuthenticated()">
                         <a class="nav-link" href="/logout">로그아웃</a>
                     </li>
                 </ul>

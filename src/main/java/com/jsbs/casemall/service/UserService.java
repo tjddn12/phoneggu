@@ -1,6 +1,6 @@
 package com.jsbs.casemall.service;
 
-import com.jsbs.casemall.dto.UserDTO;
+import com.jsbs.casemall.dto.UserDto;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,7 +31,7 @@ public class UserService implements UserDetailsService {
 
     // 세이브
 
-    public void JoinUser(UserDTO userDTO){
+    public void JoinUser(UserDto userDTO){
         Users user = Users.createMember(userDTO,passwordEncoder);
         userRepository.save(user);
     }

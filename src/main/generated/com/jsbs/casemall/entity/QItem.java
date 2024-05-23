@@ -13,7 +13,7 @@ import com.querydsl.core.types.Path;
  * QItem is a Querydsl query type for Item
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QItem extends EntityPathBase<Item> {
+public class QItem extends EntityPathBase<Product> {
 
     private static final long serialVersionUID = 2007688347L;
 
@@ -50,15 +50,15 @@ public class QItem extends EntityPathBase<Item> {
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
     public QItem(String variable) {
-        super(Item.class, forVariable(variable));
+        super(Product.class, forVariable(variable));
     }
 
-    public QItem(Path<? extends Item> path) {
+    public QItem(Path<? extends Product> path) {
         super(path.getType(), path.getMetadata());
     }
 
     public QItem(PathMetadata metadata) {
-        super(Item.class, metadata);
+        super(Product.class, metadata);
     }
 
 }

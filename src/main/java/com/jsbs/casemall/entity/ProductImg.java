@@ -18,7 +18,7 @@ public class ProductImg extends BaseEntity {
     @Column(name = "pr_img_name")
     private String prImgName; //이미지 이름
 
-    @Column(name = "pr_img_orgin_name")
+    @Column(name = "pr_img_origin_name")
     private String prImgOriginName; //원본 이미지 이름
 
     private String imgUrl; //이미지 주소
@@ -28,7 +28,7 @@ public class ProductImg extends BaseEntity {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="pr_no")
-    private Item item;
+    private Product product;
 
     public ProductImg(String prImgOriginName, String prImgName, String imgUrl) {
         this.prImgOriginName = prImgOriginName;

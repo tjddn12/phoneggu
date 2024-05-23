@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @NoArgsConstructor
 @ToString
-public class UserDTO {
+public class UserDto {
 
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")

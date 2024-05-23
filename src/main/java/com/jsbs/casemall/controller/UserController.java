@@ -1,7 +1,7 @@
 package com.jsbs.casemall.controller;
 
 
-import com.jsbs.casemall.dto.UserDTO;
+import com.jsbs.casemall.dto.UserDto;
 import com.jsbs.casemall.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String memberForm(@Valid  @ModelAttribute UserDTO userDTO,
+    public String userForm(@Valid  @ModelAttribute UserDto userDTO,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "user/save";
