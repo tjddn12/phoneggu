@@ -13,8 +13,7 @@ import java.util.List;
 @Getter
 @Entity
 @Setter
-@Table(name = "order")
-@NoArgsConstructor
+@Table(name = "orders")
 public class Order {
     // 주문 저장 테이블
 
@@ -44,7 +43,7 @@ public class Order {
     private  String payInfo; // 결제 수단
 
     // 주문 목록
-    @OneToMany(mappedBy = "order" ,cascade=CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order" ,cascade=CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<OrderDetail> orderItems = new ArrayList<>();
 
 

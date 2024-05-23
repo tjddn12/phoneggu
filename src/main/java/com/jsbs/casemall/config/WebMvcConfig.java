@@ -18,8 +18,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 //uploadPath에 설정한 폴더를 기준으로 파일을 읽어오도록 설정
                 .addResourceLocations(uploadPath);
                 //2.로컬 컴퓨터에 저장된 파일을 읽어올 root 경로를 설정
-
-
     }
 
 }
