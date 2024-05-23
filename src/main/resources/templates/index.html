@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
- <h2>Hello!</h2>
-<a href="/save">회원가입</a>
-<a href="/login">로그인</a>
-</body>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment = "content">
+     <h2>Hello!</h2>
+    <a href="/save">회원가입</a>
+    <a href="/login">로그인</a>
+</div>
 </html>
