@@ -1,16 +1,16 @@
 package com.jsbs.casemall.controller;
 
-import com.jsbs.casemall.dto.ProductFormDto;
+import com.jsbs.casemall.dto.ItemFormDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ProductController {
+public class ItemController {
 
-    @GetMapping("/admin/product/new")
+    @GetMapping("/admin/item/new")
     public String productForm(Model model){
-        model.addAttribute("productFormDto", new ProductFormDto());
-        return "/product/productForm";
+        model.addAttribute("itemFormDto", new ItemFormDto());
+        return "/item/itemForm";
     }
 }
