@@ -2,8 +2,11 @@ package com.jsbs.casemall.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -18,6 +21,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 //uploadPath에 설정한 폴더를 기준으로 파일을 읽어오도록 설정
                 .addResourceLocations(uploadPath);
                 //2.로컬 컴퓨터에 저장된 파일을 읽어올 root 경로를 설정
+        registry.addResourceHandler("/pay/**")
+                .addResourceLocations("classpath:/templates/order/", "classpath:/static/")
+                .setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
+
+
+
     }
 
 }
