@@ -2,13 +2,16 @@ package com.jsbs.casemall.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "order_detail")
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 다른곳에서 new 생성자를 막기 위해
 public class OrderDetail {
     // 주문상세
     // 하나의 주문에는 여러개의 주문아이템이 존재 상품 하나의 여러개 주문아이템 존재
@@ -45,7 +48,7 @@ public class OrderDetail {
         orders.setProduct(product);
         orders.setCount(count);
         orders.setOrderPrice(product.getPrPrice());
-
+        product.removeStock(count); // 해당 제품의 재고를 감소함
 
         return  orders;
     }
