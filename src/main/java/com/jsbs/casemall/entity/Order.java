@@ -21,7 +21,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_no") // 주문번호
+    @Column(name = "order_id") // 주문번호
     private Long id;
 
     @Column(name = "pr_count",nullable = false)

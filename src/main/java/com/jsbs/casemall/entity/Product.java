@@ -1,9 +1,10 @@
 package com.jsbs.casemall.entity;
 
-import com.jsbs.casemall.constant.ProductSell;
+import com.jsbs.casemall.constant.ProductSellStatus;
 import com.jsbs.casemall.dto.ProductFormDto;
 import com.jsbs.casemall.exception.OutOfStockException;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,12 +17,12 @@ import lombok.ToString;
 public class Product extends BaseEntity{
 
     @Id
-    @Column(name = "pr_no")
+    @Column(name = "pr_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; //상품 번호
 
-    @Column(name = "categories_no")
-    private int categoriesNo; //카테고리 번호
+    @Column(name = "categories_id")
+    private Long categoriesId; //카테고리 번호
 
     @Column(name = "pr_name", nullable = false, length = 100)
     private String prName; //상품 이름
@@ -31,22 +32,26 @@ public class Product extends BaseEntity{
     private String prDetail; //상품 설명
 
     @Column(name = "pr_price", nullable = false)
-    private int prPrice; //상품 가격
+    private Long prPrice; //상품 가격
 
     @Column(name = "pr_stock", nullable = false)
     private int prStock; //상품 재고
 
-    private double discount; //할인율
+    @Max(value = 100, message = "최대 할인율은 100입니다")
+    private Long discount; //할인율
 
-    @Column(name = "pr_sell")
-    private ProductSell prSell; //상품 판매 상태
+    private Long discountPrice; //할인 가격
+
+    @Column(name = "pr_sellStatus")
+    private ProductSellStatus productSellStatus; //상품 판매 상태
 
     public void updateProduct(ProductFormDto productFormDto) {
         this.prName = productFormDto.getPrName();
         this.prPrice = productFormDto.getPrPrice();
         this.prStock = productFormDto.getPrStock();
         this.prDetail = productFormDto.getPrDetail();
-        this.prSell = productFormDto.getPrSell();
+        this.categoriesId = productFormDto.getCategoriesId();
+        this.productSellStatus = productFormDto.getProductSellStatus();
     }
 
     public void removeStock(int prStock){

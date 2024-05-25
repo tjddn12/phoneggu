@@ -31,12 +31,12 @@ public class OrderDetail {
     private Order order; // 주문번호
 
 
-    private int orderPrice; //주문가격
+    private Long orderPrice; //주문가격
 
 
     private int count; //주문수량
 
-    public int getTotalPrice() {
+    public Long getTotalPrice() {
         return orderPrice * count;
     }
 

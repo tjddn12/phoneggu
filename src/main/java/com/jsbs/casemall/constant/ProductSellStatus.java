@@ -1,5 +1,5 @@
 package com.jsbs.casemall.constant;
 
-public enum ProductSell {
+public enum ProductSellStatus {
     SELL, SOLD_OUT
 }

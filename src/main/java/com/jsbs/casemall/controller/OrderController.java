@@ -17,9 +17,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-
-
-
     @GetMapping("/order/{prId}/pay")
     public String pay(Principal principal, @PathVariable(name = "prId") Long prId, @Valid OrderDto orderDto, Validation validation,
                       Model model)  {

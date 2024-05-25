@@ -56,7 +56,7 @@
               th:object="${productFormDto}">
             <input type="hidden" th:field="*{id}">
             <div class="form-group">
-                <select th:field="*{prSell}" class="custom-select">
+                <select th:field="*{productSellStatus}" class="custom-select">
                     <option value="SELL">판매중</option>
                     <option value="SOLD_OUT">품절</option>
                 </select>
@@ -74,12 +74,35 @@
 
             <div class="form-group">
                 <div class="input-group-prepend">
+                    <span class="input-group-text">카테고리</span>
+                </div>
+                <select th:field="*{categoriesId}" class="form-control" style="width:auto;">
+                    <option value="">카테고리선택</option>
+                    <option value="Android">안드로이드</option>
+                    <option value="iPhone">아이폰</option>
+                </select>
+            </div>
+            <p th:if="${#fields.hasErrors('categoriesId')}" th:errors="*{categoriesId}"
+               class="filedError">잘못된 값 입니다</p>
+
+            <div class="form-group">
+                <div class="input-group-prepend">
                     <span class="input-group-text">가격</span>
                 </div>
                 <input type="number" th:field="*{prPrice}" class="form-control"
                        placeholder="가격을 입력해주세요">
             </div>
             <p th:if="${#fields.hasErrors('prPrice')}" th:errors="*{prPrice}"
+               class="filedError">잘못된 값 입니다</p>
+
+            <div class="form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">할인율 기본 0</span>
+                </div>
+                <input type="number" th:field="*{discount}" class="form-control"
+                       placeholder="할인율을 입력해주세요" value="0" min="0" max="100">
+            </div>
+            <p th:if="${#fields.hasErrors('discount')}" th:errors="*{discount}"
                class="filedError">잘못된 값 입니다</p>
 
 
