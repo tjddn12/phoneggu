@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Controller
-public class PayController {
+public class PaymentController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -95,12 +95,13 @@ public class PayController {
      */
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
-        return "order/success";
+        logger.info(request.toString());
+        return "pay/success";
     }
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET)
     public String index(HttpServletRequest request, Model model) throws Exception {
-        return "order/checkout";
+        return "pay/checkout";
     }
 
     /**
@@ -118,6 +119,6 @@ public class PayController {
         model.addAttribute("code", failCode);
         model.addAttribute("message", failMessage);
 
-        return "order/fail";
+        return "pay/fail";
     }
 }

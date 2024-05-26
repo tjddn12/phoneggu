@@ -21,8 +21,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 //uploadPath에 설정한 폴더를 기준으로 파일을 읽어오도록 설정
                 .addResourceLocations(uploadPath);
                 //2.로컬 컴퓨터에 저장된 파일을 읽어올 root 경로를 설정
-        registry.addResourceHandler("/pay/**")
-                .addResourceLocations("classpath:/templates/order/", "classpath:/static/")
+        registry.addResourceHandler("/order/pay/**")
+                .addResourceLocations("classpath:/templates/pay/", "classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
 
 

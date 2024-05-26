@@ -16,7 +16,7 @@ public class MainProductDto {
     @QueryProjection //: QueryDSL 라이브러리에서 사용, JPA와 비슷한 방식으로 쿼리 작성 보조,
     //문자열 기반 쿼리 대신 Java 코드로 쿼리 작성, 컴파일 시점에 타입 안정성 보장.
     public MainProductDto(Long id, String prName, String prDetail, String imgUrl,
-                       Integer price){
+                       int price){
         this.id = id;
         this.prName = prName;
         this.prDetail = prDetail;
