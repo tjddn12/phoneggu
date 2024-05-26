@@ -1,6 +1,9 @@
 package com.jsbs.casemall.controller;
 
+import com.jsbs.casemall.service.OrderService;
+import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -21,19 +24,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-
 @Controller
+@Slf4j
+@RequiredArgsConstructor
 public class PaymentController {
+    private static final Logger log = LoggerFactory.getLogger(PaymentController.class);
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+//    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final OrderService orderService; // 주문 서비스 Di 준비
 
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
 
         JSONParser parser = new JSONParser();
-        String orderId;
-        String amount;
-        String paymentKey;
+        String orderId;  //  주문번호
+        String amount;   // 가격
+        String paymentKey;  // 결제 식별 키
+        String payInfo;  // 결제 정보
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
@@ -95,12 +103,12 @@ public class PaymentController {
      */
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
-        logger.info(request.toString());
         return "pay/success";
     }
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET)
-    public String index(HttpServletRequest request, Model model) throws Exception {
+    public String payment(HttpServletRequest request, Model model) throws Exception {
+        // 성공시 order 정보에 state 변경
         return "pay/checkout";
     }
 
