@@ -1,9 +1,11 @@
 package com.jsbs.casemall.controller;
 
+import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.service.OrderService;
 import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,14 +26,13 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.Base64;
+@Log4j2
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class PaymentController {
-    private static final Logger log = LoggerFactory.getLogger(PaymentController.class);
-
-//    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final OrderService orderService; // 주문 서비스 Di 준비
 
@@ -41,7 +43,7 @@ public class PaymentController {
         String orderId;  //  주문번호
         String amount;   // 가격
         String paymentKey;  // 결제 식별 키
-        String payInfo;  // 결제 정보
+        String payInfo;  // 결제 정보 provider < 파라메터 키 값
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
@@ -106,9 +108,14 @@ public class PaymentController {
         return "pay/success";
     }
 
-    @RequestMapping(value = "/pay", method = RequestMethod.GET)
-    public String payment(HttpServletRequest request, Model model) throws Exception {
-        // 성공시 order 정보에 state 변경
+
+
+    // 주문요청
+    @RequestMapping(value = "/{prId}/pay", method = RequestMethod.GET)
+    public String payment(@PathVariable Long prId, HttpServletRequest request, Model model, Principal principal) throws Exception {
+        // 주문하기 를 누르면 해당 페이지의 상품아이디를 가져와 서비스로 넘겨 해당 상품의 정보를 가져오고 model에 뿌려준다
+        OrderDto dto  =  orderService.getOrder(prId,principal.getName());
+        model.addAttribute("order",dto);
         return "pay/checkout";
     }
 

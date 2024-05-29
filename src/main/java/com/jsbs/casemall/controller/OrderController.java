@@ -18,6 +18,11 @@ public class OrderController {
     private final OrderService orderService;
 
 
+    @GetMapping("/test")
+    public String test(Model model) {
+        model.addAttribute("prId", 3);
+        return "order/orderInfo"; // 뷰 이름을 반환
+    }
 
 //
 //    @GetMapping("/order/{prId}/pay")
