@@ -38,6 +38,7 @@
                         class="checkable__input"
                         type="checkbox"
                         aria-checked="true"
+
                 /><span class="checkable__label-text"
                 >5,000원 쿠폰 적용</span
                 ></label
@@ -57,7 +58,7 @@
     const coupon = document.getElementById("coupon-box");
     const generateRandomString = () =>
       window.btoa(Math.random()).slice(0, 20);
-    var amount = 5000;
+    let amount = 99999; // 금액 담기
     // ------  결제위젯 초기화 ------
     // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
     // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
@@ -94,12 +95,13 @@
 
       paymentWidget.requestPayment({
         orderId: generateRandomString(),        // orderId 넘겨주기
-        orderName: "토스 티셔츠 외 2건",       // 해당 상품의 이름 외 +count
+        orderName: [[${product}]],       // 해당 상품의 이름 외 +count
         successUrl: window.location.origin + "/success",
         failUrl: window.location.origin + "/fail",
         customerEmail: "customer123@gmail.com"  , // 바꿔야할거  : 회원이메일
         customerName: "김토스",                    // 회원이름
         customerMobilePhone: "01012341234",        // 회원번호
+
       });
     });
 </script>

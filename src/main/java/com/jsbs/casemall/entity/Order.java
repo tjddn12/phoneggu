@@ -37,7 +37,7 @@ public class Order {
     private LocalDateTime orderDate; // 주문일
 
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private OrderStatus orderStatus; // 주문상태 저장
 
 

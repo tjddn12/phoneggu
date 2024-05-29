@@ -1,6 +1,7 @@
 package com.jsbs.casemall.service;
 
 
+import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.entity.Order;
 import com.jsbs.casemall.entity.OrderDetail;
 import com.jsbs.casemall.entity.Product;
@@ -59,6 +60,17 @@ public class OrderService {
         // 주문 번호 반환
         return order.getId();
     }
+
+    @Transactional(readOnly = true)
+    public OrderDto getOrder(Long prId,String id) {
+         Product product = productRepository.findById(prId).orElseThrow(EntityNotFoundException::new);
+         Users user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+         OrderDto dto  = new OrderDto();
+         return dto;
+
+    }
+
+
 
 
 }
