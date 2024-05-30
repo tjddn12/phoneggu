@@ -50,6 +50,10 @@ public class PaymentController {
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
+            // parser 유효성 검사
+            if (paymentKey == null || paymentKey.isEmpty() || orderId == null || orderId.isEmpty() || amount == null || amount.isEmpty()) {
+                throw new IllegalArgumentException("Invalid payment information");
+            }
 
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -96,10 +100,10 @@ public class PaymentController {
         JSONObject easyPayObject = (JSONObject) jsonObject.get("easyPay");
         paymentMethod= (String) easyPayObject.get("provider");
 //        log.info(paymentMethod);
-        // 이상이 없다면
-        orderService.updateOrderWithPaymentInfo(orderId,paymentMethod);
-
-
+        // 이상이 없다면 성공시 최종적으로 db에 저장
+        if(isSuccess){
+            orderService.updateOrderWithPaymentInfo(orderId,paymentMethod);
+        }
         return ResponseEntity.status(code).body(jsonObject);
     }
 
