@@ -54,11 +54,12 @@
     </div>
 </div>
 <script th:inline="javascript">
+    const order = [[${order}]]; // 주문 dto > 객체로 변환
     const button = document.getElementById("payment-button");
     const coupon = document.getElementById("coupon-box");
     const generateRandomString = () =>
       window.btoa(Math.random()).slice(0, 20);
-    let amount = 99999; // 금액 담기
+    let amount = order.amount; // 금액 담기
     // ------  결제위젯 초기화 ------
     // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
     // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
@@ -94,13 +95,13 @@
       // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
 
       paymentWidget.requestPayment({
-        orderId: generateRandomString(),        // orderId 넘겨주기
-        orderName: [[${product}]],       // 해당 상품의 이름 외 +count
+        orderId: order.orderID,        // 고유 식별자 코드 생성
+        orderName: order.orderName,       // 해당 상품의 이름 외 +count
         successUrl: window.location.origin + "/success",
         failUrl: window.location.origin + "/fail",
-        customerEmail: "customer123@gmail.com"  , // 바꿔야할거  : 회원이메일
-        customerName: "김토스",                    // 회원이름
-        customerMobilePhone: "01012341234",        // 회원번호
+        customerEmail: order.email, // 바꿔야할거  : 회원이메일
+        customerName: order.userName,                    // 회원이름
+        customerMobilePhone: order.phone,        // 회원번호
 
       });
     });

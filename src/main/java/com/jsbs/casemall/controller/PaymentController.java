@@ -43,13 +43,14 @@ public class PaymentController {
         String orderId;  //  주문번호
         String amount;   // 가격
         String paymentKey;  // 결제 식별 키
-        String payInfo;  // 결제 정보 provider < 파라메터 키 값
+        String paymentMethod;  // 결제 정보 provider < 파라메터 키 값
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
+
         } catch (ParseException e) {
             throw new RuntimeException(e);
         };
@@ -92,6 +93,12 @@ public class PaymentController {
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
+        JSONObject easyPayObject = (JSONObject) jsonObject.get("easyPay");
+        paymentMethod= (String) easyPayObject.get("provider");
+//        log.info(paymentMethod);
+        // 이상이 없다면
+        orderService.updateOrderWithPaymentInfo(orderId,paymentMethod);
+
 
         return ResponseEntity.status(code).body(jsonObject);
     }
