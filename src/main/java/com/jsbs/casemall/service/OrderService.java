@@ -33,45 +33,17 @@ public class OrderService {
     private final ProductRepository productRepository;
 
 
-    // 주문
-//    @Transactional
-//    // 임시로 해놈 나중에 dto 정보에 맞춰서 변경 예정 = dto 정보를 통채로 넘김
-//    public Long order(String userId, long prId, int count, String payInfo) {
-//        // 주문이 들어오면 해당 고객 + 주문하는 상품 개수 + 상세정보를 만들고  + 주문 테이블에 저장후
-//        // 주문 아이디를 반환
-//
-//        // 주문한 고객 찾기
-//        Users user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-//
-//        // 무슨 상품인지 검색
-//        Product product = productRepository.findById(prId).orElseThrow(EntityNotFoundException::new);
-//
-//        // 주문상세 만들기
-//        List<OrderDetail> orderList = new ArrayList<>();
-//        OrderDetail orders = OrderDetail.createOrderDetails(product, count);
-//        orderList.add(orders);
-//        // 주문 객체 만들어주기
-//        Order order = Order.createOrder(user, orderList, payInfo);
-//
-//        // 작업이 끝나면 주문 정보를 DB에 저장 시킴
-//        orderRepository.save(order);
-//
-//        // 주문 번호 반환
-//        return order.getId();
-//    }
-
-//    @Transactional(readOnly = true)
     @Transactional
-    public OrderDto getOrder(Long prId,String id) { // 나중에 수량도 받아와야함
+    public OrderDto getOrder(Long prId,String id,int count) { // 나중에 수량도 받아와야함
          Product product = productRepository.findById(prId).orElseThrow(EntityNotFoundException::new);
         // 주문한 고객 찾기
         Users user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         // 주문 상세 객체 생성
-        OrderDetail orderDetail = OrderDetail.createOrderDetails(product, 1); // 임의로 상품 수량은 1로 설정
+        OrderDetail orderDetail = OrderDetail.createOrderDetails(product, count); // 임의로 상품 수량은 1로 설정
         List<OrderDetail> orderItems = new ArrayList<>();
         orderItems.add(orderDetail);
         // 주문 정보 생성
-        Order order = Order.createOrder(user, orderItems, "카드 결제"); // 결제 정보는 임의로 설정
+        Order order = Order.createOrder(user, orderItems);
 
         orderRepository.save(order);
 
@@ -89,9 +61,9 @@ public class OrderService {
 
 
     @Transactional
-    public void updateOrderWithPaymentInfo(String orderId,String paymentMethod) {
+    public void updateOrderWithPaymentInfo(String orderId,String paymentMethod,String payInfo) {
         Order order = orderRepository.findByOrderId(orderId).orElseThrow(EntityNotFoundException::new);
-        order.updatePaymentInfo(paymentMethod);
+        order.updatePaymentInfo(paymentMethod,payInfo);
         orderRepository.save(order);
     }
 

@@ -43,7 +43,7 @@ public class Order {
 
 
     @Column(name = "payInfo")
-    private  String payInfo; // 지불정보 > 카드 결제
+    private  String payInfo; // 결제 방식
 
     @Column(name = "payment_method")
     private String paymentMethod; // 결제 방법
@@ -66,7 +66,7 @@ public class Order {
 
 
     // 주문 테이블 생성
-    public static Order createOrder(Users user, List<OrderDetail> orderItems, String payInfo) {
+    public static Order createOrder(Users user, List<OrderDetail> orderItems) {
         Order order = new Order();
         order.setUsers(user);
 
@@ -77,14 +77,15 @@ public class Order {
 
         order.setOrderStatus(OrderStatus.STAY); // 주문 상태
         order.setOrderDate(LocalDateTime.now()); // 결제 날짜
-        order.setPayInfo(payInfo); // 결재방식 ex) 카드결제
+
         order.setOrderId(UUID.randomUUID().toString()); // 고유한 주문 ID 생성
 
         return order;
     }
 
-    public void updatePaymentInfo(String paymentMethod) {
+    public void updatePaymentInfo(String paymentMethod,String payInfo) {
         this.orderStatus = OrderStatus.ORDER; // 성공시 결제 상태를 변경
+        this.payInfo = payInfo; // 결제 방식 추가
         this.paymentMethod = paymentMethod; // 결제 수단을 업데이트
     }
 

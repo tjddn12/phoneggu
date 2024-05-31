@@ -8,12 +8,21 @@
     <title>Document</title>
 </head>
 <body>
-<h1>테스트</h1>
-<p th:text="'prId: ' + ${prId}"></p>
-<a th:href="@{|/${prId}/pay|}">주문하기</a>
-</body>
-<script >
+<h1>상품 주문 페이지</h1>
+<input type="number" id="count" name="count" placeholder="수량"> 수량 <br>
+<input type="hidden" th:value="${prId}" id="prId">
+<a id="order-link" href="#">주문하기</a>
 
+<script>
+    const orderLink = document.getElementById('order-link');
+    const countInput = document.getElementById('count');
+    const prId = document.getElementById('prId').value;
+
+
+    countInput.addEventListener('input', function() {
+        const count = countInput.value;
+        orderLink.href = `/pay?prId=${prId}&count=${count}`;
+    });
 </script>
-
+</body>
 </html>

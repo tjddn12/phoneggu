@@ -9,16 +9,9 @@ import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,13 +30,14 @@ public class PaymentController {
 
     private final OrderService orderService; // 주문 서비스 Di 준비
 
-    @RequestMapping(value = "/confirm", method = RequestMethod.POST)
+    @PostMapping(value = "/confirm")
     public String confirmPayment(@RequestBody String jsonBody) throws Exception {
         JSONParser parser = new JSONParser();
         String orderId;
         String amount;
         String paymentKey;
         String paymentMethod;
+        String payInfo;
 
         try {
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
@@ -52,7 +46,7 @@ public class PaymentController {
             amount = (String) requestData.get("amount");
 
             if (paymentKey == null || paymentKey.isEmpty() || orderId == null || orderId.isEmpty() || amount == null || amount.isEmpty()) {
-                throw new IllegalArgumentException("Invalid payment information");
+                throw new IllegalArgumentException("결제 정보가 잘못되었씁니다");
             }
 
         } catch (ParseException e) {
@@ -91,7 +85,8 @@ public class PaymentController {
             if (isSuccess) {
                 JSONObject easyPayObject = (JSONObject) jsonObject.get("easyPay");
                 paymentMethod = (String) easyPayObject.get("provider");
-                orderService.updateOrderWithPaymentInfo(orderId, paymentMethod);
+                payInfo = (String)jsonObject.get("method");
+                orderService.updateOrderWithPaymentInfo(orderId, paymentMethod,payInfo);
                 return "redirect:/success?orderId=" + orderId + "&amount=" + amount + "&paymentKey=" + paymentKey;
             } else {
                 orderService.failOrder(orderId);
@@ -100,7 +95,7 @@ public class PaymentController {
         }
     }
 
-    @RequestMapping(value = "/success", method = RequestMethod.GET)
+    @GetMapping(value = "/success")
     public String paymentRequest(HttpServletRequest request, Model model) {
         model.addAttribute("orderId", request.getParameter("orderId"));
         model.addAttribute("amount", request.getParameter("amount"));
@@ -110,11 +105,11 @@ public class PaymentController {
 
 
     // 주문요청
-    @RequestMapping(value = "/{prId}/pay", method = RequestMethod.GET)
-    public String payment(@PathVariable Long prId, HttpServletRequest request, Model model, Principal principal) throws Exception {
-        // 주문하기 를 누르면 해당 페이지의 상품아이디를 가져와 서비스로 넘겨 해당 상품의 정보를 가져오고 model에 뿌려준다
-        OrderDto dto  =  orderService.getOrder(prId,principal.getName());
-        model.addAttribute("order",dto);
+    @GetMapping(value = "/pay")
+    public String payment(@RequestParam Long prId, @RequestParam int count, Model model, Principal principal) throws Exception {
+        // 주문하기를 누르면 해당 페이지의 상품 ID와 수량을 가져와 서비스로 넘겨 해당 상품의 정보를 가져오고 model에 뿌려준다
+        OrderDto dto = orderService.getOrder(prId, principal.getName(), count);
+        model.addAttribute("order", dto);
         return "pay/checkout";
     }
 
@@ -125,7 +120,7 @@ public class PaymentController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/fail", method = RequestMethod.GET)
+    @GetMapping(value = "/fail")
     public String failPayment(HttpServletRequest request, Model model) throws Exception {
         String failCode = request.getParameter("code");
         String failMessage = request.getParameter("message");
