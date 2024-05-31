@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -24,8 +25,8 @@ public class Order {
     @Column(name = "order_no") // 주문번호
     private Long id;
 
-    @Column(name = "pr_count",nullable = false)
-    private String prCount; // 상품 수량
+//    @Column(name = "pr_count",nullable = false)
+//    private int prCount; // 상품 수량 < 이것도 상품상세에 리스트로 되어있으니 필요없는거 아닌가?
 
 
     @ManyToOne
@@ -44,6 +45,14 @@ public class Order {
     @Column(name = "payInfo")
     private  String payInfo; // 결제 수단
 
+    @Column(name = "payment_method")
+    private String paymentMethod; // 결제 수단
+
+
+    @Column(name = "order_id", nullable = false, unique = true)
+    private String orderId; // 주문 고유 ID
+
+
     // 주문 목록
     @OneToMany(mappedBy = "order" ,cascade=CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<OrderDetail> orderItems = new ArrayList<>();
@@ -57,24 +66,27 @@ public class Order {
 
 
     // 주문 테이블 생성
-    public  static  Order createOrder(Users user, List<OrderDetail> orderItems,String patInfo){
+    public static Order createOrder(Users user, List<OrderDetail> orderItems, String payInfo) {
         Order order = new Order();
         order.setUsers(user);
 
-        // 주문아이템이 한개가 아닐수도 있기때문에 for문으로 집어넣기
-
-        for(OrderDetail item : orderItems){
+        // 주문아이템이 한개가 아닐수도 있기때문에 for문으로 집어넣기 => 장바구니에서 주문시
+        for (OrderDetail item : orderItems) {
             order.addOrderItem(item);
         }
 
-        order.setOrderStatus(OrderStatus.ORDER); // 주문 상태
+        order.setOrderStatus(OrderStatus.STAY); // 주문 상태
         order.setOrderDate(LocalDateTime.now()); // 결제 날짜
-        order.setPayInfo(patInfo); // 주문방식 ex) 네이버페이 / 카카오페이 ....
+        order.setPayInfo(payInfo); // 결재방식 ex) 카드결제
+        order.setOrderId(UUID.randomUUID().toString()); // 고유한 주문 ID 생성
 
-        return  order;
+        return order;
     }
 
-
+    public void updatePaymentInfo(String paymentMethod) {
+        this.orderStatus = OrderStatus.ORDER; // 성공시 결제 상태를 변경
+        this.paymentMethod = paymentMethod; // 결제 수단을 업데이트
+    }
 
 
 
