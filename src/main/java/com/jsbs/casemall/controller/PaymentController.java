@@ -11,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,47 +37,39 @@ public class PaymentController {
 
     private final OrderService orderService; // 주문 서비스 Di 준비
 
-    @RequestMapping(value = "/confirm")
-    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
-
+    @RequestMapping(value = "/confirm", method = RequestMethod.POST)
+    public String confirmPayment(@RequestBody String jsonBody) throws Exception {
         JSONParser parser = new JSONParser();
-        String orderId;  //  주문번호
-        String amount;   // 가격
-        String paymentKey;  // 결제 식별 키
-        String paymentMethod;  // 결제 정보 provider < 파라메터 키 값
+        String orderId;
+        String amount;
+        String paymentKey;
+        String paymentMethod;
+
         try {
-            // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
-            // parser 유효성 검사
+
             if (paymentKey == null || paymentKey.isEmpty() || orderId == null || orderId.isEmpty() || amount == null || amount.isEmpty()) {
                 throw new IllegalArgumentException("Invalid payment information");
             }
 
         } catch (ParseException e) {
-            throw new RuntimeException(e);
-        };
+            log.error("Error parsing JSON request body", e);
+            throw new RuntimeException("Invalid JSON format", e);
+        }
+
         JSONObject obj = new JSONObject();
         obj.put("orderId", orderId);
         obj.put("amount", amount);
         obj.put("paymentKey", paymentKey);
 
-        // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
-        // @docs https://docs.tosspayments.com/reference/using-api/api-keys
         String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
-
-        // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
-        // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
-        // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
         String authorizations = "Basic " + new String(encodedBytes);
 
-        // 결제 승인 API를 호출하세요.
-        // 결제를 승인하면 결제수단에서 금액이 차감돼요.
-        // @docs https://docs.tosspayments.com/guides/payment-widget/integration#3-결제-승인하기
         URL url = new URL("https://api.tosspayments.com/v1/payments/confirm");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", authorizations);
@@ -84,41 +77,36 @@ public class PaymentController {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
 
-
-        OutputStream outputStream = connection.getOutputStream();
-        outputStream.write(obj.toString().getBytes("UTF-8"));
+        try (OutputStream outputStream = connection.getOutputStream()) {
+            outputStream.write(obj.toString().getBytes(StandardCharsets.UTF_8));
+        }
 
         int code = connection.getResponseCode();
         boolean isSuccess = code == 200;
 
-        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
-
-        // TODO: 결제 성공 및 실패 비즈니스 로직을 구현하세요.
-        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
-        JSONObject jsonObject = (JSONObject) parser.parse(reader);
-        responseStream.close();
-        JSONObject easyPayObject = (JSONObject) jsonObject.get("easyPay");
-        paymentMethod= (String) easyPayObject.get("provider");
-//        log.info(paymentMethod);
-        // 이상이 없다면 성공시 최종적으로 db에 저장
-        if(isSuccess){
-            orderService.updateOrderWithPaymentInfo(orderId,paymentMethod);
+        try (
+            InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+             Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8)) {
+            JSONObject jsonObject = (JSONObject) parser.parse(reader);
+            if (isSuccess) {
+                JSONObject easyPayObject = (JSONObject) jsonObject.get("easyPay");
+                paymentMethod = (String) easyPayObject.get("provider");
+                orderService.updateOrderWithPaymentInfo(orderId, paymentMethod);
+                return "redirect:/success?orderId=" + orderId + "&amount=" + amount + "&paymentKey=" + paymentKey;
+            } else {
+                orderService.failOrder(orderId);
+                return "redirect:/fail?message=" + jsonObject.get("message") + "&code=" + jsonObject.get("code");
+            }
         }
-        return ResponseEntity.status(code).body(jsonObject);
     }
 
-    /**
-     * 인증성공처리
-     * @param request
-     * @param model
-     * @return
-     * @throws Exception
-     */
     @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
+    public String paymentRequest(HttpServletRequest request, Model model) {
+        model.addAttribute("orderId", request.getParameter("orderId"));
+        model.addAttribute("amount", request.getParameter("amount"));
+        model.addAttribute("paymentKey", request.getParameter("paymentKey"));
         return "pay/success";
     }
-
 
 
     // 주문요청

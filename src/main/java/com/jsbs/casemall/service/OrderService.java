@@ -1,6 +1,7 @@
 package com.jsbs.casemall.service;
 
 
+import com.jsbs.casemall.constant.OrderStatus;
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.entity.Order;
 import com.jsbs.casemall.entity.OrderDetail;
@@ -20,12 +21,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class OrderService {
 
 
 
-    private final OrderDetailRepository orderDetailRepository;
 
     private final OrderRepository orderRepository;
 
@@ -97,5 +96,11 @@ public class OrderService {
     }
 
 
+    public void failOrder(String orderId) {
+        // 주문 실패시 임시 저장한 order객체를 삭제
+        Order order = orderRepository.findByOrderId(orderId).orElseThrow(EntityNotFoundException::new);
+        order.setOrderStatus(OrderStatus.CANCEL); // 주문 취소 상태로 변경
+        orderRepository.save(order);
 
+    }
 }

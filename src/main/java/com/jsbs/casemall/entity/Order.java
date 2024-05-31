@@ -43,10 +43,10 @@ public class Order {
 
 
     @Column(name = "payInfo")
-    private  String payInfo; // 결제 수단
+    private  String payInfo; // 지불정보 > 카드 결제
 
     @Column(name = "payment_method")
-    private String paymentMethod; // 결제 수단
+    private String paymentMethod; // 결제 방법
 
 
     @Column(name = "order_id", nullable = false, unique = true)
