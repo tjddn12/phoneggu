@@ -79,31 +79,51 @@
     // ------  이용약관 UI 렌더링 ------
     paymentWidget.renderAgreement("#agreement", { variantKey: "AGREEMENT" });
 
-    // ------  결제 금액 업데이트 ------
-
+    // ------  결제 금액 업데이트 쿠폰 이용시 ------
     coupon.addEventListener("change", function () {
       if (coupon.checked) {
-        paymentMethodWidget.updateAmount(amount - 5000);
+        paymentMethodWidget.updateAmount(amount - 5000); // 쿠폰 
       } else {
         paymentMethodWidget.updateAmount(amount);
       }
     });
 
-    // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
+     // 결제하기 버튼 누르면 결제창 띄우기
     button.addEventListener("click", function () {
-      // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-      // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+        paymentWidget.requestPayment({
+            orderId: order.orderID,        // 고유 식별자 코드 생성
+            orderName: order.orderName,       // 해당 상품의 이름 외 +count
+            successUrl: window.location.origin + "/success",
+            failUrl: window.location.origin + "/fail",
+            customerEmail: order.email, // 회원 이메일
+            customerName: order.userName,  // 회원 이름
+            customerMobilePhone: order.phone, // 회원 번호
+        }).then(() => {
+            isPaymentSuccess = true; // 결제 성공 시  isPaymentSuccess < true 를 넣어줌
+        });
+    });
 
-      paymentWidget.requestPayment({
-        orderId: order.orderID,        // 고유 식별자 코드 생성
-        orderName: order.orderName,       // 해당 상품의 이름 외 +count
-        successUrl: window.location.origin + "/success",
-        failUrl: window.location.origin + "/fail",
-        customerEmail: order.email, // 바꿔야할거  : 회원이메일
-        customerName: order.userName,                    // 회원이름
-        customerMobilePhone: order.phone,        // 회원번호
+    // 페이지 떠날 때 이벤트 처리
+    window.addEventListener('beforeunload', function (e) {
+        if (!isPaymentSuccess) { // 결제 한것이 아니면 cancel 로 이동
+            fetch('/cancel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId: order.orderID })
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to cancel order');
+                }
+            }).catch(error => {
+                console.error('Error canceling order:', error);
+            });
 
-      });
+            // 사용자에게 경고 메시지 표시
+            e.preventDefault();
+            e.returnValue = '주문을 취소합니다.';
+        }
     });
 </script>
 </body>

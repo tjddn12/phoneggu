@@ -1,17 +1,17 @@
 package com.jsbs.casemall.service;
 
-
+import com.jsbs.casemall.constant.OrderStatus;
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.entity.Order;
 import com.jsbs.casemall.entity.OrderDetail;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Users;
-import com.jsbs.casemall.repository.OrderDetailRepository;
 import com.jsbs.casemall.repository.OrderRepository;
 import com.jsbs.casemall.repository.ProductRepository;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,82 +20,113 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Slf4j
+@Transactional
 public class OrderService {
 
-
-
-    private final OrderDetailRepository orderDetailRepository;
-
     private final OrderRepository orderRepository;
-
     private final UserRepository userRepository;
-
     private final ProductRepository productRepository;
 
+    @Transactional(readOnly = true)
+    public boolean validatePayment(String orderId, int amount) {
+        try {
+            // 주문을 조회합니다.
+            Order order = orderRepository.findByOrderId(orderId).orElse(null);
 
-    // 주문
-//    @Transactional
-//    // 임시로 해놈 나중에 dto 정보에 맞춰서 변경 예정 = dto 정보를 통채로 넘김
-//    public Long order(String userId, long prId, int count, String payInfo) {
-//        // 주문이 들어오면 해당 고객 + 주문하는 상품 개수 + 상세정보를 만들고  + 주문 테이블에 저장후
-//        // 주문 아이디를 반환
-//
-//        // 주문한 고객 찾기
-//        Users user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-//
-//        // 무슨 상품인지 검색
-//        Product product = productRepository.findById(prId).orElseThrow(EntityNotFoundException::new);
-//
-//        // 주문상세 만들기
-//        List<OrderDetail> orderList = new ArrayList<>();
-//        OrderDetail orders = OrderDetail.createOrderDetails(product, count);
-//        orderList.add(orders);
-//        // 주문 객체 만들어주기
-//        Order order = Order.createOrder(user, orderList, payInfo);
-//
-//        // 작업이 끝나면 주문 정보를 DB에 저장 시킴
-//        orderRepository.save(order);
-//
-//        // 주문 번호 반환
-//        return order.getId();
-//    }
+            // 주문이 존재하지 않을 경우 예외 발생
+            if (order == null) {
+                throw new IllegalArgumentException("주문 정보를 찾을 수 없습니다.");
+            }
 
-//    @Transactional(readOnly = true)
-    @Transactional
-    public OrderDto getOrder(Long prId,String id) { // 나중에 수량도 받아와야함
-         Product product = productRepository.findById(prId).orElseThrow(EntityNotFoundException::new);
-        // 주문한 고객 찾기
-        Users user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        // 주문 상세 객체 생성
-        OrderDetail orderDetail = OrderDetail.createOrderDetails(product, 1); // 임의로 상품 수량은 1로 설정
-        List<OrderDetail> orderItems = new ArrayList<>();
-        orderItems.add(orderDetail);
-        // 주문 정보 생성
-        Order order = Order.createOrder(user, orderItems, "카드 결제"); // 결제 정보는 임의로 설정
+            // 주문 상세 항목의 가격을 합산합니다.
+            int price = 0;
+            for (OrderDetail orderDetail : order.getOrderItems()) {
+                price += orderDetail.getTotalPrice();
+            }
+//            log.info("졀제 금액 {} ", price);
 
-        orderRepository.save(order);
-
-        return OrderDto.builder()
-                .orderName(product.getPrName()) // 상품정보
-                .orderID(order.getOrderId()) // 주문 아이디 생성한것을 반환
-                .amount(orderDetail.getTotalPrice()) // 주문 총액은 상품 가격 * 수량
-                .userName(user.getName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .build();
+            // 결제 금액 확인
+            if (price == amount) {
+                return true;
+            } else {
+                throw new IllegalArgumentException("결제 금액이 올바르지 않습니다.");
+            }
+        } catch (IllegalArgumentException e) {
+            log.error("validatePayment 에서 발생: {}", e.getMessage());
+            return false;
+        } catch (Exception e) {
+            // 기타 예외 처리
+            log.error("Unexpected error during payment validation: {}", e.getMessage());
+            return false;
+        }
     }
 
+    // 주문 정보 생성과 반환하는 메소드
+    public OrderDto getOrder(Long prId, String id, int count) {
+        try {
+            Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
+            Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
 
+            // 주문 상세 객체 생성
+            OrderDetail orderDetail = OrderDetail.createOrderDetails(product, count);
+            List<OrderDetail> orderItems = new ArrayList<>();
+            orderItems.add(orderDetail);
 
+            // 주문 정보 생성
+            Order order = Order.createOrder(user, orderItems);
+            orderRepository.save(order);
 
-    @Transactional
-    public void updateOrderWithPaymentInfo(String orderId,String paymentMethod) {
-        Order order = orderRepository.findByOrderId(orderId).orElseThrow(EntityNotFoundException::new);
-        order.updatePaymentInfo(paymentMethod);
-        orderRepository.save(order);
+            return OrderDto.builder()
+                    .orderName(product.getPrName())
+                    .orderID(order.getOrderId())
+                    .amount(orderDetail.getTotalPrice())
+                    .userName(user.getName())
+                    .email(user.getEmail())
+                    .phone(user.getPhone())
+                    .build();
+        } catch (EntityNotFoundException e) {
+            log.error("getOrder 에서 발생: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error during order creation: {}", e.getMessage());
+            throw new RuntimeException("Order creation failed", e);
+        }
     }
 
+    public void updateOrderWithPaymentInfo(String orderId, String paymentMethod, String payInfo) {
+        try {
+            Order order = orderRepository.findByOrderId(orderId).orElseThrow(() -> new EntityNotFoundException("주문정보를 찾을수 없습니다"));
+            order.updatePaymentInfo(paymentMethod, payInfo);
+            orderRepository.save(order);
+        } catch (EntityNotFoundException e) {
+            log.error("updateOrderWithPaymentInfo 에서 발생: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error during updating order with payment info: {}", e.getMessage());
+            throw new RuntimeException("Updating order with payment info failed", e);
+        }
+    }
 
+    public void failOrder(String orderId) {
+        try {
+            // 실패시 해당 주문아이디로 주문을 찾고 상태를 캔슬로 변경 > 재고 다시 원상복구
+            Order order = orderRepository.findByOrderId(orderId).orElseThrow(() -> new EntityNotFoundException("주문정보를 찾을수 없습니다"));
+            order.setOrderStatus(OrderStatus.CANCEL);
 
+            for(OrderDetail orderDetail : order.getOrderItems()){
+                Product product = orderDetail.getProduct();
+                product.addStock(orderDetail.getCount()); // 다시 추가
+//                productRepository.save(product);
+            }
+
+            orderRepository.save(order);
+        } catch (EntityNotFoundException e) {
+            log.error("failOrder 에서 발생: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error during order cancellation: {}", e.getMessage());
+            throw new RuntimeException("Order cancellation failed", e);
+        }
+    }
 }

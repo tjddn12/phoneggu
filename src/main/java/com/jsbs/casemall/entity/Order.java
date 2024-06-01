@@ -25,9 +25,6 @@ public class Order {
     @Column(name = "order_no") // 주문번호
     private Long id;
 
-//    @Column(name = "pr_count",nullable = false)
-//    private int prCount; // 상품 수량 < 이것도 상품상세에 리스트로 되어있으니 필요없는거 아닌가?
-
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
@@ -66,7 +63,7 @@ public class Order {
 
 
     // 주문 테이블 생성
-    public static Order createOrder(Users user, List<OrderDetail> orderItems, String payInfo) {
+    public static Order createOrder(Users user, List<OrderDetail> orderItems) {
         Order order = new Order();
         order.setUsers(user);
 
@@ -77,15 +74,15 @@ public class Order {
 
         order.setOrderStatus(OrderStatus.STAY); // 주문 상태
         order.setOrderDate(LocalDateTime.now()); // 결제 날짜
-        order.setPayInfo(payInfo); // 결재방식 ex) 카드결제
         order.setOrderId(UUID.randomUUID().toString()); // 고유한 주문 ID 생성
 
         return order;
     }
 
-    public void updatePaymentInfo(String paymentMethod) {
+    public void updatePaymentInfo(String paymentMethod,String payInfo) {
         this.orderStatus = OrderStatus.ORDER; // 성공시 결제 상태를 변경
         this.paymentMethod = paymentMethod; // 결제 수단을 업데이트
+        this.payInfo = payInfo;//결제 방식을 저장
     }
 
 
