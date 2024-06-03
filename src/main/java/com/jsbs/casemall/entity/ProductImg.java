@@ -11,7 +11,7 @@ import lombok.Setter;
 public class ProductImg extends BaseEntity {
 
     @Id
-    @Column(name = "pr_img_no")
+    @Column(name = "pr_img_id")
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id; //상품 이미지 번호
 
@@ -21,16 +21,17 @@ public class ProductImg extends BaseEntity {
     @Column(name = "pr_img_origin_name")
     private String prImgOriginName; //원본 이미지 이름
 
-    private String imgUrl; //이미지 주소
+    @Column(name = "img_url", nullable = false)
+    private String imgUrl; // 이미지 URL
 
     @Column(name = "pr_main_img")
-    private String prMainImg; //대표 이미지
+    private String prMainImg; //대표 이미지 여부
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="pr_no")
+    @JoinColumn(name="pr_id")
     private Product product;
 
-    public ProductImg(String prImgOriginName, String prImgName, String imgUrl) {
+    public void updateProductImg(String prImgOriginName, String prImgName, String imgUrl) {
         this.prImgOriginName = prImgOriginName;
         this.prImgName = prImgName;
         this.imgUrl = imgUrl;

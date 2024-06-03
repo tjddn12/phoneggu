@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -21,12 +22,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final NumberPath<Integer> categoriesNo = createNumber("categoriesNo", Integer.class);
-
     //inherited
     public final StringPath createdBy = _super.createdBy;
-
-    public final NumberPath<Double> discount = createNumber("discount", Double.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -37,9 +34,15 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath prName = createString("prName");
 
-    public final NumberPath<Integer> prPrice = createNumber("prPrice", Integer.class);
+    public final EnumPath<com.jsbs.casemall.constant.ProductCategory> productCategory = createEnum("productCategory", com.jsbs.casemall.constant.ProductCategory.class);
 
-    public final EnumPath<com.jsbs.casemall.constant.ProductSell> prSell = createEnum("prSell", com.jsbs.casemall.constant.ProductSell.class);
+    public final ListPath<ProductImg, QProductImg> productImgList = this.<ProductImg, QProductImg>createList("productImgList", ProductImg.class, QProductImg.class, PathInits.DIRECT2);
+
+    public final EnumPath<com.jsbs.casemall.constant.ProductSellStatus> productSellStatus = createEnum("productSellStatus", com.jsbs.casemall.constant.ProductSellStatus.class);
+
+    public final EnumPath<com.jsbs.casemall.constant.ProductType> productType = createEnum("productType", com.jsbs.casemall.constant.ProductType.class);
+
+    public final NumberPath<Integer> prPrice = createNumber("prPrice", Integer.class);
 
     public final NumberPath<Integer> prStock = createNumber("prStock", Integer.class);
 

@@ -1,6 +1,6 @@
 package com.jsbs.casemall.dto;
 
-import com.jsbs.casemall.constant.ProductSell;
+import com.jsbs.casemall.constant.ProductSellStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +16,7 @@ public class ProductDto {
     private int prPrice;
     private int prStock;
     private double discount;
-    private ProductSell productsSell;
+    private ProductSellStatus productsSell;
     private LocalDateTime pr_regDate;
     private LocalDateTime pr_update;
 }

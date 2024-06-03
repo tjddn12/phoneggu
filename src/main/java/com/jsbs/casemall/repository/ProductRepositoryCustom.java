@@ -7,6 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductRepositoryCustom {
-    Page<Product> getAdminItemPage(ProductSearchDto productSearchDto, Pageable pageable);
-    Page<MainProductDto> getMainItemPage(ProductSearchDto productSearchDto, Pageable pageable);
+    Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, Pageable pageable);
+    Page<MainProductDto> getMainProductPage(ProductSearchDto productSearchDto, Pageable pageable);
 }
