@@ -1,13 +1,11 @@
 package com.jsbs.casemall.service;
 
-
 import com.jsbs.casemall.constant.OrderStatus;
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.entity.Order;
 import com.jsbs.casemall.entity.OrderDetail;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Users;
-import com.jsbs.casemall.repository.OrderDetailRepository;
 import com.jsbs.casemall.repository.OrderRepository;
 import com.jsbs.casemall.repository.ProductRepository;
 import com.jsbs.casemall.repository.UserRepository;
@@ -23,18 +21,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class OrderService {
 
-
-
-
     private final OrderRepository orderRepository;
-
     private final UserRepository userRepository;
-
     private final ProductRepository productRepository;
 
-
+    @Transactional(readOnly = true)
     public boolean validatePayment(String orderId, int amount) {
         try {
             // 주문을 조회합니다.
@@ -42,46 +36,37 @@ public class OrderService {
 
             // 주문이 존재하지 않을 경우 예외 발생
             if (order == null) {
-                throw new IllegalArgumentException("주문 정보를 찾을수 없습니다");
+                throw new IllegalArgumentException("주문 정보를 찾을 수 없습니다.");
             }
 
             // 주문 상세 항목의 가격을 합산합니다.
             int price = 0;
             for (OrderDetail orderDetail : order.getOrderItems()) {
-                price += orderDetail.getOrderPrice();
+                price += orderDetail.getTotalPrice();
             }
+//            log.info("졀제 금액 {} ", price);
 
-            // 결제 금액이 확인
+            // 결제 금액 확인
             if (price == amount) {
                 return true;
             } else {
-                throw new IllegalArgumentException("결제 금액이 올바르지 않습니다");
+                throw new IllegalArgumentException("결제 금액이 올바르지 않습니다.");
             }
         } catch (IllegalArgumentException e) {
-            // 비즈니스 로직에서 발생한 예외를 처리합니다.
-            log.error("validatePayment 에서 발생 : {} ",e.getMessage());
+            log.error("validatePayment 에서 발생: {}", e.getMessage());
             return false;
         } catch (Exception e) {
-            // 기타 예외를 처리합니다.
-          log.error("Unexpected error during payment validation: {} " ,e.getMessage());
+            // 기타 예외 처리
+            log.error("Unexpected error during payment validation: {}", e.getMessage());
             return false;
         }
     }
 
-
-
-
-
-
-
-
-
     // 주문 정보 생성과 반환하는 메소드
-    @Transactional
     public OrderDto getOrder(Long prId, String id, int count) {
         try {
-            Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("해당 제품을 찾을 수 없습니다 "));
-            Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
+            Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
+            Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
 
             // 주문 상세 객체 생성
             OrderDetail orderDetail = OrderDetail.createOrderDetails(product, count);
@@ -109,7 +94,6 @@ public class OrderService {
         }
     }
 
-    @Transactional
     public void updateOrderWithPaymentInfo(String orderId, String paymentMethod, String payInfo) {
         try {
             Order order = orderRepository.findByOrderId(orderId).orElseThrow(() -> new EntityNotFoundException("주문정보를 찾을수 없습니다"));
@@ -126,8 +110,16 @@ public class OrderService {
 
     public void failOrder(String orderId) {
         try {
+            // 실패시 해당 주문아이디로 주문을 찾고 상태를 캔슬로 변경 > 재고 다시 원상복구
             Order order = orderRepository.findByOrderId(orderId).orElseThrow(() -> new EntityNotFoundException("주문정보를 찾을수 없습니다"));
             order.setOrderStatus(OrderStatus.CANCEL);
+
+            for(OrderDetail orderDetail : order.getOrderItems()){
+                Product product = orderDetail.getProduct();
+                product.addStock(orderDetail.getCount()); // 다시 추가
+//                productRepository.save(product);
+            }
+
             orderRepository.save(order);
         } catch (EntityNotFoundException e) {
             log.error("failOrder 에서 발생: {}", e.getMessage());

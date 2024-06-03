@@ -2,19 +2,18 @@ package com.jsbs.casemall.controller;
 
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.service.OrderService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -24,13 +23,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.Base64;
+import java.util.Map;
 
+@Log4j2
 @Controller
-@Slf4j
 @RequiredArgsConstructor
 public class PaymentController {
 
-    private final OrderService orderService; // 주문 서비스 Di 준비
+    private final OrderService orderService;
 
     @PostMapping(value = "/confirm")
     public String confirmPayment(@RequestBody String jsonBody) {
@@ -105,11 +105,13 @@ public class PaymentController {
                 paymentMethod = (String) easyPayObject.get("provider");
                 payInfo = (String) jsonObject.get("method");
 
+                // 검증시작
                 if (orderService.validatePayment(orderId, Integer.parseInt(amount))) {
                     orderService.updateOrderWithPaymentInfo(orderId, paymentMethod, payInfo);
                     return "redirect:/success?orderId=" + orderId + "&amount=" + amount + "&paymentKey=" + paymentKey;
-                } else {
+                }else {
                     log.error("Payment validation failed for orderId: {}", orderId);
+                    orderService.failOrder(orderId); // 결제 검증 실패 시 주문을 실패 처리합니다.
                     return "redirect:/fail?message=Payment validation failed&code=400";
                 }
             } else {
@@ -158,4 +160,19 @@ public class PaymentController {
 
         return "pay/fail";
     }
+
+
+    // 주문을 취소했을 경우
+    @PostMapping("/cancel")
+    public ResponseEntity<String> cancelOrder(@RequestBody Map<String, String> request) {
+        String orderId = request.get("orderId");
+        try {
+            orderService.failOrder(orderId);
+            return ResponseEntity.ok("Order canceled successfully");
+        } catch (Exception e) {
+            log.error("Error canceling order", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to cancel order");
+        }
+    }
+
 }

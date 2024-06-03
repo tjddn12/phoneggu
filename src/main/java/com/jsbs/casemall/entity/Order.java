@@ -25,9 +25,6 @@ public class Order {
     @Column(name = "order_no") // 주문번호
     private Long id;
 
-//    @Column(name = "pr_count",nullable = false)
-//    private int prCount; // 상품 수량 < 이것도 상품상세에 리스트로 되어있으니 필요없는거 아닌가?
-
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
@@ -77,7 +74,6 @@ public class Order {
 
         order.setOrderStatus(OrderStatus.STAY); // 주문 상태
         order.setOrderDate(LocalDateTime.now()); // 결제 날짜
-
         order.setOrderId(UUID.randomUUID().toString()); // 고유한 주문 ID 생성
 
         return order;

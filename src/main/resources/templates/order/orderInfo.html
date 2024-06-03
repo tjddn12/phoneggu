@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,21 +8,25 @@
     <title>Document</title>
 </head>
 <body>
-<h1>상품 주문 페이지</h1>
-<input type="number" id="count" name="count" placeholder="수량"> 수량 <br>
-<input type="hidden" th:value="${prId}" id="prId">
-<a id="order-link" href="#">주문하기</a>
+<h1>테스트</h1>
+<input type="number" id="count" name="count" min="1" value="1"> 수량 <br>
+<a id="order-link" th:href="@{'/pay?prId=' + ${prId} + '&count=1'}">주문하기</a>
 
 <script>
-    const orderLink = document.getElementById('order-link');
-    const countInput = document.getElementById('count');
-    const prId = document.getElementById('prId').value;
-
-
-    countInput.addEventListener('input', function() {
-        const count = countInput.value;
+    document.getElementById('count').addEventListener('input', function () {
+        const count = this.value;
+        const prId = [[${prId}]]; // 타임리프를 이용하여 prId를 삽입
+        const orderLink = document.getElementById('order-link');
         orderLink.href = `/pay?prId=${prId}&count=${count}`;
     });
+
+    // 초기 로드 시 링크 설정
+    window.onload = function() {
+        const count = document.getElementById('count').value;
+        const prId = [[${prId}]]; // 타임리프를 이용하여 prId를 삽입
+        const orderLink = document.getElementById('order-link');
+        orderLink.href = `/pay?prId=${prId}&count=${count}`;
+    };
 </script>
 </body>
 </html>
