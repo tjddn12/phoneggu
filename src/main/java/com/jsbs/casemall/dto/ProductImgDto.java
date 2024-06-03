@@ -10,16 +10,17 @@ import org.modelmapper.ModelMapper;
 public class ProductImgDto {
     private Long id;
 
-    private String prImgName;
+    private String prImgName; //이미지 이름
 
-    private String prImgOriginName;
+    private String prImgOriginName; //원본 이미지 이름
 
     private String imgUrl;
 
-    private String prMainImg;
+    private String prMainImg; //대표 이미지 여부
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static ProductImgDto of(ProductImg prImg){
-        return modelMapper.map(prImg, ProductImgDto.class);
+    public static ProductImgDto of(ProductImg productImg){
+        return modelMapper.map(productImg, ProductImgDto.class);
     }
+    //ProductImg 엔티티를 ProductImgDto로 매핑
 }
