@@ -6,6 +6,7 @@ import com.jsbs.casemall.entity.Order;
 import com.jsbs.casemall.entity.OrderDetail;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Users;
+import com.jsbs.casemall.exception.OutOfStockException;
 import com.jsbs.casemall.repository.OrderRepository;
 import com.jsbs.casemall.repository.ProductRepository;
 import com.jsbs.casemall.repository.UserRepository;
@@ -27,6 +28,11 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final CartService cartService;
+
+    public OrderDto checkout(String userId) {
+        return cartService.checkoutCart(userId);
+    }
 
     @Transactional(readOnly = true)
     public boolean validatePayment(String orderId, int amount) {
@@ -63,34 +69,39 @@ public class OrderService {
     }
 
     // 주문 정보 생성과 반환하는 메소드
-    public OrderDto getOrder(Long prId, String id, int count) {
-        try {
-            Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
+    public OrderDto getOrder(Long prId, String id, int count,boolean fromCart) {
             Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
+        if (fromCart) {
+            // 장바구니에서 결제할 때
+            return cartService.checkoutCart(id);
+        } else {
+            // 단일 상품 상세 페이지에서 결제할 때
+            List<OrderDetail> orderDetails = new ArrayList<>();
+            int totalAmount = 0;
 
-            // 주문 상세 객체 생성
+            Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+            try {
+                product.removeStock(count); // 재고 감소
+            } catch (OutOfStockException e) {
+                throw new IllegalArgumentException("재고가 부족합니다: " + product.getPrName(), e);
+            }
+            productRepository.save(product);
+
             OrderDetail orderDetail = OrderDetail.createOrderDetails(product, count);
-            List<OrderDetail> orderItems = new ArrayList<>();
-            orderItems.add(orderDetail);
+            orderDetails.add(orderDetail);
+            totalAmount += orderDetail.getTotalPrice();
 
-            // 주문 정보 생성
-            Order order = Order.createOrder(user, orderItems);
+            Order order = Order.createOrder(user, orderDetails);
             orderRepository.save(order);
 
             return OrderDto.builder()
-                    .orderName(product.getPrName())
                     .orderID(order.getOrderId())
-                    .amount(orderDetail.getTotalPrice())
+                    .amount(totalAmount)
                     .userName(user.getName())
                     .email(user.getEmail())
                     .phone(user.getPhone())
                     .build();
-        } catch (EntityNotFoundException e) {
-            log.error("getOrder 에서 발생: {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error during order creation: {}", e.getMessage());
-            throw new RuntimeException("Order creation failed", e);
         }
     }
 

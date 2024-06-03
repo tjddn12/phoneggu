@@ -109,7 +109,7 @@ public class PaymentController {
                 if (orderService.validatePayment(orderId, Integer.parseInt(amount))) {
                     orderService.updateOrderWithPaymentInfo(orderId, paymentMethod, payInfo);
                     return "redirect:/success?orderId=" + orderId + "&amount=" + amount + "&paymentKey=" + paymentKey;
-                }else {
+                } else {
                     log.error("Payment validation failed for orderId: {}", orderId);
                     orderService.failOrder(orderId); // 결제 검증 실패 시 주문을 실패 처리합니다.
                     return "redirect:/fail?message=Payment validation failed&code=400";
@@ -140,13 +140,27 @@ public class PaymentController {
 
     @GetMapping(value = "/pay")
     public String payment(@RequestParam Long prId, @RequestParam int count, Model model, Principal principal) {
+        boolean fromCart = false;
         try {
-            OrderDto dto = orderService.getOrder(prId, principal.getName(), count);
+            OrderDto dto = orderService.getOrder(prId, principal.getName(), count, fromCart);
             model.addAttribute("order", dto);
             return "pay/checkout";
         } catch (Exception e) {
             log.error("Error creating order", e);
             return "redirect:/fail?message=Order creation failed&code=500";
+        }
+    }
+
+    @GetMapping(value = "/cart/pay")
+    public String payFromCart(Model model, Principal principal) {
+        boolean fromCart = true;
+        try {
+            OrderDto dto = orderService.getOrder(null, principal.getName(), 0, fromCart);
+            model.addAttribute("order", dto);
+            return "pay/checkout";
+        } catch (Exception e) {
+            log.error("Error creating order from cart", e);
+            return "redirect:/fail?message=Order creation from cart failed&code=500";
         }
     }
 
@@ -161,18 +175,16 @@ public class PaymentController {
         return "pay/fail";
     }
 
-
     // 주문을 취소했을 경우
     @PostMapping("/cancel")
     public ResponseEntity<String> cancelOrder(@RequestBody Map<String, String> request) {
         String orderId = request.get("orderId");
         try {
             orderService.failOrder(orderId);
-            return ResponseEntity.ok("Order canceled successfully");
+            return ResponseEntity.ok("주문 취소가 정상적으로 완료되었습니다");
         } catch (Exception e) {
             log.error("Error canceling order", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to cancel order");
         }
     }
-
 }
