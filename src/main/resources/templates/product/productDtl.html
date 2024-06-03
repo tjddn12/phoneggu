@@ -69,7 +69,7 @@
 <!--            var token = $("meta[name='_csrf']").attr("content");-->
 <!--            var header = $("meta[name='_csrf_header']").attr("content");-->
 
-            var url = "/cart/add";
+            var url = "/cart";
             var paramData = {
                 prId : $("#prId").val(),
                 count : $("#count").val()
@@ -178,7 +178,7 @@
                         class="btn btn-light border border-primary btn-lg">장바구니 담기</button>
 <!--                <button type="button" onclick="order()"-->
 <!--                        class="btn btn-primary btn-lg">주문하기</button>-->
-                <a  th:href="@{'/pay?prId=' + ${prId} + '&count=1'}"
+                <a th:href="@{'/pay?prId=' + ${prId} + '&count=1'}"
                         class="btn btn-primary btn-lg">주문하기</a>
             </div>
             <div th:unless="${product.productSellStatus == T(com.jsbs.casemall.constant.ProductSellStatus).SELL}"
