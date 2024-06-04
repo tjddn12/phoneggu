@@ -27,9 +27,9 @@
             <tbody>
             <tr th:each="item : ${cart.items}">
                 <td th:text="${item.productName}">상품명</td>
-                <td th:text="${item.quantity}">수량</td>
+                <td th:text="${item.count}">수량</td>
                 <td th:text="${item.price}">가격</td>
-                <td th:text="${item.price * item.quantity}">총 가격</td>
+                <td th:text="${item.price * item.count}">총 가격</td>
                 <td>
                     <form th:action="@{/cart/remove}" method="post">
                         <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">

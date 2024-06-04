@@ -10,14 +10,14 @@ public class CartItemDto {
     private Long cartItemId;
     private Long productId;
     private String productName;
-    private int quantity;
+    private int count;
     private int price;
 
     public CartItemDto(CartItem cartItem) {
         this.cartItemId = cartItem.getId();
         this.productId = cartItem.getProduct().getId();
         this.productName = cartItem.getProduct().getPrName();
-        this.quantity = cartItem.getQuantity();
+        this.count = cartItem.getCount();
         this.price = cartItem.getProduct().getPrPrice();
     }
 }

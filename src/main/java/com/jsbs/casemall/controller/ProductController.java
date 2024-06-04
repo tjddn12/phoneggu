@@ -136,13 +136,14 @@ public class ProductController {
         return "redirect:/admin/product/management";
     }
 
-    // 상품 상세 정보 조회 (일반 사용자용)
-    @GetMapping(value="/product/{prId}")
-    public String productDtl(Model model, @PathVariable("prId") Long prId) {
-        ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
-        model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
+        // 상품 상세 정보 조회 (일반 사용자용)
+        @GetMapping(value="/product/{prId}")
+        public String productDtl(Model model, @PathVariable("prId") Long prId) {
+            ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
+            model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
 
-        return "product/productDtl";
-    }
+    //        return "product/productDtl";
+            return "product/productTest";
+        }
 
 }

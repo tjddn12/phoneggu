@@ -16,7 +16,7 @@ public class OrderDto {
 
     private String orderID;
 
-    private String orderName; // 상
+    private String orderName; // 상품이름
 
     private String userName; // 주문한 고객이름
 

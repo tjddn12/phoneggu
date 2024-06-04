@@ -33,7 +33,11 @@ public class CartService {
     }
 
 
-    public void addItemToCart(String userId, Long productId, int quantity) {
+
+
+
+
+    public void addItemToCart(String userId, Long productId, int count) {
         // 이용 회원과 해당 상품이 디비에 있는지 확인
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
@@ -42,11 +46,12 @@ public class CartService {
         Cart cart = cartRepository.findByUser(user);
 
         // 기존에 있는지 확인
+        // 없으면 새로운 카트 만들기
         if (cart == null) {
             cart = Cart.createCart(user); // Cart 객체 생성 메서드 사용
         }
         // 장바구니상품 생성
-        CartItem cartItem = CartItem.createCartItem(product, quantity);
+        CartItem cartItem = CartItem.createCartItem(product, count);
         cart.addCartItems(cartItem);
         cartRepository.save(cart); // 장바구니에 임시 저장
 
@@ -64,9 +69,9 @@ public class CartService {
 
         for (CartItem cartItem : cart.getCartItems()) {
             Product product = cartItem.getProduct();
-            product.removeStock(cartItem.getQuantity());  // 재고 감소
+            product.removeStock(cartItem.getCount());  // 재고 감소
             productRepository.save(product);
-            OrderDetail orderDetail = OrderDetail.createOrderDetails(product, cartItem.getQuantity());
+            OrderDetail orderDetail = OrderDetail.createOrderDetails(product, cartItem.getCount());
             orderDetails.add(orderDetail);
             totalAmount += orderDetail.getTotalPrice(); // 총 금액을 계산
         }
@@ -97,23 +102,24 @@ public class CartService {
         }
     }
 
-    public void removeItemFromCart(String userId, Long cartItemId) {
+    public void removeItemFromCart(String userId, Long cartId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
+        // 장바구니가 비어있지 않으면
         if (cart != null) {
-            CartItem cartItemToRemove = null;
-            for (CartItem cartItem : cart.getCartItems()) {
-                if (cartItem.getId().equals(cartItemId)) {
-                    cartItemToRemove = cartItem;
+            CartItem removeCartItem = null; // 삭제하려는 아이템을 담을 변수
+            for (CartItem cartItem : cart.getCartItems()) { // cart 안에 아이템을 순회하면서 찾기
+                if (cartItem.getId().equals(cartId)) {
+                    removeCartItem = cartItem; // 찾으면 빠져나옴
                     break;
                 }
             }
-
-            if (cartItemToRemove == null) {
-                throw new EntityNotFoundException("Cart item not found");
+            // 예외 처리 삭제하려는 카트아이템이 없다면
+            if (removeCartItem == null) {
+                throw new EntityNotFoundException("해당 상품을 찾을 수 없습니다");
             }
 
-            cart.removeItems(cartItemToRemove);
+            cart.removeItems(removeCartItem);
             cartRepository.save(cart);
         }
     }

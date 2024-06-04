@@ -96,6 +96,7 @@ public class OrderService {
             orderRepository.save(order);
 
             return OrderDto.builder()
+                    .orderName(product.getPrName())
                     .orderID(order.getOrderId())
                     .amount(totalAmount)
                     .userName(user.getName())

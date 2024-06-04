@@ -28,13 +28,13 @@ public class CartItem {
     Product product;
 
 
-    int quantity; // 수량
+    int count; // 수량
 
     // CartItem 객체 생성 메서드
-    public static CartItem createCartItem(Product product, int quantity) {
+    public static CartItem createCartItem(Product product, int count) {
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
-        cartItem.setQuantity(quantity);
+        cartItem.setCount(count);
         return cartItem;
     }
 
