@@ -35,11 +35,11 @@ public class PaymentController {
     @PostMapping(value = "/confirm")
     public String confirmPayment(@RequestBody String jsonBody) {
         JSONParser parser = new JSONParser();
-        String orderId;
-        String amount;
-        String paymentKey;
-        String paymentMethod;
-        String payInfo;
+        String orderId; // 주문아이디
+        String amount; // 가격
+        String paymentKey; // 고객 식별 키
+        String paymentMethod; // 결제 방법
+        String payInfo; // 결제방식
 
         try {
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
@@ -138,6 +138,7 @@ public class PaymentController {
         return "pay/success";
     }
 
+    // 단일 주문
     @GetMapping(value = "/pay")
     public String payment(@RequestParam Long prId, @RequestParam int count, Model model, Principal principal) {
         boolean fromCart = false;
@@ -151,6 +152,7 @@ public class PaymentController {
         }
     }
 
+    // 장바구니 주문
     @GetMapping(value = "/cart/pay")
     public String payFromCart(Model model, Principal principal) {
         boolean fromCart = true;

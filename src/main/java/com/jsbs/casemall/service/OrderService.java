@@ -38,7 +38,8 @@ public class OrderService {
     public boolean validatePayment(String orderId, int amount) {
         try {
             // 주문을 조회합니다.
-            Order order = orderRepository.findByOrderId(orderId).orElse(null);
+            Order order = orderRepository.findByOrderId(orderId)
+                    .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
 
             // 주문이 존재하지 않을 경우 예외 발생
             if (order == null) {
@@ -68,43 +69,49 @@ public class OrderService {
         }
     }
 
-    // 주문 정보 생성과 반환하는 메소드
-    public OrderDto getOrder(Long prId, String id, int count,boolean fromCart) {
-            Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
+    // 주문 생성 (단일 상품, 장바구니 상품들)
+    public OrderDto getOrder(Long prId, String id, int count, boolean fromCart) {
+        Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         if (fromCart) {
             // 장바구니에서 결제할 때
             return cartService.checkoutCart(id);
         } else {
             // 단일 상품 상세 페이지에서 결제할 때
-            List<OrderDetail> orderDetails = new ArrayList<>();
-            int totalAmount = 0;
-
-            Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("Product not found"));
-
-            try {
-                product.removeStock(count); // 재고 감소
-            } catch (OutOfStockException e) {
-                throw new IllegalArgumentException("재고가 부족합니다: " + product.getPrName(), e);
-            }
-            productRepository.save(product);
-
-            OrderDetail orderDetail = OrderDetail.createOrderDetails(product, count);
-            orderDetails.add(orderDetail);
-            totalAmount += orderDetail.getTotalPrice();
-
-            Order order = Order.createOrder(user, orderDetails);
-            orderRepository.save(order);
-
-            return OrderDto.builder()
-                    .orderName(product.getPrName())
-                    .orderID(order.getOrderId())
-                    .amount(totalAmount)
-                    .userName(user.getName())
-                    .email(user.getEmail())
-                    .phone(user.getPhone())
-                    .build();
+            return createSingleOrder(prId, user, count);
         }
     }
+
+    // 단일 제품 주문서
+    private OrderDto createSingleOrder(Long prId, Users user, int count) {
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        int totalAmount = 0;
+
+        Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        try {
+            product.removeStock(count); // 재고 감소
+        } catch (OutOfStockException e) {
+            throw new IllegalArgumentException("재고가 부족합니다: " + product.getPrName(), e);
+        }
+        productRepository.save(product);
+
+        OrderDetail orderDetail = OrderDetail.createOrderDetails(product, count);
+        orderDetails.add(orderDetail);
+        totalAmount += orderDetail.getTotalPrice();
+
+        Order order = Order.createOrder(user, orderDetails);
+        orderRepository.save(order);
+
+        return OrderDto.builder()
+                .orderName(List.of(product.getPrName()))
+                .orderID(order.getOrderId())
+                .amount(totalAmount)
+                .userName(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
+    }
+
 
     public void updateOrderWithPaymentInfo(String orderId, String paymentMethod, String payInfo) {
         try {
@@ -126,10 +133,9 @@ public class OrderService {
             Order order = orderRepository.findByOrderId(orderId).orElseThrow(() -> new EntityNotFoundException("주문정보를 찾을수 없습니다"));
             order.setOrderStatus(OrderStatus.CANCEL);
 
-            for(OrderDetail orderDetail : order.getOrderItems()){
+            for (OrderDetail orderDetail : order.getOrderItems()) {
                 Product product = orderDetail.getProduct();
                 product.addStock(orderDetail.getCount()); // 다시 추가
-//                productRepository.save(product);
             }
 
             orderRepository.save(order);

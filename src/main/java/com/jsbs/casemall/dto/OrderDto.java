@@ -3,6 +3,8 @@ package com.jsbs.casemall.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class OrderDto {
@@ -16,13 +18,15 @@ public class OrderDto {
 
     private String orderID;
 
-    private String orderName; // 상품이름
+    private List<String> orderName; // 상품이름
 
     private String userName; // 주문한 고객이름
 
     private String email; // 이메일
 
     private String phone; // 전화번호
+
+
 
 
 

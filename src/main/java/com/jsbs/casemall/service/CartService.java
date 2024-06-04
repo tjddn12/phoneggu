@@ -12,12 +12,14 @@ import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CartService {
 
     private final CartRepository cartRepository;
@@ -26,17 +28,14 @@ public class CartService {
     private final OrderRepository orderRepository;
 
 
+    @Transactional(readOnly = true)
     public CartDto getCartByUserId(String userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
-        return new CartDto(cart);
+        return cart != null ? new CartDto(cart) : null;
     }
 
-
-
-
-
-
+    // 장바구니에 추가
     public void addItemToCart(String userId, Long productId, int count) {
         // 이용 회원과 해당 상품이 디비에 있는지 확인
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
@@ -45,18 +44,25 @@ public class CartService {
         // 카트 객체 생성
         Cart cart = cartRepository.findByUser(user);
 
-        // 기존에 있는지 확인
-        // 없으면 새로운 카트 만들기
         if (cart == null) {
-            cart = Cart.createCart(user); // Cart 객체 생성 메서드 사용
+            cart = Cart.createCart(user);
+        } else { // 기존에 있다면 해당 제품에 수량을 추가하고 장바구니에 저장
+            for (CartItem cartItem : cart.getCartItems()) {
+                if (cartItem.getProduct().equals(product)) {
+                    cartItem.addCount(count); // 기존 수량에 추가
+                    cartRepository.save(cart);
+                    return;
+                }
+            }
         }
-        // 장바구니상품 생성
+
         CartItem cartItem = CartItem.createCartItem(product, count);
         cart.addCartItems(cartItem);
-        cartRepository.save(cart); // 장바구니에 임시 저장
-
+        cartRepository.save(cart);
     }
 
+
+        // 장바구니에서 주문 목록 처리
     public OrderDto checkoutCart(String userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
@@ -65,51 +71,61 @@ public class CartService {
         }
 
         List<OrderDetail> orderDetails = new ArrayList<>();
+        List<String> productNames = new ArrayList<>(); // 주문 상품 이름 목록
         int totalAmount = 0; // 총 금액
 
         for (CartItem cartItem : cart.getCartItems()) {
             Product product = cartItem.getProduct();
-            product.removeStock(cartItem.getCount());  // 재고 감소
+            if (product.getPrStock() < cartItem.getCount()) {
+                throw new OutOfStockException("재고가 부족합니다: " + product.getPrName());
+            }
+            product.removeStock(cartItem.getCount());
             productRepository.save(product);
+
             OrderDetail orderDetail = OrderDetail.createOrderDetails(product, cartItem.getCount());
             orderDetails.add(orderDetail);
-            totalAmount += orderDetail.getTotalPrice(); // 총 금액을 계산
+            productNames.add(product.getPrName()); // 상품 이름 추가
+            totalAmount += orderDetail.getTotalPrice();
         }
 
         Order order = Order.createOrder(user, orderDetails);
         orderRepository.save(order);
 
         // 장바구니 비우기
-        cart.getCartItems().clear();
+        cart.clearItems();
         cartRepository.save(cart);
 
         return OrderDto.builder()
                 .orderID(order.getOrderId())
-                .amount(totalAmount) // 총 금액 설정
+                .amount(totalAmount)
                 .userName(user.getName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .orderName(productNames) // 주문 상품 이름 목록 설정
                 .build();
     }
 
-
+    // 비우기 메소드
     public void clearCart(String userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
         if (cart != null) {
             cart.getCartItems().clear();
             cartRepository.save(cart);
+        }else {
+            throw new IllegalArgumentException("장바구니가 없습니다");
         }
     }
 
-    public void removeItemFromCart(String userId, Long cartId) {
+    // 장바구니에서 삭제
+    public void removeItemFromCart(String userId, Long cartItemId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
         // 장바구니가 비어있지 않으면
         if (cart != null) {
             CartItem removeCartItem = null; // 삭제하려는 아이템을 담을 변수
             for (CartItem cartItem : cart.getCartItems()) { // cart 안에 아이템을 순회하면서 찾기
-                if (cartItem.getId().equals(cartId)) {
+                if (cartItem.getId().equals(cartItemId)) {
                     removeCartItem = cartItem; // 찾으면 빠져나옴
                     break;
                 }

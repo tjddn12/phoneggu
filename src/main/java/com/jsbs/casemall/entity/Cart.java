@@ -46,12 +46,16 @@ public class Cart {
     }
 
 
+    // 카트 아이템 삭제
     public void  removeItems(CartItem cartItem){
         this.cartItems.remove(cartItem);
         cartItem.setCart(null);
     }
 
-
+    // 카트 아이템 비우기
+    public void clearItems() {
+        this.cartItems.clear(); // cartItems 리스트를 비웁니다.
+    }
 
 
 
