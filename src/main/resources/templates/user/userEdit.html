@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 정보 수정</title>
+    <link rel="stylesheet" href="css/userEdit.css">
+</head>
+<body>
+    <section class="signup">
+        <h1 class="tit">회원 정보 수정</h1>
+        <form action="#" method="post">
+            <label for="userId">아이디 <strong>*</strong></label>
+            <input type="text" id="userId" name="userId" disabled>
+            
+            <label for="userPw">비밀번호  <strong>*</strong></label>
+            <input type="text" id="userPw" name="userPw">
+            
+            <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
+            <input type="text" id="confirm-userPw" name="confirm-userPw">
+            
+            <label for="name">이름  <strong>*</strong></label>
+            <input type="text" id="name" name="name" disabled>
+
+            <label for="address">주소 <strong>*</strong></label>
+            <input type="text" id="address" name="address">
+            <!-- pCode - 우편 주소  loadAddr - 도로명 주소  lotAddr - 지번 주소  detailAddr - 우편 주소 -->
+
+            <label for="phone">휴대전화  <strong>*</strong></label>
+<!--            <label for="phone">-->
+            <input type="text" id="phone1" name="phone1"> 
+            -
+            <input type="text" id="phone2" name="phone2"> 
+            -
+            <input type="text" id="phone3" name="phone3"></label>
+            
+            <label for="email">이메일  <strong>*</strong></label>
+            <input type="email" id="email" name="email">
+            
+            <div>
+                <label>이메일 수신여부 <strong>*</strong></label>
+                <input type="radio" id="receive-email" name="email-opt" value="receive">
+                <label for="receive-email">수신함</label>
+                <input type="radio" id="no-receive-email" name="email-opt" value="no-receive" checked>
+                <label for="no-receive-email">수신안함</label>
+            </div>
+            
+            <div>
+                <label>SMS 수신여부  <strong>*</strong></label>
+                <input type="radio" id="receive-sms" name="sms-opt" value="receive">
+                <label for="receive-sms">수신함</label>
+                <input type="radio" id="no-receive-sms" name="sms-opt" value="no-receive" checked>
+                <label for="no-receive-sms">수신안함</label>
+            </div>
+            
+        
+            <div class="button-container">
+                <button type="submit" class="btn1">회원정보수정</button>
+                <button type="button" onclick="location.href='#'" class="btn2">취소</button>
+            </div>
+        </form>
+    </section>
+</body>
+</html>

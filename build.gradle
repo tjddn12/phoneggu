@@ -36,7 +36,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.modelmapper:modelmapper:2.3.8'
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0'
 
 
 	// queryDSL
@@ -46,9 +46,12 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	//spring-boot-starter-data-auditing 의존성 추가
-	implementation 'org.springframework.boot:spring-boot-starter-data-auditing'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-auditing'
 	//심플 제이슨
 	implementation("com.googlecode.json-simple:json-simple:1.1.1")
+
+	// 서버자동 재시작
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('bootBuildImage') {

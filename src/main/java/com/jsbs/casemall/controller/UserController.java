@@ -18,17 +18,17 @@ public class UserController {
     private final UserService userService;
 
     // 회원가입 페이지 출력 요청
-    @GetMapping("/save")
+    @GetMapping("/join")
     public String saveForm() {
 
-        return "user/save";
+        return "user/join";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/join")
     public String userForm(@Valid  @ModelAttribute UserDto userDTO,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "user/save";
+            return "user/join";
         }
         System.out.println("userDTO" + userDTO);
         userService.JoinUser(userDTO);
@@ -38,7 +38,7 @@ public class UserController {
     // 로그인 페이지
     @GetMapping("/login")
     public String login(){
-        return  "user/userLoginForm"; // 로그인 페이지
+        return  "user/login"; // 로그인 페이지
     }
 
 

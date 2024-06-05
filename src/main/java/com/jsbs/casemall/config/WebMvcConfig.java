@@ -14,6 +14,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${uploadPath}")
     String uploadPath;
 
+
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
@@ -25,9 +27,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/order/pay/**")
                 .addResourceLocations("classpath:/templates/pay/", "classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
-
-
-
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("classpath:/static/images/");
     }
 
 }

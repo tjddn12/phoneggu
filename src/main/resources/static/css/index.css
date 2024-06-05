@@ -1,0 +1,215 @@
+*{margin:0;padding:0;}
+ul,li{list-style:none;}
+a{text-decoration:none;}
+.cf:after{
+    content:'';
+    display:block;
+    clear:both;
+}
+
+.header{
+    position: relative;
+    background-color: #bcdffd;
+    color: #fff;
+    padding: 20px 0;
+    font-family: 'Mochiy Pop One', sans-serif;
+}
+.mochiy-pop-one-regular {
+    font-family: "Mochiy Pop One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #fff;
+}
+.header-notices, .header-links{
+    position: absolute;
+    bottom: 10px;    
+}
+.header-notices a, .header-links a{color: #000;}
+.header-notices a:hover, .header-links a:hover{
+    color: #fff;
+    font-weight: bold;
+}
+.header_bottom img {
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+    padding-top: 10px;
+}
+
+nav{
+    z-index: 99;
+}
+.nav-item{
+    height: 40px;
+    margin: 10px 20px;    
+}
+nav a {
+    text-decoration: none;
+    color: #000;
+    text-align: center;
+}
+nav li:hover {
+    text-align: center;
+    transform: scale(1.4);
+    font-weight: bold;
+}
+/* nav li ul li a:hover {
+    font-size: 1.3em;
+    font-weight: bold;
+} */
+nav li ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    z-index: 1;
+    border: none;
+}
+nav li:hover ul {
+    display: block;
+}
+nav li ul li {
+    margin: 0;
+}
+nav li ul li a {
+    padding: 10px;
+    display: block;
+}
+.dropdown-menu {
+    border: none; 
+    box-shadow: none;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: transparent !important; /* 부트스트랩 기본 호버 배경색 제거 */
+    color: inherit; /* 텍스트 색상 유지 */
+}
+
+.carousel-inner{
+    width: 1500px;
+    margin: 0 auto;
+}
+.carousel-item {
+    height: 500px;
+}
+.carousel-item img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    /*background-color: 000; */
+    border-radius: 50%;
+}
+.carousel-control-prev {
+    left: 5%; 
+}
+.carousel-control-next {
+    right: 5%; 
+}
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px; 
+    height: 50px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%; 
+    top: 50%; 
+    transform: translateY(-50%);
+}
+.carousel-indicators [data-bs-target] {
+    background-color: #ffcc00; 
+}
+.carousel-indicators .active {
+    background-color: #ff9900;
+}
+
+.container {
+    width: 1500px;
+    margin: 0 auto;
+}
+.container h1{
+    padding: 40px;
+    text-align: center;
+    font-family: 'Mochiy Pop One', sans-serif;
+}
+
+.item_group{
+    height: 600px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+}
+.circle_group {
+    width: 1100px;
+    margin: 0 auto;
+    padding-top: 30px;
+    padding-left: 30px;
+}
+.circle-item {
+    float: left;
+    padding: 10px;
+}
+
+.event{
+    width: 1500px;
+    margin: 0 auto;
+}
+
+.event_text{
+    padding: 40px;
+    text-align: center;
+    font-family: 'Mochiy Pop One', sans-serif;
+}
+.event_imgs img{
+    width: 23%;
+    padding: 5px;
+}
+
+.footer {
+    background-color: #bcdffd;
+    color: #fff;
+    padding: 20px 0;
+}
+.footer a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+.footer .footer-content {
+    width: 1500px;
+    margin: 0 auto;
+}
+.footer h5 {
+    margin-top: 20px;
+    font-weight: bold;
+}
+.footer p {
+    margin: 0;
+}
+.footer .bottom-text {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+.footer .bottom-text p {
+    margin: 5px 0;
+}
+.footer .footer-links {
+    margin-bottom: 10px;
+}
+.bor_b{
+    border-bottom: 1px solid #fff;
+    padding-bottom: 10px;
+}
+.bor_r{
+    border-right: 1px solid #fff;
+}
+.bor_t{
+    border-top: 1px solid #fff;
+    padding-top: 10px;
+}

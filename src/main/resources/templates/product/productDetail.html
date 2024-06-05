@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/productDetail.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="product-container container">
+        <div class="product-image">
+            <img alt="" src="">
+        </div>
+        <div class="product-details">
+            <h1>[하드]Natural Soap 핑크 케이스</h1> <!--DB에 저장되어있는 상품 이름 -->
+            <div>브랜드: 자사브랜드</div>
+            <div class="price">판매가 : <span class="totalPrice"></span> 원</div>
+            <div class="shipping">배송비: 3,000원 (10,000원 이상 구매 시 무료)</div>
+            <div class="options">
+                <label for="options">종류:</label>
+                <select id="options">
+                    <option>- [필수] 옵션을 선택해 주세요 -</option>
+                    <option disabled value="">▶구매전 기종 확인 해주세요</option>
+                    <option value="">[하드] 갤럭시 z-플립1/2(+1000원)</option>
+                    <option disabled value="">------------</option>
+                    <option value="">[하드] 아이폰12mini</option>
+                </select>
+            </div>
+            <div class="minimum-order">
+                최소주문수량 1개 이상
+            </div>
+            <div class="totalProduct">
+                TOTAL: (
+                <spant class="totalProducts">0</spant>
+                개)
+            </div>
+            <button class="btn-save">찜</button>
+            <button class="btn-cart">카트</button>
+            <button class="btn-bay">바로구매</button>
+        </div>
+    </div>
+    <div class="foot">
+        <div><a href="#">구매가이드</a></div>
+        <div><a href="#">구매후기</a></div>
+        <div><a href="#">상품문의</a></div>
+    </div>
+    <div class="additional-info">
+        <div class="info-box" id=""></div>
+    </div>
+    <div class="detailguide">
+        <img alt="" src="images/detailguide.png">
+    </div>
+</div>
+</body>
+</html>
