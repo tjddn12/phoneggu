@@ -1,0 +1,38 @@
+*{margin:0;padding:0;}
+ul,li{list-style:none;}
+a{text-decoration:none;}
+.cf:after{
+    content:'';
+    display:block;
+    clear:both;
+}
+.wrap{
+    width: 1500px;
+    margin: 0 auto;
+}
+.top {      
+    position: relative;
+}
+.top_img img {
+    display: block;
+    height: 700px;
+}
+
+.top_bot{
+    width: 1500px;
+    position: absolute;
+    border-bottom: 1px solid #3f3f3f;
+}
+.top_bot .top_left{
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+}
+.top_bot .top_right{
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+}
+.top_bot .top_right a{
+    
+}
