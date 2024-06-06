@@ -1,0 +1,135 @@
+* {margin: 0; padding: 0;}
+ul, li {list-style: none;}
+a {text-decoration: none;}
+.cf:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+}
+
+.payment-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1500px;
+}
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-group-divider td:nth-child(2) img{
+    padding: 5px;
+    width: 100px;
+    height: 100px;
+}
+
+.table-group-divider td:nth-child(3) {
+    width: 500px; 
+}
+
+.table-group-divider td:nth-child(3) .prName {
+    font-weight: bold;
+    margin: 0;
+}
+
+.table-group-divider td:nth-child(3) .prDetail {
+    color: #777;
+    margin: 0;
+}
+.table-group-divider td:nth-child(4),
+.table-group-divider td:nth-child(6),
+.table-group-divider td:nth-child(7),
+.table-group-divider td:nth-child(8){
+    width: 130px;
+    font-weight: bold;    
+}
+.table-group-divider td:nth-child(5){width: 150px;}
+.prCount input[type="number"] {
+    width: 80px;
+}
+
+.table-group-divider td:nth-child(9){width: 90px;}
+.select button {
+    font-size: 11px;
+    width: 90px;
+}
+.tbBot th{text-align: left;}
+.tbBot td{text-align: end;}
+.tbBot .bb{font-weight: bold;}
+
+.border {
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+ul {
+    margin-top: 10px;
+}
+
+li {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #555;
+}
+
+.form-text {
+    font-size: 0.8em;
+    color: #888;
+}
+
+.input-group-text, .form-select, .form-control {
+    font-size: 0.9em;
+}
+
+.phoneNumber {
+    max-width: 80px;
+}
+
+.phoneNumber[aria-label="Middle number"], .phoneNumber[aria-label="Last number"] {
+    max-width: 100px;
+}
+
+.summary .table th, .summary .table td {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.form-check-input {
+    margin-right: 0.5em;
+}
+
+.form-check-label {
+    margin-right: 1em;
+}
+
+.btn-dark {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+}
+
+.btn-dark:hover {
+    background-color: #333;
+}
+
+.payment-content {
+    margin-top: 20px;
+}

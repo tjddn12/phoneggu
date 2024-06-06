@@ -5,6 +5,12 @@
     padding: 20px 0;
     font-family: 'Mochiy Pop One', sans-serif;
 }
+/* 헤더 컨테이너 민테 a */
+.header-container a{
+    text-decoration: none;
+
+}
+
 .mochiy-pop-one-regular {
     font-family: "Mochiy Pop One", sans-serif;
     font-weight: 400;

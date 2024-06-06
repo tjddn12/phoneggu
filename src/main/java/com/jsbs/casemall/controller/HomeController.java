@@ -23,4 +23,15 @@ public class HomeController {
 
     @GetMapping("/productDtl")
     String test3(){return "product/productDetail";}
+
+
+    @GetMapping("/cart/test")
+    public String tset222(){
+        return "cart/cart";
+    }
+    @GetMapping("/orderTest")
+    String orderTest(){
+        return "/pay/payment";
+    }
+
 }
