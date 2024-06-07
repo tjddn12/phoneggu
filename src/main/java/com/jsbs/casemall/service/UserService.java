@@ -36,4 +36,10 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+
+    public Users getUserByEmailAndPhoneNumber(String email, String phone) {
+        return userRepository.findByEmailAndPhone(email,phone).orElseThrow(EntityNotFoundException::new); // 없으면 예외 발생시킴
+
+    }
+
 }

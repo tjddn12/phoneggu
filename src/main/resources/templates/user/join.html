@@ -1,68 +1,161 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>PHONE GGU 회원가입</title>
     <link rel="stylesheet" th:href="@{/css/join.css}">
 </head>
 <body>
-    <div layout:fragment="content">
-        <section class="signup">
-            <h2 class="tit">회원가입</h2>
-            <p class="back-login">이미 계정이 있으신가요? <a href="#" class="bk-link">로그인 하러 가기</a></p>
-            <button class="kakao-login">카카오 로그인</button>
-            <form action="#" method="post">
-                <label for="userId">아이디 <strong>*</strong></label>
-                <input type="text" id="userId" name="userId">
-                
-                <label for="userPw">비밀번호  <strong>*</strong></label>
-                <input type="password" id="userPw" name="userPw">
-                
-                <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
-                <input type="password" id="confirm-userPw" name="confirm-userPw">
-                
-                <label for="name">이름  <strong>*</strong></label>
-                <input type="text" id="name" name="name">
-    
-                <label for="address">주소 <strong>*</strong></label>
-                <input type="text" id="address" name="address">
-                <!-- pCode - 우편 주소  loadAddr - 도로명 주소  lotAddr - 지번 주소  detailAddr - 우편 주소 -->
+<div layout:fragment="content">
+    <section class="signup">
+        <h2 class="tit">회원가입</h2>
+        <p class="back-login">이미 계정이 있으신가요? <a class="bk-link" href="/login">로그인 하러 가기</a></p>
+        <button class="kakao-login">카카오 로그인</button>
+        <form action="/join" method="post">
+            <label for="userId">아이디 <strong>*</strong></label>
+            <input id="userId" name="userId" type="text">
 
-                <label for="phone">휴대전화  <strong>*</strong></label>
-                <label for="phone">
-                <input type="text" id="phone1" name="phone1"> 
+            <label for="userPw">비밀번호 <strong>*</strong></label>
+            <input id="userPw" name="userPw" type="password">
+
+            <label for="confirm-userPw">비밀번호 확인 <strong>*</strong></label>
+            <input id="confirm-userPw" name="confirm-userPw" type="password">
+
+            <label for="name">이름 <strong>*</strong></label>
+            <input id="name" name="name" type="text">
+
+            <label class="col-sm-2 col-form-label" for="address">주소 <span
+                    class="text-danger">*</span></label>
+            <div class="input-group mb-2">
+                <input class="form-control" id="address" placeholder="우편번호" style="max-width: 150px;"
+                       type="text" name="p_code">
+                <button class="btn btn-outline-secondary" type="button">우편번호</button>
+            </div>
+            <input class="form-control mb-2" placeholder="도로명 주소" type="text" name="loadAddr">
+            <input class="form-control mb-2" placeholder="지번 주소" type="text" name="lotAddr">
+            <input class="form-control" placeholder="상세 주소" type="text" name="detailAddr">
+            <!-- pCode - 우편 주소  loadAddr - 도로명 주소  lotAddr - 지번 주소  detailAddr - 우편 주소 -->
+
+            <label for="phone">휴대전화 <strong>*</strong></label>
+            <label for="phone">
+                <input id="phone" name="phone" type="hidden" value="">
+                <input id="phone1" name="phone1" th:maxlength="3" type="tel">
                 -
-                <input type="text" id="phone2" name="phone2"> 
+                <input id="phone2" name="phone2" th:maxlength="4" type="tel">
                 -
-                <input type="text" id="phone3" name="phone3"></label>
-                
-                <label for="email">이메일  <strong>*</strong></label>
-                <input type="email" id="email" name="email">
-                
-                <div>
-                    <label>이메일 수신여부 <strong>*</strong></label>
-                    <input type="radio" id="receive-email" name="email-opt" value="receive">
-                    <label for="receive-email">수신함</label>
-                    <input type="radio" id="no-receive-email" name="email-opt" value="no-receive" checked>
-                    <label for="no-receive-email">수신안함</label>
-                </div>
-                
-                <div>
-                    <label>SMS 수신여부  <strong>*</strong></label>
-                    <input type="radio" id="receive-sms" name="sms-opt" value="receive">
-                    <label for="receive-sms">수신함</label>
-                    <input type="radio" id="no-receive-sms" name="sms-opt" value="no-receive" checked>
-                   <label for="no-receive-sms">수신안함</label>
-                </div>
-                
-                <div><button type="submit" class="btn">회원가입</button></div> 
-            </form>
-        </section>
-    </div>
-  
+                <input id="phone3" name="phone3" th:maxlength="4" type="tel">
+            </label>
+
+            <label for="email">이메일 <strong>*</strong></label>
+            <div class="input-group">
+                <input class="form-control" id="email" placeholder="이메일" style="max-width: 150px;"
+                       type="text" >
+                <span class="input-group-text">@</span>
+                <input class="form-control" id="email-domain" placeholder="직접입력" style="max-width: 150px;" type="text" >
+                <select class="form-select" style="max-width: 120px;" id="domain-select" onchange="updateEmailValue()">
+                    <option value="">직접입력</option>
+                    <option value="naver.com">naver.com</option>
+                    <option value="daum.net">daum.net</option>
+                    <option value="gmail.com">gmail.com</option>
+                    <option value="nate.com">nate.com</option>
+                </select>
+                <input type="hidden" name="email" id="resultEmail">
+            </div>
+
+            <div>
+                <label>이메일 수신여부 <strong>*</strong></label>
+                <input id="receive-email" name="email-opt" type="radio" value="receive">
+                <label for="receive-email">수신함</label>
+                <input checked id="no-receive-email" name="email-opt" type="radio" value="no-receive">
+                <label for="no-receive-email">수신안함</label>
+            </div>
+
+            <div>
+                <label>SMS 수신여부 <strong>*</strong></label>
+                <input id="receive-sms" name="sms-opt" type="radio" value="receive">
+                <label for="receive-sms">수신함</label>
+                <input checked id="no-receive-sms" name="sms-opt" type="radio" value="no-receive">
+                <label for="no-receive-sms">수신안함</label>
+            </div>
+
+            <div>
+                <button class="btn" type="submit">회원가입</button>
+            </div>
+        </form>
+
+        <script>
+            function updatePhoneValue() {  // 전화번호 phone 값 전달하는 스크립트
+                var phone1 = document.getElementById("phone1").value;
+                var phone2 = document.getElementById("phone2").value;
+                var phone3 = document.getElementById("phone3").value;
+                let phone = document.getElementById("phone");
+                phone.value = phone1 + phone2 + phone3;
+                console.log(phone.value) // 확인용
+            }
+
+            document.getElementById("phone1").addEventListener("change", updatePhoneValue);
+            document.getElementById("phone2").addEventListener("change", updatePhoneValue);
+            document.getElementById("phone3").addEventListener("change", updatePhoneValue);
 
 
+
+            function updateEmailValue() {
+                let selectBox = document.getElementById('domain-select');
+                let customDomainInput = document.getElementById('email-domain');
+
+                if (selectBox.value) {
+                    customDomainInput.value = selectBox.value;
+                    customDomainInput.disabled = true;
+                } else {
+                    customDomainInput.value = "";
+                    customDomainInput.disabled = false;
+                }
+
+                emailHiddenInput();  // Select 박스가 변경될 때 이메일 업데이트
+            }
+
+            function emailHiddenInput(){
+                let e1 = document.getElementById("email").value;
+                let domain = document.getElementById("email-domain").value;
+                let result = document.getElementById("resultEmail");
+                result.value = e1 + "@" + domain;
+                console.log(result.value)
+            }
+
+            document.getElementById("email").addEventListener("input", emailHiddenInput);
+            document.getElementById("email-domain").addEventListener("input", emailHiddenInput);
+
+
+
+
+
+
+            document.querySelector('.kakao-login').addEventListener('click', function () {
+                var width = 500;
+                var height = 600;
+                var left = (screen.width / 2) - (width / 2);
+                var top = (screen.height / 2) - (height / 2);
+
+                var popupUrl = 'http://localhost/join'; // 여기에 팝업으로 띄울 URL을 입력하세요
+
+                window.open(popupUrl, '로그인 팝업', 'width=' + 400 + ', height=' + 500 + ', top=' + 200 + ', left=' + 400);
+            });
+
+        </script>
+
+    </section>
+</div>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
