@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHONE GGU 회원가입</title>
-    <link rel="stylesheet" href="css/join.css">
-
+    <link rel="stylesheet" th:href="@{/css/join.css}">
 </head>
 <body>
+    <div layout:fragment="content">
         <section class="signup">
             <h2 class="tit">회원가입</h2>
+            <p class="back-login">이미 계정이 있으신가요? <a href="#" class="bk-link">로그인 하러 가기</a></p>
             <button class="kakao-login">카카오 로그인</button>
-            <form action="/join" method="post">
+            <form action="#" method="post">
                 <label for="userId">아이디 <strong>*</strong></label>
                 <input type="text" id="userId" name="userId">
                 
@@ -29,7 +30,7 @@
                 <!-- pCode - 우편 주소  loadAddr - 도로명 주소  lotAddr - 지번 주소  detailAddr - 우편 주소 -->
 
                 <label for="phone">휴대전화  <strong>*</strong></label>
-<!--                <label for="phone">-->
+                <label for="phone">
                 <input type="text" id="phone1" name="phone1"> 
                 -
                 <input type="text" id="phone2" name="phone2"> 
@@ -58,8 +59,7 @@
                 <div><button type="submit" class="btn">회원가입</button></div> 
             </form>
         </section>
-    </main>
-  
+    </div>
   
 
 

@@ -1,0 +1,154 @@
+* {margin: 0;padding: 0;}
+ul, li {list-style: none;}
+a {text-decoration: none;}
+.cf:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.orderComplete {
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 1500px;
+    text-align: center;
+}
+.orderComplete h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+.orderHeader {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.orderHeader .orderHeader_left{
+    width: 40%;    
+    float: left;
+    text-align: right;
+}
+.orderHeader .orderHeader_left img {    
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+.orderHeader .orderHeader_right{
+    width: 60%;
+    float: left;
+}
+.orderHeader_right p {
+    text-align: left;
+}
+.order-info, .payment_info{
+    text-align: left;
+    margin-bottom: 20px;
+}
+.order-info p, .payment_info p {
+    margin: 5px 0;
+}
+.order-info strong, .payment_info strong {
+    font-weight: bold;
+}
+.payment_info {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    padding-left: 50px;
+}
+.payment_info .amount {
+    font-size: 20px;
+    color: #333;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-group-divider td:nth-child(1) img{
+    padding: 5px;
+    width: 100px;
+    height: 100px;
+}
+
+.table-group-divider td:nth-child(2) {
+    width: 500px; 
+}
+
+.table-group-divider td:nth-child(2) .prName {
+    font-weight: bold;
+    margin: 0;
+}
+
+.table-group-divider td:nth-child(2) .prDetail {
+    color: #777;
+    margin: 0;
+}
+.table-group-divider td:nth-child(3),
+.table-group-divider td:nth-child(5),
+.table-group-divider td:nth-child(6),
+.table-group-divider td:nth-child(7){
+    width: 130px;
+    font-weight: bold;    
+}
+.table-group-divider td:nth-child(4){width: 150px;}
+
+.tbBot th{text-align: left;}
+.tbBot td{text-align: end;}
+.tbBot .bb{font-weight: bold;}
+
+.summary .table th, .summary .table td {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.shipping-info {
+    text-align: left;
+    margin-bottom: 20px;
+}
+.shipping-info strong {
+    font-size: 24px;
+    font-weight: bold;
+}
+.shipping-info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.shipping-info table th {
+    text-align: left;
+    width: 200px;
+    padding-left: 50px;
+}
+.shipping-info table td {
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    text-align: left;
+}
+.actions {
+    margin-top: 20px;
+}
+.actions .btn {
+    margin-left: 10px;
+}
+
+.usage-info {
+    text-align: left;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.usage-info p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.usage-info ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+.usage-info ul li {
+    margin-bottom: 5px;
+}

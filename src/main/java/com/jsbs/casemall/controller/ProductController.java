@@ -143,7 +143,7 @@ public class ProductController {
             model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
 
     //        return "product/productDtl";
-            return "product/productTest";
+            return "product/productDetail";
         }
 
 }

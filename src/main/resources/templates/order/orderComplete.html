@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>주문성공</title>
+    <link rel="stylesheet" th:href="@{/css/orderComplete.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="orderComplete">
+        <h1>주문완료</h1>
+        <div class="orderHeader cf">
+            <div class="orderHeader_left">
+                <img alt="Logo" src="/images/orderComplete.png">
+            </div>
+            <div class="orderHeader_right">
+                <p>고객님의 주문이 완료 되었습니다.</p>
+                <p>주문내역 및 배송에 관한 안내는 <strong>주문조회</strong>를 통하여 확인 가능합니다.</p>
+
+                <div class="order_info">
+                    <p><strong>주문번호:</strong> <span class="orderNumber">0</span></p>
+                    <p><strong>주문일자:</strong> <span class="orderDate">0</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment_info">
+            <p><strong>결제정보</strong></p>
+            <p class="amount"><strong>최종결제금액 :</strong> <span class="totalPrice">0</span>원</p>
+            <p><strong>결제수단 :</strong> <span class="paymentMethod"></span></p>
+            <p><strong>입금자 :</strong> <span class="payer"></span></p>
+            <p><strong>계좌번호 :</strong> <span class="accountNumber"></span></p>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>이미지</th>
+                <th>상품 정보</th>
+                <th>판매가</th>
+                <th>수량</th>
+                <th>배송비</th>
+                <th>배송구분</th>
+                <th>합계</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider align-middle ">
+            <tr>
+                <td class="prImg">
+                    <img alt="상품 이미지" class="img-fluid" src="">
+                </td>
+                <td class="prInfo">
+                    <p class="prName">상품 이름</p>
+                    <p class="prDetail">상품 설명</p>
+                </td>
+                <td><p><span class="prPrice">0</span>원</p></td>
+                <td class="prCount">
+                    <span class="totalCount">0</span>
+                </td>
+                <td><span class="shippingCost">0</span>원</td>
+                <td><span class="shipping">기본배송</span></td>
+                <td><span class="totalPrice">0</span>원</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table tbBot">
+            <th>[<span class="shipping">기본배송</span>]</th>
+            <td>상품구매금액 <span class="sumPrice bb">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
+                    class="sumTotalPrice bb">0</span>원
+            </td>
+        </table>
+
+        <div class="summary my-4">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>총 상품금액</th>
+                    <th>총 배송비</th>
+                    <th>결제예정금액</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                <tr>
+                    <th scope="row"><span class="price">0</span>원</th>
+                    <td><span class="cost">0</span>원</td>
+                    <td><span class="totalPrice">0</span>원</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="shipping-info">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><strong>배송지정보</strong></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>받으시는분</th>
+                    <td>홍길동</td>
+                </tr>
+                <tr>
+                    <th>우편번호</th>
+                    <td>12345</td>
+                </tr>
+                <tr>
+                    <th>주 소</th>
+                    <td>서울특별시 강남구 역삼동</td>
+                </tr>
+                <tr>
+                    <th>일반전화</th>
+                    <td>02-123-4567</td>
+                </tr>
+                <tr>
+                    <th>휴대전화</th>
+                    <td>010-1234-5678</td>
+                </tr>
+                <tr>
+                    <th>배송메시지</th>
+                    <td>문 앞에 놓아주세요.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="actions text-end">
+            <button class="btn btn-secondary">쇼핑계속하기</button>
+            <button class="btn btn-primary">주문확인하기</button>
+        </div>
+
+        <div class="usage-info">
+            <p><strong>이용안내</strong></p>
+            <ul>
+                <li>1. 비회원 주문의 경우, 주문번호를 꼭 기억하세요. 주문번호로 주문조회가 가능합니다.</li>
+                <li>2. 배송료 정책은 각 지역에 따라 다를 수 있으며 2,999원 이상일 수 있습니다.</li>
+                <li>3. 상품별 개별 배송비는 주문조회를 통해 확인하실 수 있습니다.</li>
+                <li>4. 주문 취소 및 변경, 고객문의 사항은 이용안내의 내용을 참고하십시오.</li>
+            </ul>
+            <p><strong>세금계산서 발행 안내</strong></p>
+            <ul>
+                <li>1. 부가가치세법 제 54조에 의거하여 세금계산서는 배송완료일로부터 다음달 10일까지 요청하실 수 있습니다.</li>
+                <li>2. 세금계산서는 사업자만 신청하실 수 있습니다.</li>
+                <li>3. [세금계산서] 메뉴를 통해 세금계산서 신청이 가능합니다.</li>
+                <li>4. [세금계산서 신청] 버튼을 클릭하여 신청양식을 작성하신 후 사업자등록증 사본을 보내셔야 세금계산서 발행이 가능합니다.</li>
+                <li>5. 매출전표(신용카드전표)와 세금계산서 중복발행은 불가합니다.</li>
+            </ul>
+            <p><strong>현금영수증 이용안내</strong></p>
+            <ul>
+                <li>1. 현금영수증을 발급 요청 시, 현금영수증 발급이 가능합니다.</li>
+                <li>2. 현금영수증 발급대상: 현금으로 결제한 경우 (실시간 계좌이체, 에스크로, 무통장입금).</li>
+                <li>3. 현금영수증 발급은 입금확인 후 [주문조회] 페이지에서 직접 인쇄가 가능합니다.</li>
+                <li>4. 현금영수증 발급 후, 미발행된 경우에 한해 발급이 가능합니다.</li>
+                <li>5. 현금영수증 신청 및 발급은 해당 사이트를 통해 가능합니다.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

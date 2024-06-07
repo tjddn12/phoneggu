@@ -1,8 +1,5 @@
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     background-color: #f9f9f9;
 }
@@ -14,8 +11,10 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 1500px;
+    min-height: 1000px;
 
 }
+
 .table th, .table td {
     text-align: center;
     vertical-align: middle;

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원 정보 수정</title>
-    <link rel="stylesheet" href="css/userEdit.css">
+    <link rel="stylesheet" th:href="@{/css/userEdit.css}">
 </head>
 <body>
+    <div layout:fragment="content">
     <section class="signup">
         <h1 class="tit">회원 정보 수정</h1>
         <form action="#" method="post">
@@ -14,10 +15,10 @@
             <input type="text" id="userId" name="userId" disabled>
             
             <label for="userPw">비밀번호  <strong>*</strong></label>
-            <input type="text" id="userPw" name="userPw">
+            <input type="password" id="userPw" name="userPw">
             
             <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
-            <input type="text" id="confirm-userPw" name="confirm-userPw">
+            <input type="password" id="confirm-userPw" name="confirm-userPw">
             
             <label for="name">이름  <strong>*</strong></label>
             <input type="text" id="name" name="name" disabled>
@@ -36,29 +37,14 @@
             
             <label for="email">이메일  <strong>*</strong></label>
             <input type="email" id="email" name="email">
-            
-            <div>
-                <label>이메일 수신여부 <strong>*</strong></label>
-                <input type="radio" id="receive-email" name="email-opt" value="receive">
-                <label for="receive-email">수신함</label>
-                <input type="radio" id="no-receive-email" name="email-opt" value="no-receive" checked>
-                <label for="no-receive-email">수신안함</label>
-            </div>
-            
-            <div>
-                <label>SMS 수신여부  <strong>*</strong></label>
-                <input type="radio" id="receive-sms" name="sms-opt" value="receive">
-                <label for="receive-sms">수신함</label>
-                <input type="radio" id="no-receive-sms" name="sms-opt" value="no-receive" checked>
-                <label for="no-receive-sms">수신안함</label>
-            </div>
-            
-        
+
+            <!-- 수정을 누르면 수정되었습니다 라는 메시지와 함께 원래 있던 페이지로 리다이렉트 -->
             <div class="button-container">
                 <button type="submit" class="btn1">회원정보수정</button>
                 <button type="button" onclick="location.href='#'" class="btn2">취소</button>
             </div>
         </form>
     </section>
+    </div>
 </body>
 </html>

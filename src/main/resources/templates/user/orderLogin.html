@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" th:href="@{/css/userLogin.css}">
+</head>
+<body>
+<!-- 주문시 로그인 안되어있으면 오는 페이지 -->
+    <th:block layout:fragment="content">
+    <div class="login-container">
+        <h1>LOGIN</h1>
+        <div class="tabs">
+            <div class="tab active">회원 로그인</div>
+            <div class="tab">비회원 주문조회</div>
+        </div>
+        <div class="form-container">
+            <div class="member-login">
+                <h2>회원 로그인</h2>
+                <form>
+                    <input type="text" placeholder="아이디" class="login-id">
+                    <button type="submit" class="login-button">로그인</button>
+                    <input type="password" placeholder="비밀번호" class="login-pw">
+                    
+                </form>
+                <button class="naver-login">네이버 로그인</button>
+                <button class="kakao-login">카카오 로그인</button>
+            </div>
+            <div class="links">
+              <div class="line"></div>
+                <a href="#">아이디찾기</a> | <a href="#">비밀번호찾기</a> | <a href="#">회원가입</a>
+            </div>
+            <p>비회원님도 상품구매가 가능하나 다양한 회원혜택에서 제외됩니다.</p>
+            <button class="guest-purchase">비회원구매</button>
+        </div>
+        <div class="login-bottom">
+            <p class="big">아직도 회원이 아니세요?</p>
+            <p>지금 회원 가입 하시고 더욱 다양한 이벤트에 참여해보세요.</p>
+            <p>회원만의 특별한 혜택을 가장 먼저 만나보세요.</p>
+        </div>
+    </div>
+    </th:block>
+</body>
+</html>

@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
 body {
@@ -25,6 +24,7 @@ body {
 }
 
 .signup {
+    font-family: Arial, sans-serif;
     border: 3px solid #aaa;
     background-color: #fff;
     padding: 20px;
@@ -32,7 +32,12 @@ body {
     width: 60%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.signup > .back-login {
+    float: right;
+    margin-top: 30px;
+    font-size: 13px;
 
+}
 .signup h2 {
     margin-bottom: 20px;
 }
@@ -118,7 +123,6 @@ form button {
 .btn{
     width: 120px;
     height: 50px;
-    margin: auto;
-    display: block; 
-    margin-top: 50px;
+    margin: 50px auto 0;
+    display: block;
 }

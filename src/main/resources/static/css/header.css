@@ -3,14 +3,16 @@
     background-color: #bcdffd;
     color: #fff;
     padding: 20px 0;
-    font-family: 'Mochiy Pop One', sans-serif;
+    font-family: 'Mochiy Pop One' , sans-serif ;
 }
 /* 헤더 컨테이너 민테 a */
 .header-container a{
     text-decoration: none;
 
 }
-
+.header_bottom > .container{
+    margin: 50px auto;
+}
 .mochiy-pop-one-regular {
     font-family: "Mochiy Pop One", sans-serif;
     font-weight: 400;
@@ -35,24 +37,24 @@
     padding-top: 10px;
 }
 
-nav {
+.navbar {
     z-index: 99;
 }
-.nav-item {
+.navbar-nav > .nav-item {
     height: 40px;
     margin: 10px 20px;
 }
-nav a {
+.navbar a {
     text-decoration: none;
     color: #000;
     text-align: center;
 }
-nav li:hover {
+.navbar li:hover {
     text-align: center;
     transform: scale(1.4);
     font-weight: bold;
 }
-nav li ul {
+.navbar li ul {
     display: none;
     position: absolute;
     top: 100%;
@@ -61,13 +63,13 @@ nav li ul {
     z-index: 1;
     border: none;
 }
-nav li:hover ul {
+.navbar li:hover ul {
     display: block;
 }
-nav li ul li {
+.navbar li ul li {
     margin: 0;
 }
-nav li ul li a {
+.navbar li ul li a {
     padding: 10px;
     display: block;
 }
