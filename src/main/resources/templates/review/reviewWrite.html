@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰쓰기 | 폰꾸</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--    CSS-->
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" th:href="@{/css/review.css}">
+        <link rel="stylesheet" th:href="@{/css/thumbnail.css}">
+    </th:block>
+</head>
+<body layout:fragment="content">
+<div class="title-wrapper">
+    <h2>리뷰쓰기</h2>
+</div>
+<div class="container content-wrapper">
+    <div class="writeBox">
+        <form id="writeForm" class="write-form" th:action="@{/review/write}" method="post">
+            <fieldset>
+                <legend>상품 정보</legend>
+            </fieldset>
+            <table>
+                <tbody>
+                <tr>
+                    <td><img th:src="" alt="" style="width: 80px; height: 80px"></td>
+                    <!--                            : 이미지 삽입 코드는 추후 추가-->
+                    <td class="option-area" th:value="*{product.prodNo}">
+                        <a th:href="@{/product/details(no=={product.prodNo})}">[[*{product.prodName}]]</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <fieldset>
+                <legend>리뷰 작성</legend>
+            </fieldset>
+            <table class="review-table">
+                <colgroup>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>제목</th>
+                    <td>
+                        <input type="text" id="orderNo" name="orderNo" th:value="${reviewDto.orderNo}" hidden="hidden">
+                        <input type="text" id="revwTitle" name="revwTitle" th:value="${reviewDto.revwTitle}" placeholder="제목을 입력하세요">
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>별점</th>
+                    <td colspan="2">
+                        <div class="stars">
+                            <input type="radio" id="one" name="revwRatings" value="1">
+                            <label for="one">&#9733;</label>
+                            <input type="radio" id="two" name="revwRatings" value="2">
+                            <label for="two">&#9733;</label>
+                            <input type="radio" id="three" name="revwRatings" value="3">
+                            <label for="three">&#9733;</label>
+                            <input type="radio" id="four" name="revwRatings" value="4">
+                            <label for="four">&#9733;</label>
+                            <input type="radio" id="five" name="revwRatings" value="5">
+                            <label for="five">&#9733;</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>
+                        <div>
+                            <textarea name="revwContent" id="revwContent" th:text="${reviewDto.revwContent}" cols="30" rows="10"></textarea>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>사진첨부</th>
+                    <td class="thumbnailBox reviewImageBox">
+                        <ul>
+                            <li class="imageItem" onclick="previewImage()">
+                                <div class="imageBox reviewImage">
+                                    <label for="image1" class="imageLabel">
+                                        <i class="fa-solid fa-image" style="font-size: 300%"></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li class="imageItem" onclick="previewImage()">
+                                <div class="imageBox reviewImage">
+                                    <label for="image2" class="imageLabel">
+                                        <i class="fa-solid fa-image" style="font-size: 300%"></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li class="imageItem" onclick="previewImage()">
+                                <div class="imageBox reviewImage">
+                                    <label for="image3" class="imageLabel">
+                                        <i class="fa-solid fa-image" style="font-size: 300%"></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                        <input type="text" id="image1" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                        <input type="text" id="image2" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                        <input type="text" id="image3" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="buttonBox">
+                <button type="button" class="cancelBtn btn" onclick="history.back()">취소</button>
+                <button type="submit" class="writeBtn btn btn-dark">등록</button>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/review.js}" type="text/javascript"></script>
+</th:block>
+</body>
+</html>
