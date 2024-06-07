@@ -1,6 +1,8 @@
 package com.jsbs.casemall.controller;
 
 import ch.qos.logback.classic.Logger;
+import com.jsbs.casemall.constant.ProductCategory;
+import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.ProductFormDto;
 import com.jsbs.casemall.dto.ProductSearchDto;
 import com.jsbs.casemall.entity.Product;
@@ -145,5 +147,21 @@ public class ProductController {
     //        return "product/productDtl";
             return "product/productDetail";
         }
+
+    @GetMapping("/products")
+    public String getProducts(@RequestParam(required = false) ProductCategory category,
+                              @RequestParam(required = false) ProductType type,
+                              Model model) {
+        List<Product> products;
+        if (type != null) {
+            products = productService.getProductsByType(type);
+        } else if (category != null) {
+            products = productService.getProductsByCategory(category);
+        } else {
+            products = productService.getProductsByCategory(ProductCategory.DEFAULT); // 전체 상품을 반환하도록 수정 필요
+        }
+        model.addAttribute("products", products);
+        return "productList";
+    }
 
 }

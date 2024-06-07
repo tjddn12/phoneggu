@@ -1,5 +1,7 @@
 package com.jsbs.casemall.repository;
 
+import com.jsbs.casemall.constant.ProductCategory;
+import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,8 +16,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
 
 
     List<Product> findByPrName(String prName);
-    List<Product> findByProductCategory(int prCategory);
-    List<Product> findByProductType(int prType);
+    List<Product> findByProductCategory(ProductCategory productCategory);
+    List<Product> findByProductType(ProductType productType);
+//    List<Product> findByProductCategory(String prCategory);
+//    List<Product> findByProductType(String prType);
     List<Product> findByPrNameOrPrDetail(String prName, String prDetail);
     List<Product> findByPrPriceLessThan(Long prPrice);
     List<Product> findByPrPriceLessThanOrderByPrPriceDesc(Long prPrice);

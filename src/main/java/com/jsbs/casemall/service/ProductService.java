@@ -1,5 +1,7 @@
 package com.jsbs.casemall.service;
 
+import com.jsbs.casemall.constant.ProductCategory;
+import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.*;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.ProductImg;
@@ -143,6 +145,14 @@ public class ProductService {
 
         // 상품 삭제
         productRepository.delete(product);
+    }
+
+    public List<Product> getProductsByCategory(ProductCategory category) {
+        return productRepository.findByProductCategory(category);
+    }
+
+    public List<Product> getProductsByType(ProductType type) {
+        return productRepository.findByProductType(type);
     }
 
 }

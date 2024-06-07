@@ -1,7 +1,15 @@
 package com.jsbs.casemall.constant;
 
 public enum ProductType {
-    JELLY,
     HARD,
-    CARD_STORAGE
+    JELLY,
+    CARD,
+    ROUND,
+    HEART,
+    ACRYLIC,
+    AIRPODS_1_2,
+    AIRPODS_PRO,
+    AIRPODS_3,
+    BUDS,
+    APPLE_WATCH
 }

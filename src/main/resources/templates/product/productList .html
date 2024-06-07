@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Document</title>
-    <link rel="stylesheet" th:href="@{/css/case.css}">
+    <link rel="stylesheet" th:href="@{/css/productList.css}">
 </head>
 <body>
 <div layout:fragment="content">
@@ -16,7 +16,29 @@
             </div>
             <div class="top_bot d-flex justify-content-between">
                 <div class="top_left">
-                    <p>폰 케이스</p> <!-- 하드면  하드 / 카드 수납 / 젤리 누르면 innerText 이용해서 p 태그 안에 글씨 넣어주기  -->
+                    <div>
+                        <p class="phoneCase">폰 케이스</p>
+                        <p class="phoneCase_drop1">하드</p>
+                        <p class="phoneCase_drop2">젤리</p>
+                        <p class="phoneCase_drop3">카드 수납</p>
+                    </div>
+                    <div>
+                        <p class="tok">톡</p>
+                        <p class="tok_drop1">원형톡</p>
+                        <p class="tok_drop2">하트톡</p>
+                        <p class="tok_drop3">아크릴톡</p>
+                    </div>
+                    <div>
+                        <p class="airPods">에어팟/버즈</p>
+                        <p class="airPods_drop1">에어팟1/2세대</p>
+                        <p class="airPods_drop2">에어팟PRO</p>
+                        <p class="airPods_drop3">에어팟3세대</p>
+                        <p class="airPods_drop4">버즈</p>
+                    </div>
+                    <div>
+                        <p class="digital">디지털</p>
+                        <p class="digital_drop1">애플워치</p>
+                    </div>
                 </div>
                 <ul class="top_right d-flex">
                     <li><a href="#">신상품</a></li>
@@ -27,27 +49,45 @@
                 </ul>
             </div>
         </div>
+
         <!-- 내비 -->
         <nav class="navigation">
-            <ul class="d-flex justify-content-center">
+            <ul class="d-flex justify-content-center phoneCase">
                 <li><a href="#">하드</a></li>
                 <li><a href="#">카드수납</a></li>
                 <li><a href="#">젤리</a></li>
             </ul>
+            <ul class="d-flex justify-content-center tok">
+                <li><a href="#">원형톡</a></li>
+                <li><a href="#">하트톡</a></li>
+                <li><a href="#">아크릴톡</a></li>
+            </ul>
+            <ul class="d-flex justify-content-center airPods">
+                <li><a href="#">에어팟1/2세대</a></li>
+                <li><a href="#">에어팟PRO</a></li>
+                <li><a href="#">에어팟3세대</a></li>
+                <li><a href="#">버즈</a></li>
+            </ul>
+            <ul class="d-flex justify-content-center digital">
+                <li><a href="#">애플워치</a></li>
+            </ul>
         </nav>
+
         <!-- 실제 디비에 저장되어있는 상품 나열 -->
-        <div class="product">
-            <div class="product-image">
-                <a href="이미지_링크"><img alt="보드-Molli 이미지" src="이미지_주소"></a>
-            </div>
-            <div class="product-info">
-                <p class="product-name">
-                    <a href="상품_이름_링크">[카드수납]★★보드-Molli</a>
-                </p>
-                <div class="price-info">
-                    <span class="original-price"><a class="no-click" href="#">KRW 24,000</a></span>
-                    <span class="discount"><a class="no-click" href="#">47% 할인</a></span>
-                    <span class="discounted-price"><a class="no-click" href="#">KRW 12,800</a></span>
+        <div class="product-list">
+            <div class="product" th:each="product : ${products}">
+                <div class="product-image">
+                    <a th:href="@{/products/{id}(id=${product.id})}"><img th:src="@{${product.imageUrl}}" th:alt="${product.prName} 이미지"></a>
+                </div>
+                <div class="product-info">
+                    <p class="product-name">
+                        <a th:href="@{/products/{id}(id=${product.id})}"><span th:text="${product.prName}"></span></a>
+                    </p>
+                    <div class="price-info">
+                        <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
+                        <span class="discount"><a class="no-click" href="#"><span th:text="${product.discount} + '% 할인'"></span>할인</a></span>
+                        <span class="discounted-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice - (product.prPrice * product.discount / 100)}"></span>원</a></span>
+                    </div>
                 </div>
             </div>
         </div>
