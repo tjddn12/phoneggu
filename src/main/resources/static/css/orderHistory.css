@@ -1,0 +1,76 @@
+* {margin: 0;padding: 0;}
+ul, li {list-style: none;}
+a {text-decoration: none;}
+.cf:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.orderHistory {
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 1500px;
+}
+.orderHistory h1 {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.tab_menu {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+}
+.tab_menu div {
+    padding: 10px 20px;
+    cursor: pointer;
+    flex-grow: 1;
+    text-align: center;
+}
+.tab_menu .active {
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+}
+
+.search_bar {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+.search_bar .dropdown, .search_bar .btn_group, .search_bar input, .search_bar button {
+    margin-right: 10px;
+}
+.search_bar input[type="date"] {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.search_bar span {
+    margin: 0 5px;
+}
+
+table{text-align: center;}
+
+.pagination_container {
+    width: 100%;
+    text-align: center;
+}
+.pagination_btn {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: pointer;
+    margin: 0 2px;
+}
+.pagination_btn.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+}
