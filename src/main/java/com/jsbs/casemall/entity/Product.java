@@ -29,6 +29,7 @@ public class Product extends BaseEntity{
     @Column(name = "pr_name", nullable = false, length = 100)
     private String prName; //상품 이름
 
+
     @Lob
     @Column(name = "pr_detail", nullable = false, length = 100)
     private String prDetail; //상품 설명
