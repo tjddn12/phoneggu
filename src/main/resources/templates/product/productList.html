@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Document</title>
+    <title>productList</title>
     <link rel="stylesheet" th:href="@{/css/productList.css}">
+    <script th:src="@{/js/productList.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -16,29 +17,7 @@
             </div>
             <div class="top_bot d-flex justify-content-between">
                 <div class="top_left">
-                    <div>
-                        <p class="phoneCase">폰 케이스</p>
-                        <p class="phoneCase_drop1">하드</p>
-                        <p class="phoneCase_drop2">젤리</p>
-                        <p class="phoneCase_drop3">카드 수납</p>
-                    </div>
-                    <div>
-                        <p class="tok">톡</p>
-                        <p class="tok_drop1">원형톡</p>
-                        <p class="tok_drop2">하트톡</p>
-                        <p class="tok_drop3">아크릴톡</p>
-                    </div>
-                    <div>
-                        <p class="airPods">에어팟/버즈</p>
-                        <p class="airPods_drop1">에어팟1/2세대</p>
-                        <p class="airPods_drop2">에어팟PRO</p>
-                        <p class="airPods_drop3">에어팟3세대</p>
-                        <p class="airPods_drop4">버즈</p>
-                    </div>
-                    <div>
-                        <p class="digital">디지털</p>
-                        <p class="digital_drop1">애플워치</p>
-                    </div>
+                    <p id="main-category"></p>
                 </div>
                 <ul class="top_right d-flex">
                     <li><a href="#">신상품</a></li>
@@ -52,24 +31,24 @@
 
         <!-- 내비 -->
         <nav class="navigation">
-            <ul class="d-flex justify-content-center phoneCase">
-                <li><a href="#">하드</a></li>
-                <li><a href="#">카드수납</a></li>
-                <li><a href="#">젤리</a></li>
+            <ul class="d-flex justify-content-center" th:if="${mainCategory != null && mainCategory.name() == 'PHONE_CASE'}">
+                <li><a th:href="@{/products?category=PHONE_CASE&type=HARD}" class="nav-link" data-category="PHONE_CASE" data-type="HARD">하드</a></li>
+                <li><a th:href="@{/products?category=PHONE_CASE&type=CARD}" class="nav-link" data-category="PHONE_CASE" data-type="CARD">카드 수납</a></li>
+                <li><a th:href="@{/products?category=PHONE_CASE&type=JELLY}" class="nav-link" data-category="PHONE_CASE" data-type="JELLY">젤리</a></li>
             </ul>
-            <ul class="d-flex justify-content-center tok">
-                <li><a href="#">원형톡</a></li>
-                <li><a href="#">하트톡</a></li>
-                <li><a href="#">아크릴톡</a></li>
+            <ul class="d-flex justify-content-center" th:if="${mainCategory != null && mainCategory.name() == 'TOK'}">
+                <li><a th:href="@{/products?category=TOK&type=ROUND}" class="nav-link" data-category="TOK" data-type="ROUND">원형톡</a></li>
+                <li><a th:href="@{/products?category=TOK&type=HEART}" class="nav-link" data-category="TOK" data-type="HEART">하트톡</a></li>
+                <li><a th:href="@{/products?category=TOK&type=ACRYLIC}" class="nav-link" data-category="TOK" data-type="ACRYLIC">아크릴톡</a></li>
             </ul>
-            <ul class="d-flex justify-content-center airPods">
-                <li><a href="#">에어팟1/2세대</a></li>
-                <li><a href="#">에어팟PRO</a></li>
-                <li><a href="#">에어팟3세대</a></li>
-                <li><a href="#">버즈</a></li>
+            <ul class="d-flex justify-content-center" th:if="${mainCategory != null && mainCategory.name() == 'AIRPODS'}">
+                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_1_2}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_1_2">에어팟1/2세대</a></li>
+                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_PRO}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_PRO">에어팟PRO</a></li>
+                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_3}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_3">에어팟3세대</a></li>
+                <li><a th:href="@{/products?category=AIRPODS&type=BUDS}" class="nav-link" data-category="AIRPODS" data-type="BUDS">버즈</a></li>
             </ul>
-            <ul class="d-flex justify-content-center digital">
-                <li><a href="#">애플워치</a></li>
+            <ul class="d-flex justify-content-center" th:if="${mainCategory != null && mainCategory.name() == 'DIGITAL'}">
+                <li><a th:href="@{/products?category=DIGITAL&type=APPLE_WATCH}" class="nav-link" data-category="DIGITAL" data-type="APPLE_WATCH">애플워치</a></li>
             </ul>
         </nav>
 

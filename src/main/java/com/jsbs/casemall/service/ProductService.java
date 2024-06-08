@@ -155,4 +155,7 @@ public class ProductService {
         return productRepository.findByProductType(type);
     }
 
+    public List<Product> getAllProducts() {
+        return productRepository.findAll(); // 전체 상품을 반환하는 메서드
+    }
 }
