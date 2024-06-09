@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Header</title>
-
 </head>
 <body>
 <div th:fragment="header">
@@ -25,6 +24,16 @@
                 </div>
                 <div class="col-md-4 d-flex justify-content-end">
                     <div class="header-links">
+                        <!-- ADMIN 드롭다운 메뉴 -->
+                        <div class="dropdown" sec:authorize="hasRole('ADMIN')" style="display: inline-block;">
+                            <a class="me-3 dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                ADMIN
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="adminDropdown" style="margin-top: 10px;">
+                                <li><a class="dropdown-item" th:href="@{/admin/product/new}">상품 등록</a></li>
+                                <li><a class="dropdown-item" th:href="@{/admin/product/management}">상품 관리</a></li>
+                            </ul>
+                        </div>
                         <a class="me-3" th:href="@{/login}" sec:authorize="!isAuthenticated()">LOGIN</a>
                         <a class="me-3" th:href="@{/join}" sec:authorize="!isAuthenticated()">JOIN US</a>
                         <a class="me-3" th:href="@{/logout}" sec:authorize="isAuthenticated()">LOG OUT</a>
@@ -49,7 +58,6 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
-
                         <li class="nav-item dropdown">
                             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
                                id="navPhoneCase" role="button">폰 케이스</a>
@@ -59,7 +67,6 @@
                                 <li><a class="dropdown-item" th:href="@{/products(category='PHONE_CASE', type='CARD')}" id="navCard">카드수납</a></li>
                             </ul>
                         </li>
-
                         <li class="nav-item dropdown">
                             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
                                id="navTok" role="button">톡</a>
@@ -69,7 +76,6 @@
                                 <li><a class="dropdown-item" th:href="@{/products(category='TOK', type='ACRYLIC')}" id="navAcrylic">아크릴톡</a></li>
                             </ul>
                         </li>
-
                         <li class="nav-item dropdown">
                             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
                                id="navAirPodsBuds" role="button">에어팟/버즈</a>
@@ -80,7 +86,6 @@
                                 <li><a class="dropdown-item" th:href="@{/products(category='AIRPODS', type='BUDS')}" id="navBuds">버즈</a></li>
                             </ul>
                         </li>
-
                         <li class="nav-item dropdown">
                             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
                                id="navDigital" role="button">디지털</a>

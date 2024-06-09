@@ -104,20 +104,19 @@ public class ProductController {
         return "redirect:/admin/product/management";
     }
 
-
     // 상품 관리 페이지 및 검색 처리
     @GetMapping(value = {"/admin/product/management", "/admin/product/management/{page}"})
     public String productManage(ProductSearchDto productSearchDto,
-                                @PathVariable(name = "prId", required = false) Long prId,
                                 @PathVariable(name = "page", required = false) Integer page, Model model) {
 
         Pageable pageable = PageRequest.of(page != null ? page : 0, 5);
         Page<Product> management = productService.getAdminProductPage(productSearchDto, pageable);
 
-        if (prId != null) {
-            ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
-            model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
-        }
+//        // 디버깅 로그 추가
+//        log.info("Pageable: {}, Management: {}", pageable, management);
+//        log.info("Products: {}", management.getContent());
+//        log.info("Total Pages: {}", management.getTotalPages());
+//        log.info("Current Page: {}", management.getNumber());
 
         model.addAttribute("management", management);
         model.addAttribute("productSearchDto", productSearchDto);
@@ -125,6 +124,7 @@ public class ProductController {
 
         return "product/productManagement";
     }
+
 
     // 상품 삭제 처리
     @PostMapping("/admin/product/delete/{prId}")
@@ -137,6 +137,7 @@ public class ProductController {
         }
         return "redirect:/admin/product/management";
     }
+
 
     // 상품 상세 정보 조회 (일반 사용자용)
     @GetMapping(value="/product/{prId}")

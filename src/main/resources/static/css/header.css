@@ -26,6 +26,22 @@
 .header-notices a, .header-links a {
     color: #000;
 }
+
+.header-links a,
+.header-links .dropdown {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.header-links .dropdown-menu {
+    top: 100%;
+    left: -20px;
+    margin-top: 0;
+    width: 80px;
+    background-color: #bcdffd;
+}
+
 .header-notices a:hover, .header-links a:hover {
     color: #fff;
     font-weight: bold;
@@ -38,7 +54,7 @@
 }
 
 .navbar {
-    z-index: 99;
+    z-index: 10;
 }
 .navbar-nav > .nav-item {
     height: 40px;

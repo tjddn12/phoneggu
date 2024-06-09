@@ -70,13 +70,6 @@ public class ProductService {
             log.warn("No product images found for ID: {}", prId); // 이미지가 없는 경우 경고 출력
         }
 
-//        // ProductImg 엔티티를 ProductImgDto로 변환하여 리스트에 추가
-//        List<ProductImgDto> productImgDtoList = new ArrayList<>();
-//        for (ProductImg productImg : productImgList) {
-//            ProductImgDto productImgDto = ProductImgDto.of(productImg);
-//            productImgDtoList.add(productImgDto);
-//        }
-
         List<ProductImgDto> productImgDtoList = product.getProductImgList().stream()
                 .map(img -> {
                     ProductImgDto productImgDto = new ProductImgDto();
@@ -86,8 +79,6 @@ public class ProductService {
                 .collect(Collectors.toList());
 
         // Product 엔티티를 가져와서 없으면 예외 발생
-
-
 
         productFormDto.setProductImgDtoList(productImgDtoList); // 이미지 리스트 설정
 
@@ -119,8 +110,8 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, Pageable pageable){
+        log.info("Fetching products for admin page with pageable: {}", pageable);
         return productRepository.getAdminProductPage(productSearchDto, pageable);
-        //return productRepository.findAll(pageable);
 
     }
     //상품 조회조건 페이지 정보를 파라미터로 받아와서 상품 데이터를 조회하는
