@@ -1,0 +1,39 @@
+*{margin:0;padding:0;}
+ul,li{list-style:none;}
+a{text-decoration:none;}
+.cf:after{
+    content:'';
+    display:block;
+    clear:both;
+}
+
+.productManagement_container {
+    max-width: 1500px;
+    margin: 50px auto;
+}
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+.table-container {
+    margin-top: 30px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.product-img {
+    width: 50px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.pagination .page-item .page-link {
+    cursor: pointer;
+}
