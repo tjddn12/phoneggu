@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>상품 등록/수정</title>
+    <link rel="stylesheet" th:href="@{/css/productForm.css}">
+    <script th:src="@{/js/productForm.js}"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container mt-5 productForm_container">
+        <h1 class="text-center mb-4">상품 등록</h1>
+        <form th:action="@{/admin/product/new}" th:object="${productFormDto}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group row mb-3">
+                <label for="productSellStatus" class="col-form-label col-sm-2">판매 상태</label>
+                <div class="col-sm-10">
+                    <select id="productSellStatus" th:field="*{productSellStatus}" class="form-select">
+                        <option th:value="SELL">판매중</option>
+                        <option th:value="SOLD_OUT">품절</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="prName" class="col-form-label col-sm-2">상품명</label>
+                <div class="col-sm-10">
+                    <input type="text" id="prName" th:field="*{prName}" class="form-control" placeholder="상품명을 입력해주세요">
+                    <div th:if="${#fields.hasErrors('prName')}" class="fieldError" th:errors="*{prName}">잘못된 값 입니다</div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="productCategory" class="col-form-label col-sm-2">카테고리</label>
+                <div class="col-sm-4">
+                    <select id="productCategory" th:field="*{productCategory}" class="form-select select_category">
+                        <option th:value="PHONE_CASE">PHONE_CASE</option>
+                        <option th:value="TOK">TOK</option>
+                        <option th:value="AIRPODS">AIRPODS</option>
+                        <option th:value="DIGITAL">DIGITAL</option>
+                        <option th:value="DEFAULT">DEFAULT</option>
+                    </select>
+                </div>
+                <label for="productType" class="col-form-label col-sm-2">종류</label>
+                <div class="col-sm-4">
+                    <select id="productType" th:field="*{productType}" class="form-select select_type">
+                        <option th:value="HARD">HARD</option>
+                        <option th:value="JELLY">JELLY</option>
+                        <option th:value="CARD">CARD</option>
+                        <option th:value="ROUND">ROUND</option>
+                        <option th:value="HEART">HEART</option>
+                        <option th:value="ACRYLIC">ACRYLIC</option>
+                        <option th:value="AIRPODS_1_2">AIRPODS_1_2</option>
+                        <option th:value="AIRPODS_PRO">AIRPODS_PRO</option>
+                        <option th:value="AIRPODS_3">AIRPODS_3</option>
+                        <option th:value="BUDS">BUDS</option>
+                        <option th:value="APPLE_WATCH">APPLE_WATCH</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="prPrice" class="col-form-label col-sm-2">가격</label>
+                <div class="col-sm-10">
+                    <input type="number" id="prPrice" th:field="*{prPrice}" class="form-control" placeholder="가격을 입력해주세요" step="100">
+                    <div th:if="${#fields.hasErrors('prPrice')}" class="fieldError" th:errors="*{prPrice}">잘못된 값 입니다</div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="prStock" class="col-form-label col-sm-2">재고수량</label>
+                <div class="col-sm-10">
+                    <input type="number" id="prStock" th:field="*{prStock}" class="form-control" placeholder="재고수량을 입력해주세요">
+                    <div th:if="${#fields.hasErrors('prStock')}" class="fieldError" th:errors="*{prStock}">잘못된 값 입니다</div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="prDetail" class="col-form-label col-sm-2">상품 상세 내용</label>
+                <div class="col-sm-10">
+                    <textarea id="prDetail" th:field="*{prDetail}" class="form-control" aria-label="With textarea"></textarea>
+                    <div th:if="${#fields.hasErrors('prDetail')}" class="fieldError" th:errors="*{prDetail}">잘못된 값 입니다</div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="productImgFile" class="col-form-label col-sm-2">상품이미지</label>
+                <div class="col-sm-10">
+                    <div class="d-flex mb-2">
+                        <button type="button" class="btn btn-primary me-2" onclick="document.getElementById('productImgFile').click()">이미지 추가</button>
+                        <button type="button" class="btn btn-secondary" onclick="removeSelectedFiles()">선택한 이미지 삭제</button>
+                    </div>
+                    <input type="file" id="productImgFile" class="form-control d-none" name="productImgFile" multiple onchange="handleFiles(this.files)">
+                    <div class="fieldError">이미지는 최대 5개 까지 등록 가능합니다</div>
+                </div>
+            </div>
+
+            <div id="preview-container" class="preview-container mb-3"></div>
+
+            <div class="text-center">
+                <button th:if="${#strings.isEmpty(productFormDto.id)}" th:formaction="@{/admin/product/new}" type="submit" class="btn btn-primary">저장</button>
+                <button th:unless="${#strings.isEmpty(productFormDto.id)}" th:formaction="@{'/admin/product/' + ${productFormDto.id}}" type="submit" class="btn btn-primary">수정</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

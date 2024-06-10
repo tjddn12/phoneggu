@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>productManagement</title>
+    <link rel="stylesheet" th:href="@{/css/productManagement.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container productManagement_container">
+        <h1 class="text-center mb-4">상품 관리</h1>
+        <div class="text-end mb-3">
+            <a th:href="@{/admin/product/new}" class="btn btn-primary">상품 추가</a>
+        </div>
+        <form th:action="@{'/admin/product/management/' + ${management.number}}" role="form" method="get" th:object="${management}">
+            <div class="table-container">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">이미지</th>
+                        <th scope="col">판매 상태</th>
+                        <th scope="col">상품명</th>
+                        <th scope="col">카테고리</th>
+                        <th scope="col">종류</th>
+                        <th scope="col">등록일</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${management.content}">
+                        <td th:text="${product.id}"></td>
+                        <td>
+                            <img th:if="${product.productImgList.size() > 0}" th:src="@{${product.productImgList[0].imgUrl}}" alt="Product Image" width="100" height="100">
+                        </td>
+                        <td th:text="${product.productSellStatus.name() == 'SELL' ? '판매중' : '품절'}"></td>
+                        <td>
+                            <a th:href="@{'/product/' + ${product.id}}" th:text="${product.prName}"></a>
+                        </td>
+                        <td th:text="${product.productCategory}"></td>
+                        <td th:text="${product.productType}"></td>
+                        <td th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd')}"></td>
+                        <td>
+                            <form th:action="@{'/admin/product/delete/' + ${product.id}}" method="post" style="display:inline;">
+                                <button type="submit" class="deleteBtn btn btn-danger">삭제</button>
+                            </form>
+                            <a th:href="@{'/admin/product/' + ${product.id}}" class="btn btn-primary" style="display:inline;">수정</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 페이지네이션 -->
+            <div th:with="start=${T(java.lang.Math).floor(management.number / maxPage) * maxPage + 1},
+                            end=${(management.totalPages == 0) ? 1
+                               : (start + (maxPage - 1) < management.totalPages ? start + (maxPage - 1) : management.totalPages)}">
+                <ul class="pagination justify-content-center">
+                    <!-- 이전 페이지 링크 -->
+                    <li class="page-item" th:classappend="${management.first}?'disabled'">
+                        <a th:href="@{'/admin/product/management/' + ${management.number - 1}}" aria-label="Previous" class="page-link">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <!-- 페이지 번호 링크 -->
+                    <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}" th:classappend="${management.number == page - 1} ? 'active' : ''">
+                        <a th:href="@{'/admin/product/management/' + ${page - 1}}" class="page-link" th:text="${page}">1</a>
+                    </li>
+                    <!-- 다음 페이지 링크 -->
+                    <li class="page-item" th:classappend="${management.last}?'disabled'">
+                        <a th:href="@{'/admin/product/management/' + ${management.number + 1}}" aria-label="Next" class="page-link">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

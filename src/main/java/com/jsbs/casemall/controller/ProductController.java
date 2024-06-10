@@ -104,20 +104,19 @@ public class ProductController {
         return "redirect:/admin/product/management";
     }
 
-
     // 상품 관리 페이지 및 검색 처리
     @GetMapping(value = {"/admin/product/management", "/admin/product/management/{page}"})
     public String productManage(ProductSearchDto productSearchDto,
-                                @PathVariable(name = "prId", required = false) Long prId,
                                 @PathVariable(name = "page", required = false) Integer page, Model model) {
 
         Pageable pageable = PageRequest.of(page != null ? page : 0, 5);
         Page<Product> management = productService.getAdminProductPage(productSearchDto, pageable);
 
-        if (prId != null) {
-            ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
-            model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
-        }
+//        // 디버깅 로그 추가
+//        log.info("Pageable: {}, Management: {}", pageable, management);
+//        log.info("Products: {}", management.getContent());
+//        log.info("Total Pages: {}", management.getTotalPages());
+//        log.info("Current Page: {}", management.getNumber());
 
         model.addAttribute("management", management);
         model.addAttribute("productSearchDto", productSearchDto);
@@ -125,6 +124,7 @@ public class ProductController {
 
         return "product/productManagement";
     }
+
 
     // 상품 삭제 처리
     @PostMapping("/admin/product/delete/{prId}")
@@ -138,15 +138,16 @@ public class ProductController {
         return "redirect:/admin/product/management";
     }
 
-        // 상품 상세 정보 조회 (일반 사용자용)
-        @GetMapping(value="/product/{prId}")
-        public String productDtl(Model model, @PathVariable("prId") Long prId) {
-            ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
-            model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
 
-    //        return "product/productDtl";
-            return "product/productDetail";
-        }
+    // 상품 상세 정보 조회 (일반 사용자용)
+    @GetMapping(value="/product/{prId}")
+    public String productDtl(Model model, @PathVariable("prId") Long prId) {
+        ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
+        model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
+
+//        return "product/productDtl";
+        return "product/productDetail";
+    }
 
     @GetMapping("/products")
     public String getProducts(@RequestParam(required = false) ProductCategory category,
@@ -158,10 +159,25 @@ public class ProductController {
         } else if (category != null) {
             products = productService.getProductsByCategory(category);
         } else {
-            products = productService.getProductsByCategory(ProductCategory.DEFAULT); // 전체 상품을 반환하도록 수정 필요
+            products = productService.getAllProducts(); // 전체 상품을 반환하도록 수정 필요
         }
         model.addAttribute("products", products);
-        return "productList";
+        model.addAttribute("mainCategory", category);
+        model.addAttribute("subCategory", type);
+        return "product/productList";
     }
 
+    @GetMapping("/products/{mainCategory}")
+    public String showCategory(@PathVariable ProductCategory mainCategory, Model model) {
+        model.addAttribute("mainCategory", mainCategory);
+        model.addAttribute("subCategory", null); // SubCategory가 없을 경우 null로 설정
+        return "product/productList";
+    }
+
+    @GetMapping("/products/{mainCategory}/{subCategory}")
+    public String showSubCategory(@PathVariable ProductCategory mainCategory, @PathVariable ProductType subCategory, Model model) {
+        model.addAttribute("mainCategory", mainCategory);
+        model.addAttribute("subCategory", subCategory);
+        return "product/productList";
+    }
 }
