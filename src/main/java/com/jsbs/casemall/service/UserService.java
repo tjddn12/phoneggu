@@ -1,6 +1,8 @@
 package com.jsbs.casemall.service;
 
+import com.jsbs.casemall.dto.MailDto;
 import com.jsbs.casemall.dto.UserDto;
+import com.jsbs.casemall.dto.UserPwRequestDto;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +20,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-
+    private final SendService sendService;
 
     private final PasswordEncoder passwordEncoder; // 저장할떄 passwordEncoder.encode(넘어온비밀번호)
 
@@ -37,9 +39,26 @@ public class UserService implements UserDetailsService {
     }
 
 
+    // 아이디 찾기
     public Users getUserByEmailAndPhoneNumber(String email, String phone) {
         return userRepository.findByEmailAndPhone(email,phone).orElseThrow(EntityNotFoundException::new); // 없으면 예외 발생시킴
 
+    }
+
+
+    // 비밀번호 찾기
+
+    public void userCheck(UserPwRequestDto requestDto) {
+        Users user = userRepository.findByUserId(requestDto.getUserId()).orElseThrow(()->new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+
+            sendEmail(requestDto);
+
+    }
+
+
+    public void sendEmail(UserPwRequestDto requestDto) {
+        MailDto dto =  sendService.createMailAndChargePassword(requestDto);
+        sendService.mailSend(dto);
     }
 
 }

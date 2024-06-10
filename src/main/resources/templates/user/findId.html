@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Find User ID</title>
+</head>
+<body>
+<h1>Find User ID</h1>
+<form action="/findId" method="post">
+    <div th:if="${user != null}">
+        <h2>User ID: <span th:text="${user.getUserId()}"></span></h2>
+    </div>
+    <div th:if="${error != null}">
+        <h2 th:text="${error}"></h2>
+    </div>
+</form>
+</body>
+</html>
