@@ -30,6 +30,8 @@ public class QCartItem extends EntityPathBase<CartItem> {
 
     public final QProduct product;
 
+    public final QProductModel productModel;
+
     public QCartItem(String variable) {
         this(CartItem.class, forVariable(variable), INITS);
     }
@@ -50,6 +52,7 @@ public class QCartItem extends EntityPathBase<CartItem> {
         super(type, metadata, inits);
         this.cart = inits.isInitialized("cart") ? new QCart(forProperty("cart"), inits.get("cart")) : null;
         this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
+        this.productModel = inits.isInitialized("productModel") ? new QProductModel(forProperty("productModel"), inits.get("productModel")) : null;
     }
 
 }

@@ -5,10 +5,7 @@ import com.jsbs.casemall.dto.CartDto;
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.entity.*;
 import com.jsbs.casemall.exception.OutOfStockException;
-import com.jsbs.casemall.repository.CartRepository;
-import com.jsbs.casemall.repository.OrderRepository;
-import com.jsbs.casemall.repository.ProductRepository;
-import com.jsbs.casemall.repository.UserRepository;
+import com.jsbs.casemall.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,7 @@ public class CartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final ProductModelRepository productModelRepository;
 
 
     @Transactional(readOnly = true)
@@ -36,7 +34,8 @@ public class CartService {
     }
 
     // 장바구니에 추가
-    public void addItemToCart(String userId, Long productId, int count) {
+    public void addItemToCart(CartDto dto,String userId,Long productId) {
+
         // 이용 회원과 해당 상품이 디비에 있는지 확인
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));

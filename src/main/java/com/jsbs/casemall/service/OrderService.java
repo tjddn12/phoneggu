@@ -2,10 +2,7 @@ package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.constant.OrderStatus;
 import com.jsbs.casemall.dto.OrderDto;
-import com.jsbs.casemall.entity.Order;
-import com.jsbs.casemall.entity.OrderDetail;
-import com.jsbs.casemall.entity.Product;
-import com.jsbs.casemall.entity.Users;
+import com.jsbs.casemall.entity.*;
 import com.jsbs.casemall.exception.OutOfStockException;
 import com.jsbs.casemall.repository.OrderRepository;
 import com.jsbs.casemall.repository.ProductRepository;
@@ -86,7 +83,9 @@ public class OrderService {
         List<OrderDetail> orderDetails = new ArrayList<>();
         int totalAmount = 0;
 
-        Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        Product product = productRepository.findById(prId).orElseThrow(() -> new EntityNotFoundException("해당 제품을 찾을수 없습니다"));
+
+
 
         try {
             product.removeStock(count); // 재고 감소

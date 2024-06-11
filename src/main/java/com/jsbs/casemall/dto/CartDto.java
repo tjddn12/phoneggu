@@ -19,10 +19,12 @@ import java.util.stream.Collectors;
 public class CartDto {
     private String userId;
     private Long cartId;
+
+    // form 에서 받을 데이터
     private List<CartItemDto> items;
     private int totalPrice;
 
-
+    // 디비에서  가져올때
     public CartDto(Cart cart) {
         this.cartId = cart.getId();
         this.userId = cart.getUser().getUserId();

@@ -18,6 +18,8 @@ public class CartItemDto {
         this.cartItemId = cartItem.getId();
         this.productId = cartItem.getProduct().getId();
         this.productName = cartItem.getProduct().getPrName();
+        // 기종 이름 가져오기
+//        this.productModel = cartItem.getProductModel().getProductModelSelect().getDisplayName();
         this.count = cartItem.getCount();
         this.price = cartItem.getProduct().getPrPrice();
     }

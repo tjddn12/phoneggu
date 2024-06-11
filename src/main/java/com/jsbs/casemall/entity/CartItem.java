@@ -29,16 +29,25 @@ public class CartItem {
 
 
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_model_id")
+    private ProductModel productModel;
 
-    private int count; // 수량
+    private int count;
 
-    // CartItem 객체 생성 메서드
-    public static CartItem createCartItem(Product product, int count) {
+    // 정적 팩토리 메서드로 카트 아이템 생성
+    public static CartItem createCartItem(Product product, ProductModel productModel, int count) {
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
+        cartItem.setProductModel(productModel);
         cartItem.setCount(count);
         return cartItem;
     }
+
+
+
+
+
 
 
     public void addCount(int count) {
