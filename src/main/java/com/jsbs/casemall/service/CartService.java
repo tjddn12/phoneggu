@@ -37,9 +37,11 @@ public class CartService {
     public void addItemToCart(CartDto dto,String userId,Long productId) {
 
         // 이용 회원과 해당 상품이 디비에 있는지 확인
+
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
 
+        ProductModel productModel = productModelRepository.findById(dto.getItems())
         // 카트 객체 생성
         Cart cart = cartRepository.findByUser(user);
 
