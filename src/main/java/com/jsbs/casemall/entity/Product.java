@@ -6,7 +6,6 @@ import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.ProductFormDto;
 import com.jsbs.casemall.exception.OutOfStockException;
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -78,7 +77,7 @@ public class Product extends BaseEntity{
         }
         this.prStock = restStock;
     }
-    //재고가 0보다 적으면 예외 발생
+    // 재고가 0보다 적으면 예외 발생
     // 재고 - 주문수량 = 재고
     public void addStock(int prStock){
         this.prStock += prStock;

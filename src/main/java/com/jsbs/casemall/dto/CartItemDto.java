@@ -8,10 +8,11 @@ import lombok.Setter;
 @Setter
 public class CartItemDto {
     private Long cartItemId;
-    private Long productId;
-    private String productName;
-    private int count;
-    private int price;
+    private Long productId; // 제품 고유아이디
+    private String productName; // 제품이름
+    private String productModel; // 기종
+    private int count; // 개수
+    private int price; // 가격
 
     public CartItemDto(CartItem cartItem) {
         this.cartItemId = cartItem.getId();

@@ -24,14 +24,17 @@ public class CartController {
 
 
     // 장바구니 /cart 시 장바구니
-    @GetMapping
+    @GetMapping()
     public String getCart(Model model, Principal principal) {
         String userId = principal.getName();
-        CartDto cartDto = cartService.getCartByUserId(userId);
-        model.addAttribute("cart", cartDto);
-        return "cart/cartList";
+        CartDto cart = cartService.getCartByUserId(userId);
+        // 만약 없다면 빈 객체 생성하여 전달
+        if (cart == null) {
+            cart = new CartDto();
+        }
+        model.addAttribute("cart", cart);
+        return "cart/cart";
     }
-
 
     @PostMapping("/add")
     public String addItemToCart(@RequestParam Long prId, @RequestParam int count, Principal principal, Model model) {

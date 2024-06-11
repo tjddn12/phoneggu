@@ -11,6 +11,7 @@
 <div layout:fragment="content">
     <div class="product-container container">
         <div class="product-image">
+            <!--상품 이미지 -->
             <img alt="" src="">
         </div>
         <div class="product-details">
@@ -20,20 +21,25 @@
             <div class="shipping">배송비: 3,000원 (10,000원 이상 구매 시 무료)</div>
             <div class="options">
                 <label for="options">종류:</label>
+                <!--디비에서 종류를 가져와서 select 안에 넣기 -->
                 <select id="options">
                     <option>- [필수] 옵션을 선택해 주세요 -</option>
                     <option disabled value="">▶구매전 기종 확인 해주세요</option>
-                    <option value="">[하드] 갤럭시 z-플립1/2(+1000원)</option>
-                    <option disabled value="">------------</option>
-                    <option value="">[하드] 아이폰12mini</option>
+                    <!--반복문 란 -->
                 </select>
             </div>
             <div class="minimum-order">
                 최소주문수량 1개 이상
             </div>
+
+            <!-- 셀렉트 박스 선택한 제품 넣기 -->
+            <div id="selected-product">
+
+            </div>
+
             <div class="totalProduct">
                 TOTAL: (
-                <spant class="totalProducts">0</spant>
+                <span class="totalProducts">0</span>
                 개)
             </div>
             <button class="btn-save">찜</button>
@@ -50,8 +56,19 @@
         <div class="info-box" id=""></div>
     </div>
     <div class="detailguide">
-        <img alt="" src="images/detailguide.png">
+        <img alt="" src="/images/detailguide.png">
     </div>
 </div>
+<script >
+    document.getElementById('options').addEventListener('change', function() {
+        let selectedOption = this.value();
+        console.log(selectedOption.value)
+        let selectedProductDiv = document.getElementById('selected-product');
+        selectedProductDiv.innerHTML = '<p>선택한 제품: ' + selectedOption + '</p>';
+    });
+
+</script>
 </body>
+
+
 </html>

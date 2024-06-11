@@ -12,63 +12,67 @@
         <h1 class="text-center my-4">장바구니</h1>
         <table class="table">
             <thead>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <th>이미지</th>
-                    <th>상품 정보</th>
-                    <th>판매가</th>
-                    <th>수량</th>
-                    <th>배송비</th>
-                    <th>배송구분</th>
-                    <th>합계</th>
-                    <th>선택</th>
-                </tr>
+            <tr>
+                <td><input type="checkbox"></td>
+                <th>이미지</th>
+                <th>상품 정보</th>
+                <th>판매가</th>
+                <th>수량</th>
+                <th>배송비</th>
+                <th>배송구분</th>
+                <th>합계</th>
+                <th>선택</th>
+            </tr>
             </thead>
-            <tbody class="table-group-divider align-middle ">
-                <tr>
-                    <th scope="row"><input type="checkbox"></th>
-                    <td class="prImg">
-                        <img src="" alt="상품 이미지" class="img-fluid">                        
-                    </td>
-                    <td class="prInfo">
-                        <p class="prName">상품 이름</p>
-                        <p class="prDetail">상품 설명</p>
-                    </td>
-                    <td><p><span class="prPrice">0</span>원</p></td>
-                    <td class="prCount">
-                        <input type="number" value="1" min="1" class="form-control d-inline-block">
-                    </td>
-                    <td><span class="shippingCost">0</span>원</td>
-                    <td><span class="shipping">기본배송</span></td>
-                    <td><span class="totalPrice">0</span>원</td>
-                    <td class="select">
-                        <button class="btn btn-primary btn-sm">주문하기</button>
-                        <button class="btn btn-secondary btn-sm">관심상품등록</button>
-                        <button class="btn btn-danger btn-sm">삭제</button>
-                    </td>
-                </tr>
+            <tbody class="table-group-divider align-middle">
+            <tr th:if="${cart.items == null or #lists.isEmpty(cart.items)}">
+                <td colspan="9" class="text-center">장바구니가 비어 있습니다.</td>
+            </tr>
+            <tr th:each="item : ${cart.items}">
+                <th scope="row"><input type="checkbox"></th>
+                <td class="prImg">
+                    <img th:src="@{/images/products/{productId}.jpg(productId=${item.productId})}" alt="상품 이미지" class="img-fluid">
+                </td>
+                <td class="prInfo">
+                    <p class="prName" th:text="${item.productName}">상품 이름</p>
+                    <p class="prDetail" th:text="${item.productModel}">상품 기종</p>
+                </td>
+                <td><p><span class="prPrice" th:text="${item.getPrice()}">0</span>원</p></td>
+                <td class="prCount">
+                    <input type="number" th:value="${item.count}" min="1" class="form-control d-inline-block">
+                </td>
+                <td><span class="shippingCost">0</span>원</td>
+                <td><span class="shipping">기본배송</span></td>
+                <td><span class="totalPrice" th:text="${item.getPrice() * item.count}">0</span>원</td>
+                <td class="select">
+                    <form th:action="@{/cart/remove}" method="post">
+                        <input type="hidden" name="cartItemId" th:value="${item.id}">
+                        <button class="btn btn-danger btn-sm" type="submit">삭제</button>
+                    </form>
+                </td>
+            </tr>
             </tbody>
         </table>
         <table class="table tbBot">
             <th>[<span class="shipping">기본배송</span>]</th>
-            <td>상품구매금액 <span class="sumPrice bb">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span class="sumTotalPrice bb">0</span>원</td>
+            <td>상품구매금액 <span class="sumPrice bb" th:text="${cart.totalPrice}">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span class="sumTotalPrice bb" th:text="${cart.totalPrice}">0</span>원</td>
         </table>
-    
+
         <div class="summary my-4">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>총 상품금액</th>
-                        <th>총 배송비</th>
-                        <th>결제예정금액</th>
-                    </tr>
+                <tr>
+                    <th>총 상품금액</th>
+                    <th>총 배송비</th>
+                    <th>결제예정금액</th>
+                </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    <tr>
-                        <th scope="row"><span class="price">0</span>원</th>
-                        <td><span class="cost">0</span>원</td>
-                        <td><span class="totalPrice">0</span>원</td>
-                    </tr>
+                <tr>
+                    <th scope="row"><span class="price" th:text="${cart.totalPrice}">0</span>원</th>
+                    <td><span class="cost">0</span>원</td>
+                    <td><span class="totalPrice" th:text="${cart.totalPrice}">0</span>원</td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -78,5 +82,7 @@
         </div>
     </div>
 </div>
+<script th:src="@{/js/cart.js}"></script>
+
 </body>
 </html>

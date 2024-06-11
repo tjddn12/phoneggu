@@ -17,9 +17,11 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor
 public class CartDto {
-    private Long cartId;
     private String userId;
+    private Long cartId;
     private List<CartItemDto> items;
+    private int totalPrice;
+
 
     public CartDto(Cart cart) {
         this.cartId = cart.getId();

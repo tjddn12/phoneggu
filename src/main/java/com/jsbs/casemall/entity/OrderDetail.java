@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.thymeleaf.util.StringUtils;
 
 @Entity
 @Getter
@@ -23,7 +22,7 @@ public class OrderDetail {
 
     // 상품 고유 번호 가져오기
     @ManyToOne(fetch=FetchType.LAZY) //지연로딩
-    @JoinColumn(name="pr_no")
+    @JoinColumn(name="pr_id")
     private Product product; // 제품 아이디 조인
 
 

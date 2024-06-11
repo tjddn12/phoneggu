@@ -18,17 +18,19 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "pr_id")
+    private Product product;
+
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="cart_id")
     private Cart cart;
 
 
-    @ManyToOne
-    @JoinColumn(name = "pr_id")
-    Product product;
 
 
-    int count; // 수량
+    private int count; // 수량
 
     // CartItem 객체 생성 메서드
     public static CartItem createCartItem(Product product, int count) {
