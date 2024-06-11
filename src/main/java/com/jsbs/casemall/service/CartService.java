@@ -35,87 +35,83 @@ public class CartService {
     }
 
     // 장바구니에 추가
-    public void addItemToCart(CartDto dto,String userId,Long productId) {
+    public void addItemToCart(CartDto cartDto,String userId,Long productId) {
 
         // 이용 회원과 해당 상품이 디비에 있는지 확인
-
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
 
-        // 모델 목록을
-        List<ProductModel> models = new ArrayList<>();
-
-
         // 카트 객체 생성
         Cart cart = cartRepository.findByUser(user);
-
-
-
-        for(CartItemDto item: dto.getItems()){
-            modelIds.add(item.getModelId());
-        }
         if (cart == null) {
             cart = Cart.createCart(user); // 기존에 없다면 새로 생성
-        } else { // 기존에 있다면 해당 제품에 수량을 추가하고 장바구니에 저장
-            for (CartItem cartItem : cart.getCartItems()) {
-                if (cartItem.getProduct().equals(product) && cartItem.getProductModel()) {
+        }
+        // 기종별로 처리
+        for (CartItemDto itemDto : cartDto.getItems()) {
+            ProductModel productModel = product.getProductModelList().stream()
+                    .filter(findModel -> findModel.getId().equals(itemDto.getModelId()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("해당 모델을 찾을 수 없습니다."));
 
-                    cartRepository.save(cart);
-                    return;
-                }
+            CartItem findCartItem = cart.getCartItems().stream() // 리스트를 순회하면서 제품아이디와 해당 모델이 있는지 확인 있다면 기존에 cart에 추가 아니면 새로 저장
+                    .filter(cartItem -> cartItem.getProduct().equals(product) && cartItem.getProductModel().equals(productModel))
+                    .findFirst()
+                    .orElse(null);
+
+            if (findCartItem != null) {
+                findCartItem.addCount(itemDto.getCount());
+            } else {
+                CartItem cartItem = CartItem.createCartItem(product, productModel, itemDto.getCount());
+                cart.addCartItems(cartItem);
             }
         }
-        // 만약 기존에 카트가 있다면 해당 제품을 찾고 그 안에 기종을 찾고
-        CartItem cartItem = CartItem.createCartItem(product, count);
 
-
-        cart.addCartItems(cartItem);
-        cartRepository.save(cart); // 최정적으로 카트에 저장
+        cartRepository.save(cart); // 최종적으로 카트에 저장
     }
 
 
-        // 장바구니에서 주문 목록 처리
-    public OrderDto checkoutCart(String userId) {
-        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
-        Cart cart = cartRepository.findByUser(user);
-        if (cart == null || cart.getCartItems().isEmpty()) {
-            throw new IllegalArgumentException("Cart is empty");
-        }
-
-        List<OrderDetail> orderDetails = new ArrayList<>();
-        List<String> productNames = new ArrayList<>(); // 주문 상품 이름 목록
-        int totalAmount = 0; // 총 금액
-
-        for (CartItem cartItem : cart.getCartItems()) {
-            Product product = cartItem.getProduct();
-            if (product.getPrStock() < cartItem.getCount()) {
-                throw new OutOfStockException("재고가 부족합니다: " + product.getPrName());
-            }
-            product.removeStock(cartItem.getCount());
-            productRepository.save(product);
-
-            OrderDetail orderDetail = OrderDetail.createOrderDetails(product, cartItem.getCount());
-            orderDetails.add(orderDetail);
-            productNames.add(product.getPrName()); // 상품 이름 추가
-            totalAmount += orderDetail.getTotalPrice();
-        }
-
-        Order order = Order.createOrder(user, orderDetails);
-        orderRepository.save(order);
-
-        // 장바구니 비우기
-        cart.clearItems();
-        cartRepository.save(cart);
-
-        return OrderDto.builder()
-                .orderID(order.getOrderId())
-                .amount(totalAmount)
-                .userName(user.getName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .orderName(productNames) // 주문 상품 이름 목록 설정
-                .build();
-    }
+//        // 장바구니에서 주문 목록 처리
+//    public OrderDto checkoutCart(String userId) {
+//        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
+//        Cart cart = cartRepository.findByUser(user);
+//        if (cart == null || cart.getCartItems().isEmpty()) {
+//            throw new IllegalArgumentException("Cart is empty");
+//        }
+//
+//        List<OrderDetail> orderDetails = new ArrayList<>();
+//        List<String> productNames = new ArrayList<>(); // 주문 상품 이름 목록
+//        int totalAmount = 0; // 총 금액
+//
+//        for (CartItem cartItem : cart.getCartItems()) {
+//            Product product = cartItem.getProduct();
+//            if (product.getPrStock() < cartItem.getCount()) {
+//                throw new OutOfStockException("재고가 부족합니다: " + product.getPrName());
+//            }
+//            product.removeStock(cartItem.getCount());
+//            productRepository.save(product);
+//
+//            OrderDetail orderDetail = OrderDetail.createOrderDetails(product, cartItem.getCount());
+//            orderDetails.add(orderDetail);
+//            productNames.add(product.getPrName()); // 상품 이름 추가
+//            totalAmount += orderDetail.getTotalPrice();
+//        }
+//
+//        Order order = Order.createOrder(user, orderDetails);
+//        orderRepository.save(order);
+//
+//        // 장바구니 비우기
+//        cart.clearItems();
+//        cartRepository.save(cart);
+//
+//        return OrderDto.builder()
+//                .orderID(order.getOrderId())
+//                .amount(totalAmount)
+//                .userName(user.getName())
+//                .email(user.getEmail())
+//                .phone(user.getPhone())
+//                .orderName(productNames) // 주문 상품 이름 목록 설정
+//                .build();
+//    }
 
     // 비우기 메소드
     public void clearCart(String userId) {
