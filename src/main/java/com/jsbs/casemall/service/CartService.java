@@ -2,6 +2,7 @@ package com.jsbs.casemall.service;
 
 
 import com.jsbs.casemall.dto.CartDto;
+import com.jsbs.casemall.dto.CartItemDto;
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.entity.*;
 import com.jsbs.casemall.exception.OutOfStockException;
@@ -41,25 +42,35 @@ public class CartService {
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
 
-        ProductModel productModel = productModelRepository.findById(dto.getItems())
+        // 모델 목록을
+        List<ProductModel> models = new ArrayList<>();
+
+
         // 카트 객체 생성
         Cart cart = cartRepository.findByUser(user);
 
+
+
+        for(CartItemDto item: dto.getItems()){
+            modelIds.add(item.getModelId());
+        }
         if (cart == null) {
-            cart = Cart.createCart(user);
+            cart = Cart.createCart(user); // 기존에 없다면 새로 생성
         } else { // 기존에 있다면 해당 제품에 수량을 추가하고 장바구니에 저장
             for (CartItem cartItem : cart.getCartItems()) {
-                if (cartItem.getProduct().equals(product)) {
-                    cartItem.addCount(count); // 기존 수량에 추가
+                if (cartItem.getProduct().equals(product) && cartItem.getProductModel()) {
+
                     cartRepository.save(cart);
                     return;
                 }
             }
         }
-
+        // 만약 기존에 카트가 있다면 해당 제품을 찾고 그 안에 기종을 찾고
         CartItem cartItem = CartItem.createCartItem(product, count);
+
+
         cart.addCartItems(cartItem);
-        cartRepository.save(cart);
+        cartRepository.save(cart); // 최정적으로 카트에 저장
     }
 
 

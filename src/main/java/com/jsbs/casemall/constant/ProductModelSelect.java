@@ -1,5 +1,8 @@
 package com.jsbs.casemall.constant;
 
+import lombok.Getter;
+
+@Getter
 public enum ProductModelSelect {
     IPHONE15("아이폰15"),
     IPHONE15PLUS("아이폰15플러스"),
@@ -17,7 +20,4 @@ public enum ProductModelSelect {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
 }

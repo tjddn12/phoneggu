@@ -50,6 +50,11 @@ public class CartController {
         }
     }
 
+
+
+
+
+
     // 카트 아이템 삭제 메소드
     @PostMapping("/remove")
     public String removeItemFromCart(@RequestParam Long cartId, Principal principal, Model model) {
