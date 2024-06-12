@@ -5,6 +5,7 @@ import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Review;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.ProductRepository;
+import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +21,13 @@ import java.util.*;
 public class ReviewController {
     private final ReviewService reviewService;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
     //    private final ProductImgService productImgService; //: 이미지는 뷰에서 JS로 처리.
     @Autowired
-    public ReviewController(ReviewService reviewService, UserRepository userRepository, ProductRepository productRepository){
+    public ReviewController(ReviewService reviewService, UserRepository userRepository, ReviewRepository reviewRepository){
         this.reviewService = reviewService;
         this.userRepository = userRepository;
-        this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
     }
     @GetMapping
     public String getAllReviews(Model model){
@@ -71,14 +72,22 @@ public class ReviewController {
     }
     @GetMapping("/product/{prName}")
     public String getReviewsByPrName(@PathVariable String prName, Model model){
-        List<Product> prList = productRepository.findByPrName(prName);
+        Optional<Product> prOpt = reviewRepository.findByPrname(prName);
 
-        model.addAttribute("reviews", reviewService.getReviewsByPrName(prList));
+        if(prOpt.isPresent()){
+            Product product = prOpt.get();
 
-        return ;
+            model.addAttribute("reviews", reviewService.getReviewsByPrName(product));
+
+        }else{
+            model.addAttribute("reviews", List.of());
+            model.addAttribute("error", "해당 상품을 찾을 수 없습니다.");
+        }
+
+        return "reviews";
     }
 
-
+//------------------수정
     @PutMapping("/{reviewNo}")
     public ResponseEntity<Review> updateReview(@PathVariable Long reviewNo, @RequestBody ReviewFormDto reviewFormDto){
         reviewFormDto.setReviewNo(reviewNo);

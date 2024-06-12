@@ -6,8 +6,10 @@ import com.jsbs.casemall.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
     List<Review> findReviewsByUserId(Users userId);
     List<Review> findReviewsByPrName(Product prName);
+    Optional<Product> findByPrname(String prName);
 }
