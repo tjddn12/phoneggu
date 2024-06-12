@@ -32,10 +32,11 @@ function updateSelectedProducts() {
         const productDiv = document.createElement('div');
         productDiv.className = "selected-product";
         productDiv.innerHTML = `
-            ${product.name}
-            <input type="number" value="${product.prStock}" min="1" onchange="updateQuantity('${product.id}', this.value)">
-            <button type="button" onclick="removeProduct('${product.id}')">X</button>
+            <input type="hidden" th:value="${product.id}" name="modelId">${product.name}
+            <input type="number" name="count" value="${product.prStock}" min="1" onchange="updateQuantity('${product.id}', this.value)">
+            <button type="button" name="price" onclick="removeProduct('${product.id}')">X</button>
             <span>${(product.price * product.prStock).toLocaleString()} 원</span>
+
         `;
         selectedProductsDiv.appendChild(productDiv);
     });

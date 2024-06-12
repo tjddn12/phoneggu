@@ -170,8 +170,8 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public List<ProductModelDto> getProductModels() {
-        List<ProductModel> productModels = productModelRepository.findAllWithNonNullPrId();
+    public List<ProductModelDto> getProductModelsByProductId(Long productId) {
+        List<ProductModel> productModels = productModelRepository.findByProductId(productId);
         return productModels.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
