@@ -121,11 +121,12 @@ public class UserController {
             UserEditDto dto = userService.getUserById(id);
             log.info(dto.toString());
             model.addAttribute("user", dto);
+
         return "user/userEdit";
     }
 
     @PostMapping("/userEdit")
-    public String updateUser(UserEditDto userEditDto, Model model) {
+    public String updateUser(UserEditDto userEditDto,Model model) {
         boolean isUpdated = userService.updateUser(userEditDto);
         if (isUpdated) {
             model.addAttribute("message", "회원 정보가 성공적으로 수정되었습니다.");

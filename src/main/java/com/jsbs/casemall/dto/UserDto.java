@@ -1,6 +1,7 @@
 package com.jsbs.casemall.dto;
 
 
+import com.jsbs.casemall.entity.Users;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +46,17 @@ public class UserDto {
     private String detailAddr;
 
 
-
+    public UserDto(Users user) {
+        this.userId = user.getUserId();
+        this.userPw = user.getUserPw();
+        this.name = user.getName();
+        this.p_code = user.getPCode();
+        this.phone = user.getPhone();
+        this.loadAddr = user.getLoadAddr();
+        this.lotAddr = user.getLotAddr();
+        this.detailAddr = user.getDetailAddr();
+        this.email = user.getEmail();
+    }
 
 }
 
