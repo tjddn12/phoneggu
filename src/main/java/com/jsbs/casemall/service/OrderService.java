@@ -28,7 +28,8 @@ public class OrderService {
     private final CartService cartService;
 
     public OrderDto checkout(String userId) {
-        return cartService.checkoutCart(userId);
+//        return cartService.checkoutCart(userId);
+        return  null;
     }
 
     @Transactional(readOnly = true)
@@ -71,7 +72,7 @@ public class OrderService {
         Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         if (fromCart) {
             // 장바구니에서 결제할 때
-            return cartService.checkoutCart(id);
+            return null;
         } else {
             // 단일 상품 상세 페이지에서 결제할 때
             return createSingleOrder(prId, user, count);
@@ -88,7 +89,7 @@ public class OrderService {
 
 
         try {
-            product.removeStock(count); // 재고 감소
+//            product.removeStock(count); // 재고 감소
         } catch (OutOfStockException e) {
             throw new IllegalArgumentException("재고가 부족합니다: " + product.getPrName(), e);
         }
@@ -134,7 +135,7 @@ public class OrderService {
 
             for (OrderDetail orderDetail : order.getOrderItems()) {
                 Product product = orderDetail.getProduct();
-                product.addStock(orderDetail.getCount()); // 다시 추가
+//                product.addStock(orderDetail.getCount()); // 다시 추가
             }
 
             orderRepository.save(order);

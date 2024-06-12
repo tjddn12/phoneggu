@@ -27,13 +27,6 @@
                 <div>브랜드: 자사브랜드</div>
                 <div class="price">판매가 : <span th:text="${product.prPrice}"></span> 원</div>
                 <div class="shipping">배송비: 3,000원 (10,000원 이상 구매 시 무료)</div>
-<!--                <div class="options">-->
-<!--                    <label for="options">기종:</label>-->
-<!--                    <select id="options" name="selectedOption">-->
-<!--                        <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>-->
-<!--                        <option th:if{ th:each="model : ${product.productModelDtoList}" th:value="${model.id}" th:text="${model.productModelSelect}"></option>-->
-<!--                    </select>-->
-<!--                </div>-->
 
                 <div class="options">
                     <label for="options">기종:</label>
@@ -42,7 +35,7 @@
                         <option th:each="model : ${product.productModelDtoList}" th:value="${model.id}" th:text="${model.productModelSelect}"></option>
                     </select>
                 </div>
-
+        
                 <div class="minimum-order text-danger">
                     최소주문수량 1개 이상
                 </div>
