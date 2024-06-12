@@ -6,12 +6,19 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>상품 등록/수정</title>
     <link rel="stylesheet" th:href="@{/css/productForm.css}">
-    <script th:src="@{/js/productForm.js}"></script>
+    <script defer th:src="@{/js/productForm.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="container mt-5 productForm_container">
         <h1 class="text-center mb-4">상품 등록</h1>
+
+        <!-- Error Message Display Block -->
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <!-- End of Error Message Display Block -->
+
         <form th:action="@{/admin/product/new}" th:object="${productFormDto}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{id}">
 
@@ -44,21 +51,34 @@
                         <option th:value="DEFAULT">DEFAULT</option>
                     </select>
                 </div>
+
                 <label for="productType" class="col-form-label col-sm-2">종류</label>
                 <div class="col-sm-4">
                     <select id="productType" th:field="*{productType}" class="form-select select_type">
-                        <option th:value="HARD">HARD</option>
-                        <option th:value="JELLY">JELLY</option>
-                        <option th:value="CARD">CARD</option>
-                        <option th:value="ROUND">ROUND</option>
-                        <option th:value="HEART">HEART</option>
-                        <option th:value="ACRYLIC">ACRYLIC</option>
-                        <option th:value="AIRPODS_1_2">AIRPODS_1_2</option>
-                        <option th:value="AIRPODS_PRO">AIRPODS_PRO</option>
-                        <option th:value="AIRPODS_3">AIRPODS_3</option>
-                        <option th:value="BUDS">BUDS</option>
-                        <option th:value="APPLE_WATCH">APPLE_WATCH</option>
+                        <!-- JavaScript로 동적으로 옵션이 채워질 예정 -->
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label for="productModelDtoList" class="col-form-label col-sm-2">기종</label>
+                <div class="col-sm-10 model-container">
+                    <div th:each="model, iterStat : ${T(com.jsbs.casemall.constant.ProductModelSelect).values()}" class="model-item">
+                        <label>
+                            <input type="checkbox" th:field="*{productModelDtoList[__${iterStat.index}__].productModelSelect}" th:value="${model.name()}" th:id="${model.name()}" class="model-checkbox">
+                            <span th:text="${model.displayName}"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <label class="col-form-label col-sm-2">재고 수량</label>
+                <div class="col-sm-10 stock-container">
+                    <div th:each="model, iterStat : ${T(com.jsbs.casemall.constant.ProductModelSelect).values()}" class="stock-item">
+                        <span th:text="${model.displayName}"></span>
+                        <input type="number" th:field="*{productModelDtoList[__${iterStat.index}__].prStock}" class="form-control stock-input" placeholder="수량">
+                    </div>
                 </div>
             </div>
 
@@ -70,13 +90,13 @@
                 </div>
             </div>
 
-            <div class="form-group row mb-3">
-                <label for="prStock" class="col-form-label col-sm-2">재고수량</label>
-                <div class="col-sm-10">
-                    <input type="number" id="prStock" th:field="*{prStock}" class="form-control" placeholder="재고수량을 입력해주세요">
-                    <div th:if="${#fields.hasErrors('prStock')}" class="fieldError" th:errors="*{prStock}">잘못된 값 입니다</div>
-                </div>
-            </div>
+            <!--            <div class="form-group row mb-3">-->
+            <!--                <label for="prStock" class="col-form-label col-sm-2">재고수량</label>-->
+            <!--                <div class="col-sm-10">-->
+            <!--                    <input type="number" id="prStock" th:field="*{prStock}" class="form-control" placeholder="재고수량을 입력해주세요">-->
+            <!--                    <div th:if="${#fields.hasErrors('prStock')}" class="fieldError" th:errors="*{prStock}">잘못된 값 입니다</div>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div class="form-group row mb-3">
                 <label for="prDetail" class="col-form-label col-sm-2">상품 상세 내용</label>

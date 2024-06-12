@@ -13,13 +13,15 @@ a{text-decoration:none;}
     padding: 20px;
 }
 .product-image {
+    padding: 50px;
     width: 50%;
     height: 500px;
-    background-color: #ccc;
+    float: left;
 }
 .product-details {
     width: 50%;
     padding: 50px;
+    float: left;
     box-sizing: border-box;
 }
 .product-details h1 {
@@ -92,6 +94,16 @@ a{text-decoration:none;}
     height: 500px;
     background-color: #ccc;
 }
+.rounded {
+    border-radius: 8px;
+}
+
+.mgb-15 {
+    margin-bottom: 15px;
+    max-width: 900px;
+    height: auto;
+    width: 50%;
+}
 
 .detailguide {
     display: flex;
@@ -99,4 +111,38 @@ a{text-decoration:none;}
 }
 .detailguide img{
     width: 50%;
+}
+
+.selected-product {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.selected-product input[type="number"] {
+    width: 70px;
+    text-align: center;
+}
+
+.selected-product button {
+    width: 25px;
+    height: 25px;
+    margin: 20px auto;
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.totalPrice{
+    margin-top: 20px;
+    text-align: end;
+}
+#totalPrice{
+    font-weight: bold;
 }

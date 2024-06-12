@@ -49,7 +49,7 @@ public class OrderDetail {
         orders.setProduct(product);
         orders.setCount(count);
         orders.setOrderPrice(product.getPrPrice());
-        product.removeStock(count); // 해당 제품의 재고를 감소함
+//        product.removeStock(count); // 해당 제품의 재고를 감소함
 
         return  orders;
     }
