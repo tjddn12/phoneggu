@@ -12,16 +12,16 @@
         <h1 class="tit">회원 정보 수정</h1>
         <form action="#" method="post">
             <label for="userId">아이디 <strong>*</strong></label>
-            <input type="text" id="userId" name="userId" disabled>
-            
+            <input type="text" id="userId"  name="userId" disabled th:value="${user.getUserId()}" >
+
             <label for="userPw">비밀번호  <strong>*</strong></label>
             <input type="password" id="userPw" name="userPw">
-            
+
             <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
             <input type="password" id="confirm-userPw" name="confirm-userPw">
-            
-            <label for="name">이름  <strong>*</strong></label>
-            <input type="text" id="name" name="name" disabled>
+
+            <label for="name" >이름  <strong>*</strong></label>
+            <input type="text" id="name" name="name"  disabled th:value="${user.getName()}" >
 
             <label for="address">주소 <strong>*</strong></label>
             <input type="text" id="address" name="address">
@@ -29,12 +29,12 @@
 
             <label for="phone">휴대전화  <strong>*</strong></label>
 <!--            <label for="phone">-->
-            <input type="text" id="phone1" name="phone1"> 
+            <input type="text" id="phone1" name="phone1">
             -
-            <input type="text" id="phone2" name="phone2"> 
+            <input type="text" id="phone2" name="phone2">
             -
             <input type="text" id="phone3" name="phone3"></label>
-            
+
             <label for="email">이메일  <strong>*</strong></label>
             <input type="email" id="email" name="email">
 

@@ -3,18 +3,22 @@ package com.jsbs.casemall.controller;
 
 import com.jsbs.casemall.dto.UserDto;
 import com.jsbs.casemall.dto.UserPwRequestDto;
+import com.jsbs.casemall.dto.UserEditDto;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -84,10 +88,58 @@ public class UserController {
     @PostMapping("/findPw")
     public String pwFind(UserPwRequestDto requestDto) {
         userService.userCheck(requestDto);
-        return "user/userLogin";
+        return "user/EditPw";
     }
 
-}
+
+
+    // 아이디 중복
+    @GetMapping("/checkUserId")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> checkUserId(@RequestParam String userId) {
+        boolean exists = userService.checkUserIdExists(userId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return ResponseEntity.ok(response);
+    }
+
+    // 마이페이지
+
+    @GetMapping("/myPage")
+    public String myPage(){
+
+        return  "user/myPage";
+    }
+
+
+
+    // 정보 수정
+
+    @GetMapping("/userEdit")
+    public String showEditForm(Principal principal, Model model) {
+            String id = principal.getName();
+            UserEditDto dto = userService.getUserById(id);
+            log.info(dto.toString());
+            model.addAttribute("user", dto);
+        return "user/userEdit";
+    }
+
+    @PostMapping("/userEdit")
+    public String updateUser(UserEditDto userEditDto, Model model) {
+        boolean isUpdated = userService.updateUser(userEditDto);
+        if (isUpdated) {
+            model.addAttribute("message", "회원 정보가 성공적으로 수정되었습니다.");
+        } else {
+            model.addAttribute("message", "회원 정보 수정에 실패했습니다. 다시 시도해주세요.");
+        }
+        return "redirect:/myPage";
+    }
+    }
+
+
+
+
+
 
 
 

@@ -15,13 +15,17 @@
         <button class="kakao-login">카카오 로그인</button>
         <form action="/join" method="post">
             <label for="userId">아이디 <strong>*</strong></label>
-            <input id="userId" name="userId" type="text">
+            <input id="userId" name="userId" type="text" required>
+            <button type="button" id="checkDuplicate">중복 확인</button>
+            <span id="duplicateCheckResult"></span>
+            <br><br>
 
             <label for="userPw">비밀번호 <strong>*</strong></label>
             <input id="userPw" name="userPw" type="password">
 
             <label for="confirm-userPw">비밀번호 확인 <strong>*</strong></label>
             <input id="confirm-userPw" name="confirm-userPw" type="password">
+            <div id="passwordCheckResult"></div>
 
             <label for="name">이름 <strong>*</strong></label>
             <input id="name" name="name" type="text">
@@ -100,7 +104,6 @@
             document.getElementById("phone3").addEventListener("change", updatePhoneValue);
 
 
-
             function updateEmailValue() {
                 let selectBox = document.getElementById('domain-select');
                 let customDomainInput = document.getElementById('email-domain');
@@ -116,7 +119,7 @@
                 emailHiddenInput();  // Select 박스가 변경될 때 이메일 업데이트
             }
 
-            function emailHiddenInput(){
+            function emailHiddenInput() {
                 let e1 = document.getElementById("email").value;
                 let domain = document.getElementById("email-domain").value;
                 let result = document.getElementById("resultEmail");
@@ -126,10 +129,6 @@
 
             document.getElementById("email").addEventListener("input", emailHiddenInput);
             document.getElementById("email-domain").addEventListener("input", emailHiddenInput);
-
-
-
-
 
 
             document.querySelector('.kakao-login').addEventListener('click', function () {
@@ -143,6 +142,62 @@
                 window.open(popupUrl, '로그인 팝업', 'width=' + 400 + ', height=' + 500 + ', top=' + 200 + ', left=' + 400);
             });
 
+                // 아이디 중복
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('checkDuplicate').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var userId = document.getElementById('userId').value;
+                    if (userId === '') {
+                        alert('Please enter a User ID.');
+                        return;
+                    }
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/checkUserId?userId=' + encodeURIComponent(userId), true);
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            var resultElement = document.getElementById('duplicateCheckResult');
+                            if (response.exists) {
+                                resultElement.textContent = '중복된 아이디입니다.';
+                                resultElement.style.color = 'red';
+                            } else {
+                                resultElement.textContent = '사용 가능한 아이디입니다.';
+                                resultElement.style.color = 'green';
+                            }
+                        } else {
+                            document.getElementById('duplicateCheckResult').textContent = 'An error occurred. Please try again.';
+                            document.getElementById('duplicateCheckResult').style.color = 'red';
+                        }
+                    };
+                    xhr.onerror = function() {
+                        document.getElementById('duplicateCheckResult').textContent = 'An error occurred. Please try again.';
+                        document.getElementById('duplicateCheckResult').style.color = 'red';
+                    };
+                    xhr.send();
+                });
+            });
+
+            // 비밀번호 확인 일치
+            document.addEventListener('DOMContentLoaded', function() {
+                var userPwInput = document.getElementById('userPw');
+                var confirmUserPwInput = document.getElementById('confirm-userPw');
+                var passwordCheckResult = document.getElementById('passwordCheckResult');
+
+                function checkPasswordsMatch() {
+                    if (userPwInput.value === confirmUserPwInput.value) {
+                        passwordCheckResult.textContent = '비밀번호가 일치합니다.';
+                        passwordCheckResult.className = 'success';
+                    } else {
+                        passwordCheckResult.textContent = '비밀번호가 일치하지 않습니다. 다시 입력해 주세요.';
+                        passwordCheckResult.className = 'error';
+                    }
+                }
+
+                userPwInput.addEventListener('input', checkPasswordsMatch);
+                confirmUserPwInput.addEventListener('input', checkPasswordsMatch);
+            });
         </script>
 
     </section>
@@ -150,10 +205,6 @@
 
 </body>
 </html>
-
-
-
-
 
 
 
