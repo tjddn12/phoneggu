@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"productModelList", "productImgList"}) // 순환 참조 방지를 위해 제외
 @Entity
 @Table(name = "product")
 public class Product extends BaseEntity{
@@ -39,7 +39,8 @@ public class Product extends BaseEntity{
     @Column(name = "pr_price", nullable = false)
     private int prPrice; //상품 가격
 
-
+//    @Column(name = "pr_stock", nullable = false)
+//    private int prStock; //상품 재고
 
 //    @Max(value = 100, message = "최대 할인율은 100입니다")
 //    private int discount; //할인율
@@ -105,12 +106,4 @@ public class Product extends BaseEntity{
 //    public void addStock(int prStock){
 //        this.prStock += prStock;
 //    }
-
-    // 해당 제품의 모델을 가져오기
-    private ProductModel getProductModel(Long modelId) {
-        return this.getProductModelList().stream()
-                .filter(model -> model.getId().equals(modelId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 모델을 찾을 수 없습니다."));
-    }
 }

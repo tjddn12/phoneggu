@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const categorySelect = document.querySelector(".select_category");
     const typeSelect = document.querySelector(".select_type");
     const modelCheckboxes = document.querySelectorAll(".model-checkbox");
-    const stockInputsContainer = document.getElementById("stockInputsContainer").querySelector(".col-sm-10");
+    const stockItems = document.querySelectorAll(".stock-item");
 
     const productTypes = {
         "PHONE_CASE": ["HARD", "JELLY", "CARD"],
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "DIGITAL": ["APPLE_WATCH"]
     };
 
+    // 선택된 카테고리에 따라 타입 옵션을 업데이트하는 함수
     function updateTypeOptions() {
         const selectedCategory = categorySelect.value;
         const types = productTypes[selectedCategory] || [];
@@ -18,55 +19,40 @@ document.addEventListener("DOMContentLoaded", function() {
         typeSelect.innerHTML = types.map(type => `<option value="${type}">${type}</option>`).join("");
     }
 
-    function toggleStockInput(checkbox, modelName, index) {
-        const inputId = `stockInput_${index}`;
-        let stockInputContainer = document.getElementById(`container_${inputId}`);
-
+    // 체크박스 상태에 따라 재고 입력 필드를 토글하는 함수
+    function toggleStockInput(checkbox, stockItem) {
         if (checkbox.checked) {
-            if (!stockInputContainer) {
-                stockInputContainer = document.createElement("div");
-                stockInputContainer.classList.add("stock-input-container", "d-flex", "align-items-center", "mb-2");
-                stockInputContainer.id = `container_${inputId}`;
-
-                const label = document.createElement("label");
-                label.classList.add("mr-2");
-                label.innerText = `${modelName} :`;
-
-                const hiddenInput = document.createElement("input");
-                hiddenInput.type = "hidden";
-                hiddenInput.name = `productModelDtoList[${index}].productModelSelect`;
-                hiddenInput.value = modelName;
-
-                const stockInput = document.createElement("input");
-                stockInput.type = "number";
-                stockInput.id = inputId;
-                stockInput.name = `productModelDtoList[${index}].prStock`;
-                stockInput.classList.add("form-control", "w-auto", "ml-2");
-                stockInput.placeholder = "재고 수량";
-                stockInput.required = true; // 수량 입력 필수
-
-                stockInputContainer.appendChild(label);
-                stockInputContainer.appendChild(stockInput);
-                stockInputContainer.appendChild(hiddenInput);
-                stockInputsContainer.appendChild(stockInputContainer);
-            }
-            stockInputContainer.querySelector('input[type="number"]').disabled = false;
+            stockItem.style.display = 'flex';
         } else {
-            if (stockInputContainer) {
-                stockInputsContainer.removeChild(stockInputContainer);
-            }
+            stockItem.style.display = 'none';
+            const input = stockItem.querySelector("input[type='number']");
         }
     }
 
+    if (categorySelect && typeSelect) {
+        // 초기 호출을 통해 기본 카테고리에 따른 옵션 설정
+        updateTypeOptions();
+
+        // 카테고리 선택 변경 시 이벤트 리스너 설정
+        categorySelect.addEventListener("change", updateTypeOptions);
+    } else {
+        console.error("카테고리 선택 요소 또는 타입 선택 요소를 찾을 수 없습니다");
+    }
+
+    // 각 체크박스에 대해 초기 상태 설정 및 이벤트 리스너 추가
     modelCheckboxes.forEach((checkbox, index) => {
-        const modelName = checkbox.nextElementSibling.innerText; // 기종 이름 가져오기
-        checkbox.addEventListener("change", () => toggleStockInput(checkbox, modelName, index));
+        const stockItem = stockItems[index];
+        const removeButton = stockItem.querySelector(".remove-stock");
+
+        // 초기 상태 설정
+        toggleStockInput(checkbox, stockItem);
+
+        checkbox.addEventListener("change", function() {
+            toggleStockInput(checkbox, stockItem);
+        });
     });
-
-    categorySelect.addEventListener("change", updateTypeOptions);
-
-    updateTypeOptions(); // 페이지 로드 시 초기화
 });
+
 
 function handleFiles(files) {
     const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
@@ -131,16 +117,3 @@ function removeSelectedFiles() {
         removeFile(parseInt(checkbox.getAttribute('data-id')));
     });
 }
-
-// 폼 제출 이벤트 리스너 추가
-const form = document.querySelector("form");
-form.addEventListener("submit", function(event) {
-    const uncheckedModels = document.querySelectorAll(".model-checkbox:not(:checked)");
-    uncheckedModels.forEach((input) => {
-        const index = Array.from(modelCheckboxes).indexOf(input);
-        const stockInputContainer = document.getElementById(`container_stockInput_${index}`);
-        if (stockInputContainer) {
-            stockInputContainer.remove();
-        }
-    });
-});

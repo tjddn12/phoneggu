@@ -32,33 +32,35 @@ public class ProductService {
     private final ProductImgService productImgService;
     private final ProductModelRepository productModelRepository;
 
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
-    }
-
     public Long saveProduct(ProductFormDto productFormDto, List<MultipartFile> productImgFileList) throws Exception {
         log.info("상품 등록 시작: {}", productFormDto);
+
+        // 유효한 모델만 필터링
+        List<ProductModelDto> validModels = productFormDto.getProductModelDtoList().stream()
+                .filter(modelDto -> modelDto.getPrStock() != null && modelDto.getPrStock() > 0
+                        && modelDto.getProductModelSelect() != null)
+                .collect(Collectors.toList());
+
+        // 유효한 모델이 없는 경우 예외 처리
+        if (validModels.isEmpty()) {
+            log.error("유효한 모델이 없습니다. 상품을 저장할 수 없습니다.");
+            throw new Exception("유효한 모델이 없습니다. 상품을 저장할 수 없습니다.");
+        }
 
         // 상품 등록
         Product product = productFormDto.createProduct();
         product = productRepository.save(product);  // 여기서 저장
-        productRepository.flush();  // 여기서 flush 호출
+        productRepository.flush();  // 여기서 flush 호출하여 pr_id를 생성
 
         log.info("상품 저장 완료: {}", product);
 
         // 모델 저장
-        for (ProductModelDto modelDto : productFormDto.getProductModelDtoList()) {
-            if (modelDto.getPrStock() > 0 && modelDto.getProductModelSelect() != null) {
-                ProductModel productModel = new ProductModel();
-                productModel.setProductModelSelect(modelDto.getProductModelSelect());
-                productModel.setPrStock(modelDto.getPrStock());
-                productModel.setProduct(product);
-                productModelRepository.save(productModel);  // 모델 엔티티를 저장
-
-                log.info("상품 모델 저장 완료: {}", productModel);
-            } else {
-                log.warn("상품 모델 정보가 올바르지 않습니다: {}", modelDto);
-            }
+        for (ProductModelDto modelDto : validModels) {
+            ProductModel productModel = new ProductModel();
+            productModel.setProductModelSelect(modelDto.getProductModelSelect());
+            productModel.setPrStock(modelDto.getPrStock());
+            product.addProductModel(productModel); // 유효한 모델만 product에 추가
+            log.info("유효한 상품 모델 추가 완료: {}", productModel);
         }
 
         // 이미지 등록
@@ -162,5 +164,24 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    public List<ProductModelDto> getProductModels() {
+        List<ProductModel> productModels = productModelRepository.findAllWithNonNullPrId();
+        return productModels.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private ProductModelDto convertToDto(ProductModel productModel) {
+        ProductModelDto productModelDto = new ProductModelDto();
+        productModelDto.setId(productModel.getId());
+        productModelDto.setProductModelSelect(productModel.getProductModelSelect());
+        productModelDto.setPrStock(productModel.getPrStock());
+        return productModelDto;
     }
 }

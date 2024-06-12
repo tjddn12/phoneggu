@@ -10,7 +10,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "product_model")
 public class ProductModel {
@@ -24,7 +23,7 @@ public class ProductModel {
     @Column(name = "product_model_select")
     private ProductModelSelect productModelSelect;
 
-    @Column(name = "pr_stock", nullable = false)
+    @Column(name = "pr_stock")
     private int prStock;
 
     @ManyToOne(fetch = FetchType.LAZY)

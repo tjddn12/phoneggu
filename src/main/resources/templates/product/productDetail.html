@@ -1,74 +1,81 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Document</title>
+    <title>상세페이지</title>
     <link rel="stylesheet" th:href="@{/css/productDetail.css}">
+    <script defer th:src="@{/js/productDetail.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="product-container container">
-        <div class="product-image">
-            <!--상품 이미지 -->
-            <img alt="" src="">
+
+        <!-- 오류 메시지 표시 블록 -->
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
         </div>
-        <div class="product-details">
-            <h1>[하드]Natural Soap 핑크 케이스</h1> <!--DB에 저장되어있는 상품 이름 -->
-            <div>브랜드: 자사브랜드</div>
-            <div class="price">판매가 : <span class="totalPrice"></span> 원</div>
-            <div class="shipping">배송비: 3,000원 (10,000원 이상 구매 시 무료)</div>
-            <div class="options">
-                <label for="options">종류:</label>
-                <!--디비에서 종류를 가져와서 select 안에 넣기 -->
-                <select id="options">
-                    <option>- [필수] 옵션을 선택해 주세요 -</option>
-                    <option disabled value="">▶구매전 기종 확인 해주세요</option>
-                    <!--반복문 란 -->
-                </select>
-            </div>
-            <div class="minimum-order">
-                최소주문수량 1개 이상
+        <!-- 오류 메시지 표시 블록 끝 -->
+
+        <form th:action="@{/product/purchase}" th:object="${product}" method="post" enctype="multipart/form-data">
+            <div class="product-image">
+                <img th:src="@{${product.productImgDtoList[0].imgUrl}}" alt="제품 이미지" width="400px">
             </div>
 
-            <!-- 셀렉트 박스 선택한 제품 넣기 -->
-            <div id="selected-product">
+            <div class="product-details">
+                <h1> [ <span th:text="${product.productType}"></span> ] <span th:text="${product.prName}"></span></h1>
+                <div>브랜드: 자사브랜드</div>
+                <div class="price">판매가 : <span th:text="${product.prPrice}"></span> 원</div>
+                <div class="shipping">배송비: 3,000원 (10,000원 이상 구매 시 무료)</div>
+<!--                <div class="options">-->
+<!--                    <label for="options">기종:</label>-->
+<!--                    <select id="options" name="selectedOption">-->
+<!--                        <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>-->
+<!--                        <option th:if{ th:each="model : ${product.productModelDtoList}" th:value="${model.id}" th:text="${model.productModelSelect}"></option>-->
+<!--                    </select>-->
+<!--                </div>-->
 
-            </div>
+                <div class="options">
+                    <label for="options">기종:</label>
+                    <select id="options" name="selectedOption" onchange="addProduct(this)">
+                        <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
+                        <option th:each="model : ${product.productModelDtoList}" th:value="${model.id}" th:text="${model.productModelSelect}"></option>
+                    </select>
+                </div>
 
-            <div class="totalProduct">
-                TOTAL: (
-                <span class="totalProducts">0</span>
-                개)
+                <div class="minimum-order text-danger">
+                    최소주문수량 1개 이상
+                </div>
+
+                <div class="totalProduct">
+                    <div id="selectedProducts"></div> <!-- 동적으로 선택된 상품을 표시할 영역 -->
+                    <div class="totalPrice">
+                        TOTAL: ( <span id="totalPrice"> 0 원</span> )
+                    </div>
+                </div>
+
+                <button type="submit" name="action" value="save" class="btn-save">찜</button>
+                <button type="submit" name="action" value="cart" class="btn-cart">카트</button>
+                <button type="submit" name="action" value="buy" class="btn-buy">바로구매</button>
             </div>
-            <button class="btn-save">찜</button>
-            <button class="btn-cart">카트</button>
-            <button class="btn-bay">바로구매</button>
-        </div>
+        </form>
     </div>
     <div class="foot">
         <div><a href="#">구매가이드</a></div>
         <div><a href="#">구매후기</a></div>
         <div><a href="#">상품문의</a></div>
     </div>
-    <div class="additional-info">
-        <div class="info-box" id=""></div>
+
+    <div>
+        <div th:each="img : ${product.productImgDtoList}" class="text-center">
+            <img th:src="@{${img.imgUrl}}" alt="제품 상세 이미지" class="rounded mgb-15">
+        </div>
     </div>
+
     <div class="detailguide">
         <img alt="" src="/images/detailguide.png">
     </div>
+
 </div>
-<script >
-    document.getElementById('options').addEventListener('change', function() {
-        let selectedOption = this.value();
-        console.log(selectedOption.value)
-        let selectedProductDiv = document.getElementById('selected-product');
-        selectedProductDiv.innerHTML = '<p>선택한 제품: ' + selectedOption + '</p>';
-    });
-
-</script>
 </body>
-
-
 </html>
