@@ -3,6 +3,7 @@ package com.jsbs.casemall.service;
 import com.jsbs.casemall.dto.MailDto;
 import com.jsbs.casemall.dto.UserDto;
 import com.jsbs.casemall.dto.UserPwRequestDto;
+import com.jsbs.casemall.dto.UserEditDto;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +34,23 @@ public class UserService implements UserDetailsService {
 
     }
 
-    // 세이브
 
-    public void JoinUser(UserDto userDTO){
-        Users user = Users.createMember(userDTO,passwordEncoder);
+
+    //세이브
+
+    public void JoinUser(UserDto userDTO) {
+        // Check for duplicate userId
+        Optional<Users> existingUser = userRepository.findByUserId(userDTO.getUserId());
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("User ID already exists");
+        }
+
+        Users user = Users.createMember(userDTO, passwordEncoder);
         userRepository.save(user);
+    }
+    // 아이디 중복
+    public boolean checkUserIdExists(String userId) {
+        return userRepository.findByUserId(userId).isPresent();
     }
 
 
@@ -61,4 +76,28 @@ public class UserService implements UserDetailsService {
         sendService.mailSend(dto);
     }
 
-}
+
+    // 정보 수정
+
+    public UserEditDto getUserById(String userId) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return new UserEditDto(user.getUserId(), user.getUserPw(), user.getName(), user.getPCode(), user.getPhone(), user.getEmail());
+    }
+
+    public boolean updateUser(UserEditDto userEditDto) {
+        try {
+            Users user = userRepository.findById(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+            user.setUserPw(userEditDto.getUserPw());
+            user.setPCode(userEditDto.getPCode());
+            user.setPhone(userEditDto.getPhone());
+            user.setEmail(userEditDto.getEmail());
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    }
+

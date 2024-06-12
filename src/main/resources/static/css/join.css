@@ -132,3 +132,11 @@ form button {
     color: #fff;
     background-color: #00274c;
 }
+
+
+     .error {
+         color: red;
+     }
+     .success {
+         color: green;
+     }

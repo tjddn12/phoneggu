@@ -33,6 +33,7 @@ h1 {
     margin-bottom: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: 1px solid #ddd;
+    margin-top: 150px;
 }
 
 .balance-item {
@@ -158,4 +159,9 @@ h1 {
 .myPage-nav-links >.nav-item > strong {
     font-size: 15px;
     color: #000;
+}
+.custom-size{
+    padding-top: 10px;
+    font-size: 30px;
+    color: #333;
 }
