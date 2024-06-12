@@ -12,8 +12,7 @@
         <h1 class="tit">회원 정보 수정</h1>
         <form action="#" method="post">
             <label for="userId">아이디 <strong>*</strong></label>
-            <input type="text" id="userId"  name="userId" disabled th:value="${user.getUserId()}" th:text="${user
-            .getUserId()}">
+            <input type="text" id="userId"  name="userId" disabled th:value="${user.getUserId()}" >
 
             <label for="userPw">비밀번호  <strong>*</strong></label>
             <input type="password" id="userPw" name="userPw">
@@ -22,7 +21,7 @@
             <input type="password" id="confirm-userPw" name="confirm-userPw">
 
             <label for="name" >이름  <strong>*</strong></label>
-            <input type="text" id="name" name="name"  disabled th:value="${user.getName()}" th:text="${user.getName()}">
+            <input type="text" id="name" name="name"  disabled th:value="${user.getName()}" >
 
             <label for="address">주소 <strong>*</strong></label>
             <input type="text" id="address" name="address">

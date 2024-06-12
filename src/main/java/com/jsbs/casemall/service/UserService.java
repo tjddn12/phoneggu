@@ -81,8 +81,9 @@ public class UserService implements UserDetailsService {
 
     public UserEditDto getUserById(String userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        return new UserEditDto(user.getUserId(), user.getUserPw(), user.getName(), user.getPCode(), user.getPhone(), user.getEmail());
+        return new UserEditDto(user);
     }
+
 
     public boolean updateUser(UserEditDto userEditDto) {
         try {
