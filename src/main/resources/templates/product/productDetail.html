@@ -32,7 +32,7 @@
                     <label for="options">기종:</label>
                     <select id="options" name="selectedOption" onchange="addProduct(this)">
                         <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
-                        <option th:each="model : ${product.productModelDtoList}" th:value="${model.id}" th:text="${model.productModelSelect}"></option>
+                        <option th:each="model : ${product.productModelDtoList}" th:value="${model.id}" th:text="${model.productModelSelect}" th:attr="data-stock=${model.prStock}"></option>
                     </select>
                 </div>
         

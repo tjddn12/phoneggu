@@ -144,7 +144,7 @@ public class ProductController {
     @GetMapping(value="/product/{prId}")
     public String productDtl(Model model, @PathVariable("prId") Long prId) {
         ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
-        List<ProductModelDto> productModelDtoList = productService.getProductModels(); // 기종 정보 조회
+        List<ProductModelDto> productModelDtoList = productService.getProductModelsByProductId(prId); // 기종 정보 조회
         productFormDto.setProductModelDtoList(productModelDtoList); // 기종 정보 설정
         model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
         return "product/productDetail";
