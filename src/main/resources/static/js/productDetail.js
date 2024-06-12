@@ -37,7 +37,7 @@ function updateSelectedProducts() {
         productDiv.className = "selected-product";
         productDiv.innerHTML = `
         <input type="hidden" name="items[${index}].modelId" value="${product.id}">${product.name}
-        <input type="number" name="items[${index}].count" value="${product.prStock}" min="1" max="${product.maxStock} onchange="updateQuantity('${product.id}', this.value)">
+        <input type="number" name="items[${index}].count" value="${product.prStock}" min="1" max="${product.maxStock}" onchange="updateQuantity('${product.id}', this.value)">
         <button type="button" onclick="removeProduct('${product.id}')">X</button>
         <input type="hidden" name="items[${index}].price" value="${product.price}">
         <span>${(product.price * product.prStock).toLocaleString()} 원</span>
