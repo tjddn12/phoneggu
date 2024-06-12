@@ -9,6 +9,7 @@ import com.jsbs.casemall.exception.OutOfStockException;
 import com.jsbs.casemall.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CartService {
 
     private final CartRepository cartRepository;
@@ -46,6 +48,10 @@ public class CartService {
         if (cart == null) {
             cart = Cart.createCart(user); // 기존에 없다면 새로 생성
         }
+
+        if (cartDto.getItems() == null || cartDto.getItems().isEmpty()) {
+            throw new IllegalArgumentException("장바구니에 추가할 아이템이 없습니다.");
+        }
         // 기종별로 처리
         for (CartItemDto itemDto : cartDto.getItems()) {
             ProductModel productModel = product.getProductModelList().stream()
@@ -53,16 +59,21 @@ public class CartService {
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("해당 모델을 찾을 수 없습니다."));
 
-            CartItem findCartItem = cart.getCartItems().stream() // 리스트를 순회하면서 제품아이디와 해당 모델이 있는지 확인 있다면 기존에 cart에 추가 아니면 새로 저장
+            // 기존 카트 아이템 찾기
+            CartItem existingCartItem = cart.getCartItems().stream()
                     .filter(cartItem -> cartItem.getProduct().equals(product) && cartItem.getProductModel().equals(productModel))
                     .findFirst()
                     .orElse(null);
 
-            if (findCartItem != null) {
-                findCartItem.addCount(itemDto.getCount());
+            if (existingCartItem != null) {
+                // 기존 아이템이 있으면 수량 업데이트
+                log.info("Updating existing cart item: cartItemId={}, newCount={}", existingCartItem.getId(), existingCartItem.getCount() + itemDto.getCount());
+                existingCartItem.addCount(itemDto.getCount());
             } else {
+                // 새로운 아이템 추가
                 CartItem cartItem = CartItem.createCartItem(product, productModel, itemDto.getCount());
                 cart.addCartItems(cartItem);
+                log.info("Adding new cart item: cartItemId={}, count={}", cartItem.getId(), cartItem.getCount());
             }
         }
 

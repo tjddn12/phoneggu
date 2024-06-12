@@ -41,6 +41,7 @@ public class CartController {
     public String addToCart(@RequestParam Long prId, CartDto dto , Principal principal,Model model) {
         String userId = principal.getName();
         try {
+            log.info("Adding to cart: userId={}, productId={}, cartDto={}", userId, prId, dto); // 로그 추가
             cartService.addItemToCart(dto,userId,prId);
             return "redirect:/cart"; // 장바구니 페이지로 리다이렉션
         } catch (Exception e) {
@@ -57,10 +58,10 @@ public class CartController {
 
     // 카트 아이템 삭제 메소드
     @PostMapping("/remove")
-    public String removeItemFromCart(@RequestParam Long cartId, Principal principal, Model model) {
+    public String removeItemFromCart(@RequestParam Long cartItemId, Principal principal, Model model) {
         String userId = principal.getName();
         try {
-            cartService.removeItemFromCart(userId, cartId);
+            cartService.removeItemFromCart(userId, cartItemId);
             return "redirect:/cart"; // 장바구니 페이지로 리다이렉션
         } catch (Exception e) {
             log.error("Error removing item from cart", e);

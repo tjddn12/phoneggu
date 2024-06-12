@@ -28,17 +28,19 @@ function updateSelectedProducts() {
     const selectedProductsDiv = document.getElementById('selectedProducts');
     selectedProductsDiv.innerHTML = '';
 
+    let index = 0;
     selectedProducts.forEach(product => {
         const productDiv = document.createElement('div');
         productDiv.className = "selected-product";
         productDiv.innerHTML = `
-            <input type="hidden" th:value="${product.id}" name="modelId">${product.name}
-            <input type="number" name="count" value="${product.prStock}" min="1" onchange="updateQuantity('${product.id}', this.value)">
-            <button type="button" name="price" onclick="removeProduct('${product.id}')">X</button>
-            <span>${(product.price * product.prStock).toLocaleString()} 원</span>
-
-        `;
+        <input type="hidden" name="items[${index}].modelId" value="${product.id}">${product.name}
+        <input type="number" name="items[${index}].count" value="${product.prStock}" min="1" onchange="updateQuantity('${product.id}', this.value)">
+        <button type="button" onclick="removeProduct('${product.id}')">X</button>
+        <input type="hidden" name="items[${index}].price" value="${product.price}">
+        <span>${(product.price * product.prStock).toLocaleString()} 원</span>
+    `;
         selectedProductsDiv.appendChild(productDiv);
+        index++;
     });
 }
 
@@ -57,5 +59,19 @@ function removeProduct(productId) {
 
 function updateTotalPrice() {
     totalPrice = selectedProducts.reduce((sum, product) => sum + (product.price * product.prStock), 0);
+
     document.getElementById('totalPrice').innerText = totalPrice.toLocaleString() + " 원";
+    document.getElementById("sendTotal").value = totalPrice;
+}
+
+// 장바구니 와 바로구매 버튼 action 처리
+function submitForm(action) {
+    const form = document.getElementById('productForm');
+    const prId = document.getElementById('prId').value;
+    if (action === 'cart') {
+        form.action = `/cart/add?prId=${prId}`;
+    } else if (action === 'buy') {
+        form.action = `/order/checkout?prId=${prId}`;
+    }
+    form.submit();
 }
