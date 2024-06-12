@@ -3,6 +3,8 @@ let totalPrice = 0;
 
 function addProduct(selectElement) {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const prStock = selectedOption.getAttribute('data-stock');
+
     if (!selectedOption.value) return;
 
     const productId = selectedOption.value;
@@ -16,6 +18,7 @@ function addProduct(selectElement) {
         id: productId,
         name: productText,
         prStock: 1,
+        maxStock: prStock,
         price: productPrice
     };
 
@@ -34,7 +37,7 @@ function updateSelectedProducts() {
         productDiv.className = "selected-product";
         productDiv.innerHTML = `
         <input type="hidden" name="items[${index}].modelId" value="${product.id}">${product.name}
-        <input type="number" name="items[${index}].count" value="${product.prStock}" min="1" onchange="updateQuantity('${product.id}', this.value)">
+        <input type="number" name="items[${index}].count" value="${product.prStock}" min="1" max="${product.maxStock} onchange="updateQuantity('${product.id}', this.value)">
         <button type="button" onclick="removeProduct('${product.id}')">X</button>
         <input type="hidden" name="items[${index}].price" value="${product.price}">
         <span>${(product.price * product.prStock).toLocaleString()} 원</span>
@@ -46,7 +49,9 @@ function updateSelectedProducts() {
 
 function updateQuantity(productId, prStock) {
     const product = selectedProducts.find(p => p.id === productId);
-    product.prStock = parseInt(prStock, 10);
+    const maxStock = parseInt(product.maxStock, 10);
+    prStock = Math.min(parseInt(prStock, 10), maxStock); // Ensure the quantity does not exceed max stock
+    product.prStock = prStock;
     updateSelectedProducts();
     updateTotalPrice();
 }
