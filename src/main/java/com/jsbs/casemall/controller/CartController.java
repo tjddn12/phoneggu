@@ -26,6 +26,10 @@ public class CartController {
     // 장바구니 /cart 시 장바구니
     @GetMapping
     public String viewCart(Model model, Principal principal) {
+        if (principal == null){
+            return "redirect:login";
+        }
+
         String userId = principal.getName();
         CartDto cart = cartService.getCartByUserId(userId);
         // 만약 없다면 빈 객체 생성하여 전달

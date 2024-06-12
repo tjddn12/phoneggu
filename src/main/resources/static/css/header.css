@@ -6,10 +6,16 @@
     font-family: 'Mochiy Pop One' , sans-serif ;
 }
 
+.header .logo{
+    padding: 40px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translate(-50%);
+}
 .header-container a{
     text-decoration: none;
-
 }
+
 .header_bottom > .container{
     margin: 50px auto;
 }
@@ -113,6 +119,7 @@
         bottom: 10px;
         left: 50%;
         transform: translate(-50%);
+        white-space: nowrap;
     }
 
     .navbar-collapse {

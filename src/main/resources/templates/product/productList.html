@@ -15,7 +15,7 @@
             <div class="top_img">
                 <img alt="메인 배너" src="/images/main_banner2.png">
             </div>
-            <div class="top_bot d-flex justify-content-between">
+            <div class="top_bot d-flex justify-content-between cf">
                 <div class="top_left">
                     <p id="main-category" th:text="${mainCategory != null ? mainCategory.name() : ''}"></p>
                 </div>
@@ -56,13 +56,13 @@
         <div class="product-list cf" id="product-list" th:fragment="product-list">
             <div class="product" th:each="product : ${products}">
                 <div class="product-image">
-                    <a th:href="@{/products/{id}(id=${product.id})}">
+                    <a th:href="@{'/product/' + ${product.id}}">
                         <img th:src="@{${product.productImgList[0].imgUrl}}" th:alt="${product.prName} + ' 이미지'">
                     </a>
                 </div>
                 <div class="product-info">
                     <p class="product-name">
-                        <a th:href="@{/products/{id}(id=${product.id})}"><span th:text="${product.prName}"></span></a>
+                        <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
                     </p>
                     <div class="price-info">
                         <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
