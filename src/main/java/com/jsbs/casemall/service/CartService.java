@@ -60,15 +60,15 @@ public class CartService {
                     .orElseThrow(() -> new IllegalArgumentException("해당 모델을 찾을 수 없습니다."));
 
             // 기존 카트 아이템 찾기
-            CartItem existingCartItem = cart.getCartItems().stream()
+            CartItem findItem = cart.getCartItems().stream()
                     .filter(cartItem -> cartItem.getProduct().equals(product) && cartItem.getProductModel().equals(productModel))
                     .findFirst()
                     .orElse(null);
 
-            if (existingCartItem != null) {
+            if (findItem != null) {
                 // 기존 아이템이 있으면 수량 업데이트
-                log.info("Updating existing cart item: cartItemId={}, newCount={}", existingCartItem.getId(), existingCartItem.getCount() + itemDto.getCount());
-                existingCartItem.addCount(itemDto.getCount());
+                log.info("Updating existing cart item: cartItemId={}, newCount={}", findItem.getId(), findItem.getCount() + itemDto.getCount());
+                findItem.addCount(itemDto.getCount());
             } else {
                 // 새로운 아이템 추가
                 CartItem cartItem = CartItem.createCartItem(product, productModel, itemDto.getCount());

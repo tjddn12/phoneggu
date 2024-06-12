@@ -20,7 +20,8 @@ public class CartDto {
     private String userId;
     // form 에서 받을 데이터
     private List<CartItemDto> items = new ArrayList<>();
-    private int totalPrice;
+    // 총  결제 금액
+    private long totalPrice;
 
     // 디비에서  가져올때
     public CartDto(Cart cart) {
@@ -31,5 +32,6 @@ public class CartDto {
         for (CartItem cartItem : cart.getCartItems()) {
             this.items.add(new CartItemDto(cartItem));
         }
+        this.totalPrice = cart.getTotalPrice();
     }
 }

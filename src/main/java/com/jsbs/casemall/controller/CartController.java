@@ -41,13 +41,12 @@ public class CartController {
     public String addToCart(@RequestParam Long prId, CartDto dto , Principal principal,Model model) {
         String userId = principal.getName();
         try {
-            log.info("Adding to cart: userId={}, productId={}, cartDto={}", userId, prId, dto); // 로그 추가
             cartService.addItemToCart(dto,userId,prId);
             return "redirect:/cart"; // 장바구니 페이지로 리다이렉션
         } catch (Exception e) {
             log.error("Error adding item to cart", e);
             model.addAttribute("error", "Failed to add item to cart");
-            return "error";
+            return "/error";
         }
     }
 
