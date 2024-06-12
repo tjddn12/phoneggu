@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰 목록</title>
+    <!--    CSS-->
+</head>
+<body>
+<h1>리뷰 목록</h1>
+<table>
+    <thead>
+    <tr>
+        <th>리뷰 번호</th>
+        <th>사용자 ID</th>
+        <th>제품 이름</th>
+        <th>리뷰 내용</th>
+        <th>작성일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="review : ${reviews}">
+        <td th:text="${review.reviewNo}"></td>
+        <td th:text="${review.user.userId}"></td>
+        <td th:text="${review.product.prName}"></td>
+        <td th:text="${review.content}"></td>
+        <td th:text="${review.createdAt}"></td>
+        <!--                : 변수명 추후 수정.-->
+    </tr>
+    </tbody>
+    <button onclick="location.href='/reviewWrite'">리뷰 작성</button>
+</table>
+</body>
+</html>
