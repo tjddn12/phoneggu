@@ -9,6 +9,7 @@ import com.jsbs.casemall.dto.ProductSearchDto;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -150,6 +152,7 @@ public class ProductController {
         return "product/productDetail";
     }
 
+
     @GetMapping("/products")
     public String getProducts(@RequestParam(required = false) ProductCategory category,
                               @RequestParam(required = false) ProductType type,
@@ -160,11 +163,17 @@ public class ProductController {
         } else if (category != null) {
             products = productService.getProductsByCategory(category);
         } else {
-            products = productService.getAllProducts(); // 전체 상품을 반환하도록 수정 필요
+            products = productService.getAllProducts();
         }
         model.addAttribute("products", products);
         model.addAttribute("mainCategory", category);
         model.addAttribute("subCategory", type);
+
+        // 로깅 추가
+        log.info("mainCategory: {}", category);
+        log.info("subCategory: {}", type);
+        log.info("Number of products: {}", products.size());
+
         return "product/productList";
     }
 

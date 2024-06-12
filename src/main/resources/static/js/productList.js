@@ -7,26 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTopLeft(category, type);
     }
 
-    function addNavEventListener(id, url) {
-        const element = document.getElementById(id);
-        if (element) {
-            element.addEventListener('click', function(e) {
-                e.preventDefault();
-                const category = element.getAttribute('data-category');
-                const type = element.getAttribute('data-type');
-                updateTopLeft(category, type);
-                window.history.pushState({}, '', url);
-            });
-        }
-    }
-
     document.querySelectorAll('.nav-link').forEach(function(link) {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
+            // e.preventDefault(); // Preventing default behavior is no longer needed
             const category = link.getAttribute('data-category');
             const type = link.getAttribute('data-type');
             updateTopLeft(category, type);
-            window.history.pushState({}, '', link.href);
         });
     });
 

@@ -1,14 +1,12 @@
-* {
-    margin: 0;
-    padding: 0;
+* {margin: 0; padding: 0;}
+ul, li { list-style: none;}
+a { text-decoration: none;  color: #000; }
+.cf:after {
+    content: '';
+    display: block;
+    clear: both;
 }
-ul, li {
-    list-style: none;
-}
-a {
-    text-decoration: none;
-    color: #000;
-}
+
 .wrap {
     width: 100%;
 }
@@ -104,10 +102,13 @@ a {
 .more h3:hover {
     color: #ff9900;
 }
-
+.product-list{
+    width: 100%;
+}
 .product {
-    width: 300px;
-    margin: 20px auto;
+    width: 20%;
+    margin: 20px 1%;
+    float: left;
     text-align: center;
 }
 
