@@ -9,12 +9,14 @@ import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 //리뷰 게시판 페이지 매핑
 @Slf4j
-@RestController //: JSON 형식의 데이터 전송
+@Controller
+//@RestController //: JSON 형식의 데이터 전송, 추후 필요시 수정.
 @RequestMapping("/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
@@ -33,13 +35,15 @@ public class ReviewController {
 
         model.addAttribute("reviews", reviews);
 
-        return "reviews";
+        return "review/reviews";
     }
+    //------------------------------수정
     @GetMapping("/reviewWrite")
     public String createReviewForm(Model model){
+        //주문 내역에서 리뷰 작성시, 상품 이름&상품 사진을 받아오는 로직 구현
         model.addAttribute("review", new Review());
 
-        return "reviewWrite";
+        return "review/reviewWrite";
     }
     @PostMapping
     public String createReview(@ModelAttribute Review review){
@@ -51,7 +55,7 @@ public class ReviewController {
     public String getReviewByNo(@PathVariable Long reviewNo, Model model){
         model.addAttribute("review", reviewService.getReviewByNo(reviewNo).orElse(null));
 
-        return "reviewDetail";
+        return "review/reviewDetail";
     }
     @GetMapping("/user/{userId}")
     public String getReviewsByUserId(@PathVariable String userId, Model model){
@@ -66,9 +70,8 @@ public class ReviewController {
             model.addAttribute("error", "해당 사용자 ID를 찾을 수 없습니다.");
         }
 
-        return "reviews";
+        return "review/reviews";
     }
-    //------------------------------수정
     @GetMapping("/product/{prName}")
     public String getReviewsByPrName(@PathVariable String prName, Model model){
         Product product = new Product();
@@ -79,7 +82,7 @@ public class ReviewController {
 
         model.addAttribute("reviews", reviews);
 
-        return "reviews";
+        return "review/reviews";
     }
     @PutMapping("/{reviewNo}")
     public String updateReview(@PathVariable Long reviewNo, @ModelAttribute ReviewFormDto reviewFormDto){
