@@ -6,11 +6,11 @@
     font-family: 'Mochiy Pop One' , sans-serif ;
 }
 
-.header .logo{
+.header .ggu-logo{
     padding: 40px;
     white-space: nowrap;
-    left: 50%;
-    transform: translate(-50%);
+    text-align: center;
+    font-size: 40px;
 }
 .header-container a{
     text-decoration: none;

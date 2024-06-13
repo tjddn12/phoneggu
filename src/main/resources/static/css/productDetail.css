@@ -105,6 +105,12 @@ a{text-decoration:none;}
     width: 50%;
 }
 
+.ptc{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
 .detailguide {
     display: flex;
     justify-content: center;

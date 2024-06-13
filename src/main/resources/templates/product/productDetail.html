@@ -65,6 +65,7 @@
         <div th:each="img : ${product.productImgDtoList}" class="text-center">
             <img th:src="@{${img.imgUrl}}" alt="제품 상세 이미지" class="rounded mgb-15">
         </div>
+        <span th:text="${product.prDetail}" class="ptc"></span>
     </div>
 
     <div class="detailguide">
