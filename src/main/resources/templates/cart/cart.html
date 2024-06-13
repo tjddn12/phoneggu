@@ -6,6 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>장바구니</title>
     <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:src="@{/js/cart.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -14,7 +16,7 @@
         <table class="table">
             <thead>
             <tr>
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" id="selectAll"></td>
                 <th>이미지</th>
                 <th>상품 정보</th>
                 <th>판매가</th>
@@ -25,16 +27,14 @@
                 <th>선택</th>
             </tr>
             </thead>
-            <!--            <img th:src="@{${product.productImgDtoList[0].imgUrl}}" alt="제품 이미지" width="400px">-->
             <tbody class="table-group-divider align-middle">
             <tr th:if="${cart.items == null or #lists.isEmpty(cart.items)}">
                 <td class="text-center" colspan="9">장바구니가 비어 있습니다.</td>
             </tr>
             <tr th:each="item : ${cart.items}">
-                <th scope="row"><input type="checkbox"></th>
+                <th scope="row"><input type="checkbox" name="cartId" th:value="${item.cartItemId}" class="cart-item-checkbox"></th>
                 <td class="prImg">
                     <img alt="상품 이미지" class="img-fluid" th:src="@{${item.getImgUrl()}}">
-
                 </td>
                 <td class="prInfo">
                     <p class="prName" th:text="${item.productName}">상품 이름</p>
@@ -42,7 +42,7 @@
                 </td>
                 <td><p><span class="prPrice" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'COMMA')}">0</span>원</p></td>
                 <td class="prCount">
-                    <input class="form-control d-inline-block" min="1" th:value="${item.count}" type="number">
+                    <input class="form-control d-inline-block item-count" name="count" min="1" th:value="${item.count}" type="number" th:data-cart-id="${item.cartItemId}">
                 </td>
                 <td><span class="shippingCost">0</span>원</td>
                 <td><span class="shipping">무료배송</span></td>
@@ -83,13 +83,14 @@
                 </tbody>
             </table>
         </div>
+
         <div class="orderButtons text-center">
-            <button class="btn btn-primary me-2">전체상품주문</button>
-            <button class="btn btn-secondary">선택상품주문</button>
+            <button class="btn btn-primary me-2 allOrder">전체상품주문</button>
+            <button class="btn btn-secondary selectOrder">선택상품주문</button>
         </div>
     </div>
 </div>
-<script th:src="@{/js/cart.js}"></script>
+
 
 </body>
 </html>

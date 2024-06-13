@@ -4,14 +4,14 @@ import com.jsbs.casemall.dto.CartDto;
 import com.jsbs.casemall.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -85,4 +85,37 @@ public class CartController {
             return "error";
         }
     }
+
+
+    // 업데이트
+    @PostMapping("/update")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateCount(@RequestBody Map<String, Object> payload) {
+        Long cartItemId = Long.valueOf(payload.get("cartItemId").toString());
+        int count = Integer.parseInt(payload.get("count").toString());
+
+
+
+        Map<String, Object> response = new HashMap<>();
+        if(count < 1){
+            response.put("success", false);
+            response.put("message", "수량은 1보다 작을 수 없습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+        // 해당 재고 가져오기
+        int stock = cartService.getItemStock(cartItemId);
+        log.info("재고 : {} ",stock );
+        if (count > stock) {
+            response.put("success", false);
+            response.put("message", "주문하려는 수량이 재고보다 많습니다!.");
+            return ResponseEntity.badRequest().body(response);
+        }
+        cartService.updateCartItemQuantity(cartItemId, count);
+        response.put("success", true);
+        response.put("cartItemId", cartItemId);
+        response.put("count", count);
+        return ResponseEntity.ok(response);
+    }
+
+
 }

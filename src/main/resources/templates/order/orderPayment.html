@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>주문페이지</title>
     <link rel="stylesheet" th:href="@{/css/payment.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:src="@{/js/payment.js}"></script>
 </head>
 <body>
 <!--받는 사람  + 이메일 + 전화번호는 로그인 된 사람의 기본정보를 보여줌 -->
@@ -27,34 +29,35 @@
             </tr>
             </thead>
             <tbody class="table-group-divider align-middle ">
-            <tr>
-                <th scope="row"><input type="checkbox"></th>
+            <tr th:each="item : ${order.items}">
+                <th scope="row"><input type="checkbox" name="cartId" th:value="${item.cartItemId}" class="cart-item-checkbox"></th>
                 <td class="prImg">
-                    <img alt="상품 이미지" class="img-fluid" src="">
+                    <img alt="상품 이미지" class="img-fluid" th:src="@{${item.getImgUrl()}}">
                 </td>
                 <td class="prInfo">
-                    <p class="prName">상품 이름</p>
-                    <p class="prDetail">상품 설명</p>
+                    <p class="prName" th:text="${item.productName}">상품 이름</p>
+                    <p class="prDetail" th:text="${item.modelName}">상품 기종</p>
                 </td>
-                <td><p><span class="prPrice">0</span>원</p></td>
+                <td><p><span class="prPrice" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'COMMA')}">0</span>원</p></td>
                 <td class="prCount">
-                    <input class="form-control d-inline-block" min="1" type="number" value="1">
+                    <input class="form-control d-inline-block item-count" name="count" min="1" th:value="${item.count}" type="number" th:data-cart-id="${item.cartItemId}">
                 </td>
                 <td><span class="shippingCost">0</span>원</td>
-                <td><span class="shipping">기본배송</span></td>
-                <td><span class="totalPrice">0</span>원</td>
+                <td><span class="shipping">무료배송</span></td>
+                <td><span class="totalPrice" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
                 <td class="select">
-                    <button class="btn btn-primary btn-sm">주문하기</button>
-                    <button class="btn btn-secondary btn-sm">관심상품등록</button>
-                    <button class="btn btn-danger btn-sm">삭제</button>
+                    <form method="post" th:action="@{/order/remove}">
+                        <input name="cartItemId" th:value="${item.cartItemId}" type="hidden">
+                        <button class="btn btn-danger btn-sm" type="submit">삭제</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
         </table>
         <table class="table tbBot">
             <th>[<span class="shipping">기본배송</span>]</th>
-            <td>상품구매금액 <span class="sumPrice bb">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
-                    class="sumTotalPrice bb">0</span>원
+            <td>상품구매금액 <span class="sumPrice bb "th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
+                    class="sumTotalPrice bb" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원
             </td>
         </table>
 
@@ -84,7 +87,7 @@
                         <label class="col-sm-2 col-form-label" for="receiverName">받으시는 분 <span
                                 class="text-danger">*</span></label>
                         <div class="col-sm-10">
-                            <input class="form-control" id="receiverName" placeholder="받으시는 분" type="text">
+                            <input class="form-control" id="receiverName" placeholder="받으시는 분" type="text" th:value="${order.getUserName()}">
                         </div>
                     </div>
                     <div class="mb-3 row">
@@ -101,8 +104,9 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label class="col-sm-2 col-form-label" for="phone">휴대전화 <span
-                                class="text-danger">*</span></label>
+                        <label class="col-sm-2 col-form-label">휴대전화 <span
+                                class="text-danger">*</span>
+                        </label>
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <select class="form-select phoneNumber" style="max-width: 80px;">
@@ -141,7 +145,7 @@
                                     <option value="nate.com">nate.com</option>
                                 </select>
                             </div>
-                            <small class="form-text text-muted">이메일을 통해 주문처리과정을 보내드립니다. 이메일 주소에는 반드시 수신가능한 이메일 주소를 입력해
+                            <small class="form-text text-muted">이메일을 통해 결제정보를 보내드립니다. 이메일 주소에는 반드시 수신가능한 이메일 주소를 입력해
                                 주세요.</small>
                         </div>
                     </div>
@@ -165,9 +169,9 @@
                     </thead>
                     <tbody class="table-success">
                     <tr>
-                        <th scope="row"><span class="price">0</span>원</th>
+                        <th scope="row"><span class="price"  th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원</th>
                         <td><span class="cost">0</span>원</td>
-                        <td><span class="totalPrice">0</span>원</td>
+                        <td><span class="totalPrice" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
                     </tr>
                     </tbody>
                 </table>
