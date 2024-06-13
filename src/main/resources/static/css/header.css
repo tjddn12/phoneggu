@@ -1,4 +1,6 @@
 .header {
+    max-width: 1500px;
+    height: 150px;
     position: relative;
     background-color: #bcdffd;
     color: #fff;
@@ -7,9 +9,11 @@
 }
 
 .header .ggu-logo{
-    padding: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     white-space: nowrap;
-    text-align: center;
     font-size: 40px;
 }
 .header-container a{
@@ -111,15 +115,18 @@
         align-items: flex-start;
     }
     .header-notices{
-        top: 10px;
+        bottom: 30px;
         left: 50%;
         transform: translate(-50%);
     }
     .header-links {
-        bottom: 10px;
+        bottom: 0;
         left: 50%;
         transform: translate(-50%);
         white-space: nowrap;
+    }
+    .header .ggu-logo{
+        top: 30%;
     }
 
     .navbar-collapse {
