@@ -1,11 +1,27 @@
 $(document).ready(function(){
     $('.stars input').change(function(){
         var $this = $(this);
+        var $rating = $this.val();
+        var $labels = $this.closest('.stars').find('label');
         // 모든 레이블 색상 초기화
-        $this.siblings('label').css('color', '#E5E5E5');
+        $labels.css('color', '#E5E5E5');
         // 선택된 라디오 버튼과 이전 형제 레이블을 색상 변경
-        $this.next('label').css('color', '#fc0');
-        $this.next('label').prevAll('label').css('color', '#fc0');
+        var index = $labels.index($this.next('label'));
+
+        $labels.slice(0, index + 1).css('color', '#fc0');
+        //AJAX 요청 보내기
+        $.ajax({
+            type: 'POST',
+            url: '/submitRating', //: 서버의 엔드포인트 URL
+            data: JSON.stringify({revwRatings: rating}),
+            contentType: 'application/json',
+            success: function(response){
+                console.log("평점이 성공적으로 전송되었습니다.");
+            },
+            error: function(xhr, status, error){
+                console.error("평점 전송에 실패했습니다.:", error);
+            }
+        });
     });
     // //썸네일 미리보기 및 클릭시 재선택
     // let fileItems = document.querySelectorAll('[type=file]');

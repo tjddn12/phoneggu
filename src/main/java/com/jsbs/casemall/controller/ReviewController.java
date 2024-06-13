@@ -1,5 +1,6 @@
 package com.jsbs.casemall.controller;
 
+import com.jsbs.casemall.dto.ReviewDto;
 import com.jsbs.casemall.dto.ReviewFormDto;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Review;
@@ -9,6 +10,7 @@ import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +39,6 @@ public class ReviewController {
 
         return "review/reviews";
     }
-    //------------------------------수정
     @GetMapping("/reviewWrite")
     public String createReviewForm(Model model){
         //주문 내역에서 리뷰 작성시, 상품 이름&상품 사진을 받아오는 로직 구현
@@ -96,5 +97,12 @@ public class ReviewController {
         reviewService.deleteReview(reviewNo);
 
         return "redirect:/reviews";
+    }
+    @PostMapping("/submitRating")
+    public ResponseEntity<String> submitRating(@RequestBody ReviewDto reviewDto){
+        //평점을 reviewService를 통해 저장
+        reviewService.saveRating(reviewDto);
+
+        return ResponseEntity.ok("평점이 성공적으로 저장되었습니다.");
     }
 }

@@ -53,5 +53,12 @@ public class ReviewService {
             throw new RuntimeException("리뷰 수정 실패");
         }
     }
+    public void saveRating(ReviewDto reviewDto) {
+        //새로운 Review 엔티티를 생성하고 평점 설정
+        Review review = new Review();
 
+        review.setRevwRatings(reviewDto.getRevwRatings());
+        //DB에 저장
+        reviewRepository.save(review);
+    }
 }
