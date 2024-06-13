@@ -4,13 +4,11 @@ import com.jsbs.casemall.dto.ReviewFormDto;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Review;
 import com.jsbs.casemall.entity.Users;
-import com.jsbs.casemall.repository.ProductRepository;
 import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -70,40 +68,30 @@ public class ReviewController {
 
         return "reviews";
     }
+    //------------------------------수정
     @GetMapping("/product/{prName}")
     public String getReviewsByPrName(@PathVariable String prName, Model model){
-        Optional<Product> prOpt = reviewRepository.findByPrname(prName);
+        Product product = new Product();
 
-        if(prOpt.isPresent()){
-            Product product = prOpt.get();
+        product.setPrName(prName);
 
-            model.addAttribute("reviews", reviewService.getReviewsByPrName(product));
+        List<Review> reviews = reviewRepository.findReviewsByPrName(product);
 
-        }else{
-            model.addAttribute("reviews", List.of());
-            model.addAttribute("error", "해당 상품을 찾을 수 없습니다.");
-        }
+        model.addAttribute("reviews", reviews);
 
         return "reviews";
     }
-
-//------------------수정
     @PutMapping("/{reviewNo}")
-    public ResponseEntity<Review> updateReview(@PathVariable Long reviewNo, @RequestBody ReviewFormDto reviewFormDto){
+    public String updateReview(@PathVariable Long reviewNo, @ModelAttribute ReviewFormDto reviewFormDto){
         reviewFormDto.setReviewNo(reviewNo);
+        reviewService.updateAReview(reviewFormDto);
 
-        Review updatedReview = reviewService.updateAReview(reviewFormDto);
-
-        if(updatedReview != null){
-            return ResponseEntity.ok(updatedReview); //: HTTP 상태코드 200 OK와 함께 updatedReview 객체를
-            //응답 본문으로 포함하는 ResponseEntity 객체 생성.
-        }else{
-            return ResponseEntity.notFound().build(); //: HTTP 상태코드 400 Not Found와 함께 빈 응답 본문을
-            //가진 ResponseEntity 객체 생성.
-        }
+        return "redirect:/reviews";
     }
     @DeleteMapping("/{reviewNo}")
-    public void deleteReview(@PathVariable Long reviewNo){
+    public String deleteReview(@PathVariable Long reviewNo){
         reviewService.deleteReview(reviewNo);
+
+        return "redirect:/reviews";
     }
 }
