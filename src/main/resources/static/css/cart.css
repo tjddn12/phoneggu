@@ -20,14 +20,19 @@ body {
     vertical-align: middle;
 }
 
-.table-group-divider td:nth-child(2) img{
-    padding: 5px;
-    width: 100px;
-    height: 100px;
+.table-group-divider td:nth-child(2){
+    width: 150px;
+    max-height: 100px;
+}
+
+.prImg img {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 .table-group-divider td:nth-child(3) {
-    width: 500px; 
+    width: 450px;
 }
 
 .table-group-divider td:nth-child(3) .prName {
