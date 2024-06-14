@@ -16,7 +16,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain config(HttpSecurity http, PrincipalOauth2UserService principalOauth2UserService) throws Exception {
-
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request

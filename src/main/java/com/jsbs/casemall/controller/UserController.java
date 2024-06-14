@@ -119,7 +119,7 @@ public class UserController {
     // 정보 수정
 
     @GetMapping("/userEdit")
-    public String showEditForm(@AuthenticationPrincipal OAuth2User principal, Model model) {
+    public String showEditForm(Principal  principal, Model model) {
             String id = principal.getName();
             log.info("아이디 값 : {}",id);
             UserEditDto dto = userService.getUserById(id);
