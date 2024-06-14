@@ -114,41 +114,51 @@ public class OrderService {
     }
 
     // 주문 항목을 장바구니 항목과 비교하여 업데이트
-
     public void updateOrderFromCartItems(Order order, Users user) {
         Cart cart = cartRepository.findByUser(user);
         List<CartItem> cartItems = cart.getCartItems();
-        // 각 아이템들을 순회
-        for (CartItem cartItem : cartItems) {
-            OrderDetail orderDetail = order.getOrderItems().stream()
-                    .filter(orderItem -> orderItem.getProduct().getId().equals(cartItem.getProduct().getId()) &&
-                            orderItem.getProductModel().getId().equals(cartItem.getProductModel().getId()))
+        List<OrderDetail> toRemove = new ArrayList<>();
+
+        // 주문에서 기존 주문 항목을 찾아 업데이트 또는 삭제
+        for (OrderDetail orderDetail : order.getOrderItems()) {
+            CartItem matchingCartItem = cartItems.stream()
+                    .filter(cartItem -> cartItem.getProduct().getId().equals(orderDetail.getProduct().getId()) &&
+                            cartItem.getProductModel().getId().equals(orderDetail.getProductModel().getId()))
                     .findFirst()
                     .orElse(null);
-            int changeCount;
-            if (orderDetail != null) { // 비어있지 않는다면
-                if (orderDetail.getCount() != cartItem.getCount()) { // 주문상세의 개수와 카트에 담겨진 숫자가 다르다면
-                    changeCount = orderDetail.getCount() - cartItem.getCount();
-                    log.info("기존주문개수 - 카트에개수 : {}",changeCount);
-                    // 재고 업데이트
-                    if(changeCount > 0){
-                        orderDetail.getProductModel().addStock(changeCount);
-                    }else{
-                        orderDetail.getProductModel().removeStock((Math.abs(changeCount)));
-                    }
-                    orderDetail.setCount(cartItem.getCount());
-                }
-            }else {
-                // 장바구니에는 있고 오더에는 없는경우
-                OrderDetail newOrderDetail = OrderDetail.createOrderDetails(cartItem.getProduct(), cartItem.getProductModel(), cartItem.getCount());
-                order.getOrderItems().add(newOrderDetail);
-            }
 
-            orderRepository.save(order);
+            if (matchingCartItem != null) {
+                // 주문 항목과 장바구니 항목의 수량이 다른 경우 업데이트
+                if (orderDetail.getCount() != matchingCartItem.getCount()) {
+                    int changeCount = matchingCartItem.getCount() - orderDetail.getCount();
+                    if (changeCount > 0) {
+                        orderDetail.getProductModel().removeStock(changeCount);
+                    } else {
+                        orderDetail.getProductModel().addStock(-changeCount);
+                    }
+                    orderDetail.setCount(matchingCartItem.getCount());
+                }
+                cartItems.remove(matchingCartItem);
+            } else {
+                // 장바구니에 없는 항목을 주문에서 제거하고 재고 롤백
+                orderDetail.getProductModel().addStock(orderDetail.getCount());
+                toRemove.add(orderDetail);
+            }
         }
+
+        // 제거할 항목들을 일괄 제거
+        order.getOrderItems().removeAll(toRemove);
+
+        // 남아 있는 장바구니 항목을 주문에 추가
+        for (CartItem cartItem : cartItems) {
+            OrderDetail newOrderDetail = OrderDetail.createOrderDetails(cartItem.getProduct(), cartItem.getProductModel(), cartItem.getCount());
+            newOrderDetail.getProductModel().removeStock(cartItem.getCount());
+            order.getOrderItems().add(newOrderDetail);
+        }
+
+        orderRepository.save(order);
     }
 
-    // 주문 항목 삭제
     public void removeOrder(Long cartItemId, String userId) {
         Users user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다"));
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new IllegalArgumentException("찾는 아이템이 없습니다"));

@@ -55,9 +55,28 @@ $(document).ready(function () {
     }); // 수량의 끝
 
 
-    // 전체 선택/해제
-    $("#selectAll").on("change", function () {
-        $(".cart-item-checkbox").prop("checked", $(this).prop("checked"));
+
+
+    // 삭제 버튼 클릭 시
+    $('.btn-danger').on('click', function (e) {
+        e.preventDefault();
+        let $form = $(this).closest('form');
+        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            data: $form.serialize(),
+            success: function (response) {
+                if (response.success) {
+                    location.reload(); // 성공 시 페이지 새로고침
+                } else {
+                    alert('오류: ' + response.message);
+                }
+            },
+            error: function (xhr) {
+                let response = JSON.parse(xhr.responseText);
+                alert('오류: ' + response.message);
+            }
+        });
     });
 
 

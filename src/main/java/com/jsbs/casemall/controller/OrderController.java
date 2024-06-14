@@ -54,13 +54,19 @@ public class OrderController {
         return "order/orderPayment";
     }
 
-    // 업데이트
     @PostMapping("/remove")
-    public String itemsRemove(@RequestParam("cartItemId") Long cartItemId,Principal principal) {
+    public ResponseEntity<Map<String, Object>> itemsRemove(@RequestParam("cartItemId") Long cartItemId, Principal principal) {
         String userId = principal.getName();
-        orderService.removeOrder(cartItemId,userId);
-
-        return "redirect:/order";
+        Map<String, Object> response = new HashMap<>();
+        try {
+            orderService.removeOrder(cartItemId, userId);
+            response.put("success", true);
+        } catch (IllegalArgumentException e) {
+            log.error("Error removing order item: {}", e.getMessage());
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return ResponseEntity.ok(response);
     }
 
 
