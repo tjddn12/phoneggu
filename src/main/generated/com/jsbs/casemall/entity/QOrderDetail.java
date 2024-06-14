@@ -32,6 +32,8 @@ public class QOrderDetail extends EntityPathBase<OrderDetail> {
 
     public final QProduct product;
 
+    public final QProductModel productModel;
+
     public QOrderDetail(String variable) {
         this(OrderDetail.class, forVariable(variable), INITS);
     }
@@ -52,6 +54,7 @@ public class QOrderDetail extends EntityPathBase<OrderDetail> {
         super(type, metadata, inits);
         this.order = inits.isInitialized("order") ? new QOrder(forProperty("order"), inits.get("order")) : null;
         this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
+        this.productModel = inits.isInitialized("productModel") ? new QProductModel(forProperty("productModel"), inits.get("productModel")) : null;
     }
 
 }

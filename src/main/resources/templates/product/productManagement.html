@@ -11,6 +11,13 @@
 <div layout:fragment="content">
     <div class="container productManagement_container">
         <h1 class="text-center mb-4">상품 관리</h1>
+
+        <!-- Error Message Display Block -->
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <!-- End of Error Message Display Block -->
+
         <div class="text-end mb-3">
             <a th:href="@{/admin/product/new}" class="btn btn-primary">상품 추가</a>
         </div>

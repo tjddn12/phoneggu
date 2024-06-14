@@ -5,6 +5,7 @@ public enum ProductType {
     JELLY,
     CARD,
     ROUND,
+    ZFLIP,
     HEART,
     ACRYLIC,
     AIRPODS_1_2,

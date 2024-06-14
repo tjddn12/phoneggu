@@ -30,6 +30,16 @@ public class Cart {
     private List<CartItem> cartItems = new ArrayList<>();
 
 
+    // 결제 금액
+    public long getTotalPrice(){
+        long totalPrice = 0L;
+        for(CartItem item : cartItems){
+            totalPrice += (long) item.getCount() * item.getProduct().getPrPrice();
+        }
+
+        return totalPrice;
+    }
+
     // Cart 객체 생성 메서드
     public static Cart createCart(Users user) {
         Cart cart = new Cart();

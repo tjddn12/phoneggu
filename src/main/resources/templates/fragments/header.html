@@ -8,7 +8,7 @@
 <body>
 <div th:fragment="header">
     <header class="header">
-        <div class="container header-container">
+        <div class="header-container">
             <div class="row align-items-center">
                 <div class="col-md-4 d-flex justify-content-start">
                     <div class="header-notices">
@@ -18,8 +18,8 @@
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
-                    <div class="logo mochiy-pop-one-regular">
-                        <a th:href="@{/}"><h1>PHONE GGU</h1></a>
+                    <div class="ggu-logo mochiy-pop-one-regular">
+                        <a th:href="@{/}">PHONE GGU</a>
                     </div>
                 </div>
                 <div class="col-md-4 d-flex justify-content-end">
@@ -65,6 +65,7 @@
                                 <li><a class="dropdown-item" th:href="@{/products(category='PHONE_CASE', type='HARD')}" id="navHard">하드</a></li>
                                 <li><a class="dropdown-item" th:href="@{/products(category='PHONE_CASE', type='JELLY')}" id="navJelly">젤리</a></li>
                                 <li><a class="dropdown-item" th:href="@{/products(category='PHONE_CASE', type='CARD')}" id="navCard">카드수납</a></li>
+                                <li><a class="dropdown-item" th:href="@{/products(category='PHONE_CASE', type='ZFLIP')}" id="navZFlip">Z플립</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

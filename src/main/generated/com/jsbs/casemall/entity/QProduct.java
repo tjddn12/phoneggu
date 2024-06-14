@@ -38,13 +38,13 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final ListPath<ProductImg, QProductImg> productImgList = this.<ProductImg, QProductImg>createList("productImgList", ProductImg.class, QProductImg.class, PathInits.DIRECT2);
 
+    public final ListPath<ProductModel, QProductModel> productModelList = this.<ProductModel, QProductModel>createList("productModelList", ProductModel.class, QProductModel.class, PathInits.DIRECT2);
+
     public final EnumPath<com.jsbs.casemall.constant.ProductSellStatus> productSellStatus = createEnum("productSellStatus", com.jsbs.casemall.constant.ProductSellStatus.class);
 
     public final EnumPath<com.jsbs.casemall.constant.ProductType> productType = createEnum("productType", com.jsbs.casemall.constant.ProductType.class);
 
     public final NumberPath<Integer> prPrice = createNumber("prPrice", Integer.class);
-
-    public final NumberPath<Integer> prStock = createNumber("prStock", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;

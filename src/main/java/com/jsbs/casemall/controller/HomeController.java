@@ -21,7 +21,7 @@ public class HomeController {
     String test2(){return "user/myPage";}
 
     // 상품 상세
-    @GetMapping("/productDtl")
+    @GetMapping("/test/productDtl")
     String test3(){return "product/productDetail";}
 
     // 장바구니
@@ -30,7 +30,7 @@ public class HomeController {
         return "cart/cart";
     }
     // 결제
-    @GetMapping("/orderTest")
+    @GetMapping("/test/order")
     String orderTest(){
         return "order/orderPayment";
     }
@@ -50,6 +50,14 @@ public class HomeController {
     String test7(){
         return "user/userEdit";
     }
+    @GetMapping("/test/pay")
+    String test9(){
+        return "order/orderPayment";
+    }
+//    @GetMapping("/test/cart")
+//    String test10(){
+//        return "cart/cart";
+//    }
 
     // 결제 성공페이지
     @GetMapping("/test/success")

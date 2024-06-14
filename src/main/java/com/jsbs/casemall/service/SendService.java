@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class SendService {
+public class    SendService {
 
 
     private final PasswordEncoder passwordEncoder;
