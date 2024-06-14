@@ -91,20 +91,23 @@ public class ProductService {
 
         ProductFormDto productFormDto = ProductFormDto.of(product);
 
-        List<ProductImg> productImgList = productImgRepository.findByIdOrderByIdAsc(prId);
+        List<ProductImg> productImgList = productImgRepository.findByProductId(prId);
         if (productImgList.isEmpty()) {
             log.warn("No product images found for ID: {}", prId);
         }
 
-        List<ProductImgDto> productImgDtoList = product.getProductImgList().stream()
-                .map(img -> {
-                    ProductImgDto productImgDto = new ProductImgDto();
-                    productImgDto.setImgUrl(img.getImgUrl());
-                    return productImgDto;
-                })
+        List<ProductImgDto> productImgDtoList = productImgList.stream()
+                .map(ProductImgDto::of)
                 .collect(Collectors.toList());
 
         productFormDto.setProductImgDtoList(productImgDtoList);
+
+        // 기종 정보 추가
+        List<ProductModel> productModels = productModelRepository.findByProductId(prId);
+        List<ProductModelDto> productModelDtoList = productModels.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        productFormDto.setProductModelDtoList(productModelDtoList);
 
         return productFormDto;
     }

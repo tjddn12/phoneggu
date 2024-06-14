@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const stockItems = document.querySelectorAll(".stock-item");
 
     const productTypes = {
-        "PHONE_CASE": ["HARD", "JELLY", "CARD"],
+        "PHONE_CASE": ["HARD", "JELLY", "CARD", "ZFLIP"],
         "TOK": ["ROUND", "HEART", "ACRYLIC"],
         "AIRPODS": ["AIRPODS_1_2", "AIRPODS_PRO", "AIRPODS_3", "BUDS"],
         "DIGITAL": ["APPLE_WATCH"]
@@ -53,11 +53,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-
 function handleFiles(files) {
     const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
-    const previewContainer = document.getElementById('preview-container');
-    previewContainer.innerHTML = "";
+    const previewContainer = document.getElementById('preview-images');
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -72,11 +70,11 @@ function handleFiles(files) {
             const filePreview = document.createElement('div');
             filePreview.className = 'file-preview d-flex align-items-center mb-2';
             filePreview.innerHTML = `
-                <input type="checkbox" class="form-check-input img-checkbox me-2" data-id="${i}">
-                <img src="${e.target.result}" alt="이미지 미리보기" class="preview-image me-2" style="width: 100px; height: auto;">
-                <p class="file-name mb-0 me-2">${file.name}</p>
-                <button type="button" class="btn btn-danger btn-sm remove-file" data-id="${i}">x</button>
-            `;
+                    <input type="checkbox" class="form-check-input img-checkbox me-2" data-id="${i}">
+                    <img src="${e.target.result}" alt="이미지 미리보기" class="preview-image me-2" style="width: 100px; height: auto;">
+                    <p class="file-name mb-0 me-2">${file.name}</p>
+                    <button type="button" class="btn btn-danger btn-sm remove-file" data-id="${i}">x</button>
+                `;
             previewContainer.appendChild(filePreview);
 
             const imgCheckbox = filePreview.querySelector('.img-checkbox');
@@ -105,13 +103,13 @@ function handleFiles(files) {
 }
 
 function removeFile(fileId) {
-    const previewContainer = document.getElementById('preview-container');
+    const previewContainer = document.getElementById('preview-images');
     const filePreview = previewContainer.querySelector(`.file-preview input[data-id="${fileId}"]`).closest('.file-preview');
     previewContainer.removeChild(filePreview);
 }
 
 function removeSelectedFiles() {
-    const previewContainer = document.getElementById('preview-container');
+    const previewContainer = document.getElementById('preview-images');
     const checkboxes = previewContainer.querySelectorAll('.img-checkbox:checked');
     checkboxes.forEach((checkbox) => {
         removeFile(parseInt(checkbox.getAttribute('data-id')));

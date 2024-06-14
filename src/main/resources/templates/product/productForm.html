@@ -11,7 +11,7 @@
 <body>
 <div layout:fragment="content">
     <div class="container mt-5 productForm_container">
-        <h1 class="text-center mb-4">상품 등록</h1>
+        <h1 class="text-center mb-4" th:text="${#strings.isEmpty(productFormDto.id) ? '상품 등록' : '상품 수정'}"></h1>
 
         <!-- Error Message Display Block -->
         <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
@@ -90,14 +90,6 @@
                 </div>
             </div>
 
-            <!--            <div class="form-group row mb-3">-->
-            <!--                <label for="prStock" class="col-form-label col-sm-2">재고수량</label>-->
-            <!--                <div class="col-sm-10">-->
-            <!--                    <input type="number" id="prStock" th:field="*{prStock}" class="form-control" placeholder="재고수량을 입력해주세요">-->
-            <!--                    <div th:if="${#fields.hasErrors('prStock')}" class="fieldError" th:errors="*{prStock}">잘못된 값 입니다</div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
             <div class="form-group row mb-3">
                 <label for="prDetail" class="col-form-label col-sm-2">상품 상세 내용</label>
                 <div class="col-sm-10">
@@ -118,7 +110,23 @@
                 </div>
             </div>
 
-            <div id="preview-container" class="preview-container mb-3"></div>
+            <!-- 이미지 미리보기 및 기존 이미지 표시 -->
+            <div id="preview-container" class="preview-container mb-3">
+                <!-- 미리보기 이미지 -->
+                <div id="preview-images"></div>
+                <!-- 저장된 이미지 -->
+                <div th:if="${productFormDto.productImgDtoList != null}">
+                    <div th:each="img : ${productFormDto.productImgDtoList}">
+                        <div class="file-preview d-flex align-items-center mb-2">
+                            <input type="checkbox" class="form-check-input img-checkbox me-2" th:data-id="${img.id}">
+                            <img th:src="@{${img.imgUrl}}" alt="Product Image" class="preview-image me-2" style="width: 100px; height: auto;">
+                            <p class="file-name mb-0 me-2" th:text="${img.prImgName}"></p>
+                            <button type="button" class="btn btn-danger btn-sm remove-file" th:data-id="${img.id}">x</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of 이미지 미리보기 및 기존 이미지 표시 -->
 
             <div class="text-center">
                 <button th:if="${#strings.isEmpty(productFormDto.id)}" th:formaction="@{/admin/product/new}" type="submit" class="btn btn-primary">저장</button>
