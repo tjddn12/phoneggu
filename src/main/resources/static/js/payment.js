@@ -31,7 +31,7 @@ $(document).ready(function () {
         // console.log("보내는 데이터: ", { cartItemId: cartId, count: newCount }); // 확인을 위한 로그
 
         $.ajax({
-            url: '/order/update',
+            url: 'cart/update',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({cartItemId: cartId, count: newCount}),

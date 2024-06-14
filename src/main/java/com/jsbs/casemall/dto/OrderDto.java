@@ -1,15 +1,8 @@
 package com.jsbs.casemall.dto;
 
-import com.jsbs.casemall.entity.Cart;
-import com.jsbs.casemall.entity.CartItem;
-import com.jsbs.casemall.entity.Order;
-import com.jsbs.casemall.entity.OrderDetail;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter

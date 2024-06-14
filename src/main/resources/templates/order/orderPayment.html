@@ -17,7 +17,7 @@
         <table class="table">
             <thead>
             <tr>
-                <td><input type="checkbox"></td>
+                <td></td>
                 <th>이미지</th>
                 <th>상품 정보</th>
                 <th>판매가</th>
@@ -30,7 +30,7 @@
             </thead>
             <tbody class="table-group-divider align-middle ">
             <tr th:each="item : ${order.items}">
-                <th scope="row"><input type="checkbox" name="cartId" th:value="${item.cartItemId}" class="cart-item-checkbox"></th>
+                <th scope="row"><input type="hidden" name="cartId" th:value="${item.cartItemId}" class="cart-item-checkbox"></th>
                 <td class="prImg">
                     <img alt="상품 이미지" class="img-fluid" th:src="@{${item.getImgUrl()}}">
                 </td>

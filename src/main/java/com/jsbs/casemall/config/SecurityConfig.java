@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/**", "/order/**","/pay/**").authenticated() // 로그인성공한 사람만  user /밑에 모든  경로에 접근 가능 예를 들면 마이페이지 구매 진행 이런거
                         .requestMatchers("/admin/**") // 관리자로 저장된 회원만 admin / 아래 모든 모든곳에 접근 가능
                         .hasRole("ADMIN")
+                        .requestMatchers("/test/**").authenticated()
                         .anyRequest().permitAll() // 그 외에 는 접근 허용
                 )
                 .formLogin(login -> login
@@ -36,6 +37,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/") // 로그아웃 성공시 메인페이지로 갈수있게
                         .invalidateHttpSession(true)) // 세션에 정보 삭제
+//                .sessionManagement(session -> session
+//                        .invalidSessionUrl("/login?invalid-session=true"))
         ;
 
 
