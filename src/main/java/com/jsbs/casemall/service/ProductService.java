@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,18 +36,6 @@ public class ProductService {
     public Long saveProduct(ProductFormDto productFormDto, List<MultipartFile> productImgFileList) throws Exception {
         log.info("상품 등록 시작: {}", productFormDto);
 
-        // 유효한 모델만 필터링
-        List<ProductModelDto> validModels = productFormDto.getProductModelDtoList().stream()
-                .filter(modelDto -> modelDto.getPrStock() != null && modelDto.getPrStock() > 0
-                        && modelDto.getProductModelSelect() != null)
-                .collect(Collectors.toList());
-
-        // 유효한 모델이 없는 경우 예외 처리
-        if (validModels.isEmpty()) {
-            log.error("유효한 모델이 없습니다. 상품을 저장할 수 없습니다.");
-            throw new Exception("유효한 모델이 없습니다. 상품을 저장할 수 없습니다.");
-        }
-
         // 상품 등록
         Product product = productFormDto.createProduct();
         product = productRepository.save(product);  // 여기서 저장
@@ -54,12 +43,18 @@ public class ProductService {
 
         log.info("상품 저장 완료: {}", product);
 
-        // 모델 저장
-        for (ProductModelDto modelDto : validModels) {
+        // 유효한 모델 필터링
+        List<ProductModelDto> validModelDtos = productFormDto.getProductModelDtoList().stream()
+                .filter(modelDto -> modelDto.getPrStock() != null && modelDto.getProductModelSelect() != null)
+                .collect(Collectors.toList());
+
+        // 유효한 모델 추가
+        for (ProductModelDto modelDto : validModelDtos) {
             ProductModel productModel = new ProductModel();
             productModel.setProductModelSelect(modelDto.getProductModelSelect());
             productModel.setPrStock(modelDto.getPrStock());
-            product.addProductModel(productModel); // 유효한 모델만 product에 추가
+            productModel.setProduct(product);
+            product.addProductModel(productModel);
             log.info("유효한 상품 모델 추가 완료: {}", productModel);
         }
 
@@ -78,6 +73,14 @@ public class ProductService {
 
         log.info("상품 이미지 저장 완료");
 
+        // 최종적으로 product를 다시 저장하여 null 값이 포함된 모델 삭제 반영
+        productRepository.save(product);
+
+        // pr_id가 null인 모델 삭제
+        productModelRepository.deleteByPrIdIsNull();
+
+        log.info("pr_id가 null인 모델 삭제 완료");
+
         return product.getId();
     }
 
@@ -88,20 +91,23 @@ public class ProductService {
 
         ProductFormDto productFormDto = ProductFormDto.of(product);
 
-        List<ProductImg> productImgList = productImgRepository.findByIdOrderByIdAsc(prId);
+        List<ProductImg> productImgList = productImgRepository.findByProductId(prId);
         if (productImgList.isEmpty()) {
             log.warn("No product images found for ID: {}", prId);
         }
 
-        List<ProductImgDto> productImgDtoList = product.getProductImgList().stream()
-                .map(img -> {
-                    ProductImgDto productImgDto = new ProductImgDto();
-                    productImgDto.setImgUrl(img.getImgUrl());
-                    return productImgDto;
-                })
+        List<ProductImgDto> productImgDtoList = productImgList.stream()
+                .map(ProductImgDto::of)
                 .collect(Collectors.toList());
 
         productFormDto.setProductImgDtoList(productImgDtoList);
+
+        // 기종 정보 추가
+        List<ProductModel> productModels = productModelRepository.findByProductId(prId);
+        List<ProductModelDto> productModelDtoList = productModels.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        productFormDto.setProductModelDtoList(productModelDtoList);
 
         return productFormDto;
     }

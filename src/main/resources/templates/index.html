@@ -55,12 +55,12 @@
             <div class="item"><img src="image8.png" alt="Item8"></div>
         </div>
         <div class="circle_group cf">
-            <div class="circle-item" ><a href=""><img src="images/hard_case.png" alt="Circle1"></a> </div> <!-- 할것 : 해당 하는 url 매핑 하기 -->
-            <div class="circle-item" ><img src="images/card_case.png" alt="Circle1"></div>
-            <div class="circle-item" ><img src="images/jelly_case.png" alt="Circle1"></div>
-            <div class="circle-item" ><img src="images/tok_case.png" alt="Circle1"></div>
-            <div class="circle-item" ><img src="images/flip_case.png" alt="Circle1"></div>
-            <div class="circle-item" ><img src="images/airpods_case.png" alt="Circle1"></div>
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='HARD')}"><img src="images/hard_case.png" alt="Circle1"></a> </div> <!-- 할것 : 해당 하는 url 매핑 하기 -->
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='JELLY')}"><img src="images/card_case.png" alt="Circle1"></div>
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='CARD')}"><img src="images/jelly_case.png" alt="Circle1"></div>
+            <div class="circle-item" ><a th:href="@{/products(category='TOK', type='ROUND')}"><img src="images/tok_case.png" alt="Circle1"></div>
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='ZFLIP')}"><img src="images/flip_case.png" alt="Circle1"></div>
+            <div class="circle-item" ><a th:href="@{/products(category='AIRPODS', type='AIRPODS_1_2')}"><img src="images/airpods_case.png" alt="Circle1"></div>
         </div>
     </div>
 
@@ -68,7 +68,7 @@
         <h1 class="event_text">EVENT</h1>
         <div class="event_imgs">
             <div class="event_sale1">
-                <img src="images/event_frame1.png" alt="">
+                <a href="#"><img src="images/event_frame1.png" alt=""></a>
                 <img src="images/event_frame2.png" alt="">
                 <img src="images/event_frame3.png" alt="">
                 <img src="images/event_frame4.png" alt="">
