@@ -16,7 +16,7 @@
                 <img alt="메인 배너" src="/images/main_banner2.png">
             </div>
             <div class="top_bot d-flex justify-content-between cf">
-                <div class="top_left">
+                <div class="top_left" id="anchor">
                     <p id="main-category" th:text="${mainCategory != null ? mainCategory.name() : ''}"></p>
                 </div>
                 <ul class="top_right d-flex">
@@ -32,23 +32,24 @@
         <!-- 내비게이션 -->
         <nav class="navigation">
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'PHONE_CASE'}">
-                <li><a th:href="@{/products?category=PHONE_CASE&type=HARD}" class="nav-link" data-category="PHONE_CASE" data-type="HARD">하드</a></li>
-                <li><a th:href="@{/products?category=PHONE_CASE&type=JELLY}" class="nav-link" data-category="PHONE_CASE" data-type="JELLY">젤리</a></li>
-                <li><a th:href="@{/products?category=PHONE_CASE&type=CARD}" class="nav-link" data-category="PHONE_CASE" data-type="CARD">카드 수납</a></li>
+                <li><a th:href="@{/products?category=PHONE_CASE&type=HARD#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="HARD">하드</a></li>
+                <li><a th:href="@{/products?category=PHONE_CASE&type=JELLY#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="JELLY">젤리</a></li>
+                <li><a th:href="@{/products?category=PHONE_CASE&type=CARD#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="CARD">카드 수납</a></li>
+                <li><a th:href="@{/products?category=PHONE_CASE&type=ZFLIP#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="ZFLIP">Z플립</a></li>
             </ul>
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'TOK'}">
-                <li><a th:href="@{/products?category=TOK&type=ROUND}" class="nav-link" data-category="TOK" data-type="ROUND">원형톡</a></li>
-                <li><a th:href="@{/products?category=TOK&type=HEART}" class="nav-link" data-category="TOK" data-type="HEART">하트톡</a></li>
-                <li><a th:href="@{/products?category=TOK&type=ACRYLIC}" class="nav-link" data-category="TOK" data-type="ACRYLIC">아크릴톡</a></li>
+                <li><a th:href="@{/products?category=TOK&type=ROUND#anchor}" class="nav-link" data-category="TOK" data-type="ROUND">원형톡</a></li>
+                <li><a th:href="@{/products?category=TOK&type=HEART#anchor}" class="nav-link" data-category="TOK" data-type="HEART">하트톡</a></li>
+                <li><a th:href="@{/products?category=TOK&type=ACRYLIC#anchor}" class="nav-link" data-category="TOK" data-type="ACRYLIC">아크릴톡</a></li>
             </ul>
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'AIRPODS'}">
-                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_1_2}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_1_2">에어팟 1/2세대</a></li>
-                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_PRO}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_PRO">에어팟 PRO</a></li>
-                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_3}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_3">에어팟 3세대</a></li>
-                <li><a th:href="@{/products?category=AIRPODS&type=BUDS}" class="nav-link" data-category="AIRPODS" data-type="BUDS">버즈</a></li>
+                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_1_2#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_1_2">에어팟 1/2세대</a></li>
+                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_PRO#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_PRO">에어팟 PRO</a></li>
+                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_3#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_3">에어팟 3세대</a></li>
+                <li><a th:href="@{/products?category=AIRPODS&type=BUDS#anchor}" class="nav-link" data-category="AIRPODS" data-type="BUDS">버즈</a></li>
             </ul>
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'DIGITAL'}">
-                <li><a th:href="@{/products?category=DIGITAL&type=APPLE_WATCH}" class="nav-link" data-category="DIGITAL" data-type="APPLE_WATCH">애플워치</a></li>
+                <li><a th:href="@{/products?category=DIGITAL&type=APPLE_WATCH#anchor}" class="nav-link" data-category="DIGITAL" data-type="APPLE_WATCH">애플워치</a></li>
             </ul>
         </nav>
 

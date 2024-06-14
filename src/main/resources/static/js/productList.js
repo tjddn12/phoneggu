@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             HARD: '하드',
             JELLY: '젤리',
             CARD: '카드 수납',
+            ZFLIP: 'Z플립',
             ROUND: '원형톡',
             HEART: '하트톡',
             ACRYLIC: '아크릴톡',

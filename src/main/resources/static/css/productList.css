@@ -38,6 +38,7 @@ a { text-decoration: none;  color: #000; }
     position: absolute;
     left: 10%;
     bottom: 0;
+    white-space: nowrap;
 }
 .top_left p {
     font-size: 3em;
