@@ -1,13 +1,15 @@
 .header {
-    max-width: 1500px;
-    height: 150px;
     position: relative;
     background-color: #bcdffd;
     color: #fff;
     padding: 20px 0;
     font-family: 'Mochiy Pop One' , sans-serif ;
 }
-
+.header-container{
+    max-width: 1500px;
+    height: 150px;
+    margin: 0 auto;
+}
 .header .ggu-logo{
     position: absolute;
     left: 50%;
