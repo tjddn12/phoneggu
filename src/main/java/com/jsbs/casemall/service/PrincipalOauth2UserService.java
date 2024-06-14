@@ -2,88 +2,52 @@ package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.constant.Role;
 import com.jsbs.casemall.entity.Users;
-import com.jsbs.casemall.oauth.GoogleUserInfo;
-import com.jsbs.casemall.oauth.OAuth2UserInfo;
 import com.jsbs.casemall.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
-public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
+@RequiredArgsConstructor
+public class PrincipalOauth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public PrincipalOauth2UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        // 부모 클래스의 loadUser 메서드를 호출하여 OAuth2User 객체를 가져옴
-        OAuth2User oAuth2User = super.loadUser(userRequest);
-        OAuth2UserInfo oAuth2UserInfo = null;
+        OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser(userRequest);
 
-        // OAuth2 제공자의 이름을 가져옴
-        String provider = userRequest.getClientRegistration().getRegistrationId();
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+        Users user = userRepository.findByEmail(email).orElseGet(() -> {
+            Users newUser = new Users();
+            newUser.setEmail(email);
+            newUser.setUserId(email); // 사용자 ID는 이메일로 설정
+            newUser.setUserPw(passwordEncoder.encode("oauth2user")); // 소셜 로그인은 비밀번호가 필요없음
+            newUser.setName(name);
+            newUser.setPhone(""); // 기본 전화번호 설정
+            newUser.setPCode(""); // 기본 우편번호 설정
+            newUser.setLoadAddr(""); // 기본 주소 설정
+            newUser.setLotAddr(""); // 기본 주소 설정
+            newUser.setDetailAddr(""); // 기본 주소 설정
+            newUser.setRole(Role.USER);
+            return userRepository.save(newUser);
+        });
 
-        // 구글 제공자인 경우 GoogleUserInfo 객체 생성
-        if ("google".equals(provider)) {
-            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-        }
-
-        // 사용자 정보가 없으면 예외를 발생시킴
-        if (oAuth2UserInfo == null) {
-            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_user_info", "사용자 정보를 가져올 수 없습니다", null));
-        }
-
-        // 제공자 ID와 이메일을 가져옴
-        String providerId = oAuth2UserInfo.getProviderId();
-        String email = oAuth2UserInfo.getEmail();
-        String socialId = provider + "_" + providerId;
-
-        // 이메일을 기반으로 사용자 정보를 데이터베이스에서 조회
-        Optional<Users> optionalUsers = userRepository.findByEmail(email);
-        Users users;
-
-        if (optionalUsers.isEmpty()) {
-            // 사용자가 없으면 새 사용자 생성
-            users = Users.builder()
-                    .userId(providerId)
-                    .name(oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "default_name")
-                    .email(email)
-                    .phone("default_phone")
-                    .pCode("default_pCode")
-                    .loadAddr("default_loadAddr")
-                    .lotAddr("default_lotAddr")
-                    .detailAddr("default_detailAddr")
-                    .userPw("SOCIAL_LOGIN") // 소셜 로그인 사용자 비밀번호는 기본값 설정
-                    .provider(provider)
-                    .providerId(providerId)
-                    .socialId(socialId)
-                    .role(Role.USER) // 기본 역할을 USER로 설정
-                    .build();
-            // 새 사용자 저장
-            userRepository.save(users);
-        } else {
-            // 사용자가 있으면 기존 사용자 정보를 가져옴
-            users = optionalUsers.get();
-        }
-
-        // 인증된 OAuth2User 객체를 반환하며, ROLE_USER 권한을 부여함
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())),
                 oAuth2User.getAttributes(),
-                "email");
+                "email"
+        );
     }
 }

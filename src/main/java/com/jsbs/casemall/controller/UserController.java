@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -117,8 +119,9 @@ public class UserController {
     // 정보 수정
 
     @GetMapping("/userEdit")
-    public String showEditForm(Principal principal, Model model) {
+    public String showEditForm(@AuthenticationPrincipal OAuth2User principal, Model model) {
             String id = principal.getName();
+            log.info("아이디 값 : {}",id);
             UserEditDto dto = userService.getUserById(id);
             log.info(dto.toString());
             model.addAttribute("user", dto);

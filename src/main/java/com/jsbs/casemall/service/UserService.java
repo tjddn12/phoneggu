@@ -31,12 +31,15 @@ public class UserService implements UserDetailsService {
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // 권한부여
-        Users user = userRepository.findById(username).orElseThrow(EntityNotFoundException::new);
-        return User.builder().username(user.getUserId()).password(user.getUserPw()).roles(user.getRole().toString()).build();
-
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users user = userRepository.findByUserId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with userId: " + username));
+        return User.builder()
+                .username(user.getUserId())
+                .password(user.getUserPw())
+                .roles(user.getRole().toString())
+                .build();
     }
-
     public Long save(AddUserRequest dto) {
 
         return userRepository.save(Users.builder()
@@ -49,7 +52,6 @@ public class UserService implements UserDetailsService {
     //세이브
 
     public void JoinUser(UserDto userDTO) {
-        // Check for duplicate userId
         Optional<Users> existingUser = userRepository.findByUserId(userDTO.getUserId());
         if (existingUser.isPresent()) {
             throw new IllegalArgumentException("User ID already exists");

@@ -43,10 +43,10 @@ public class Users {
     @Column(name = "p_code", nullable = false)
     private String pCode;
 
-    @Column(name = "loadAddr", nullable = false)
+    @Column(name = "loadAddr", nullable = true)
     private String loadAddr;
 
-    @Column(name = "lotAddr", nullable = false)
+    @Column(name = "lotAddr", nullable = true)
     private String lotAddr;
 
     @Column(name = "detailAddr", nullable = true)
