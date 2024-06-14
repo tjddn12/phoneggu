@@ -28,7 +28,7 @@ public class UserEditDto {
         this.userId = user.getUserId();
         this.userPw = user.getUserPw();
         this.name = user.getName();
-        this.pCode= user.getPCode();
+        this.pCode = user.getPCode();
         this.phone = user.getPhone();
         this.loadAddr = user.getLoadAddr();
         this.lotAddr = user.getLotAddr();

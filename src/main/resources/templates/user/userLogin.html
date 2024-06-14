@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Login Page</title>
     <link rel="stylesheet" th:href="@{/css/orderLogin.css}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
@@ -27,6 +28,14 @@
                 </form>
                 <button class="naver-login">네이버 로그인</button>
                 <button class="kakao-login">카카오 로그인</button>
+
+                <a href="/oauth2/authorization/google">구글 계정으로 로그인</a>
+
+                </div>
+                <div class="g_id_signin" data-type="standard" data size="large"
+                     data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
+                </div>
+
             </div>
             <div class="links">
                 <div class="line"></div>
@@ -40,5 +49,26 @@
         </div>
     </div>
 </th:block>
+구글 로그인 api
+
+<script>
+
+function handleCredentialResponse(response) {
+console.log("Encoded JWT ID token: " + response.credential);
+}
+window.onload = function () {
+google.accounts.id.initialize({
+client_id: "1089300974383-qa6dvgqrs38j4g5k5upfoqecf1kad7v7.apps.googleusercontent.com",
+callback: handleCredentialResponse
+});
+google.accounts.id.renderButton(
+document.getElementById("buttonDiv"),
+{ theme: "outline", size: "large" }  // customization attributes
+);
+google.accounts.id.prompt(); // also display the One Tap dialog
+}
+
+
+</script>
 </body>
 </html>

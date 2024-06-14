@@ -1,9 +1,6 @@
 package com.jsbs.casemall.service;
 
-import com.jsbs.casemall.dto.MailDto;
-import com.jsbs.casemall.dto.UserDto;
-import com.jsbs.casemall.dto.UserPwRequestDto;
-import com.jsbs.casemall.dto.UserEditDto;
+import com.jsbs.casemall.dto.*;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,9 @@ public class UserService implements UserDetailsService {
 
     private final SendService sendService;
 
-    private final PasswordEncoder passwordEncoder; // 저장할떄 passwordEncoder.encode(넘어온비밀번호)
+    private final PasswordEncoder passwordEncoder;// 저장할떄 passwordEncoder.encode(넘어온비밀번호)
+
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // 권한부여
@@ -37,6 +37,13 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public Long save(AddUserRequest dto) {
+
+        return userRepository.save(Users.builder()
+                .email(dto.getEmail())
+                .userPw(passwordEncoder.encode(dto.getPassword()))
+                .build()).getId();
+    }
 
 
     //세이브
