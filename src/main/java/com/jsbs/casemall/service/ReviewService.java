@@ -1,5 +1,7 @@
 package com.jsbs.casemall.service;
 
+import com.jsbs.casemall.dto.Criteria;
+import com.jsbs.casemall.dto.PageDto;
 import com.jsbs.casemall.dto.ReviewDto;
 import com.jsbs.casemall.dto.ReviewFormDto;
 import com.jsbs.casemall.entity.Product;
@@ -8,6 +10,10 @@ import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.repository.ReviewRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,5 +66,20 @@ public class ReviewService {
         review.setRevwRatings(reviewDto.getRevwRatings());
         //DB에 저장
         reviewRepository.save(review);
+    }
+    public PageDto<Review> getReviewList(Criteria criteria){
+        if(criteria == null){
+            criteria = new Criteria();
+        }
+        Pageable pageable = PageRequest.of(criteria.getCurrentPageNo() - 1,
+                criteria.getRecordsPerPage(), Sort.by("reviewNo").descending());
+        Page<Review> reviewPage = reviewRepository.findAll(pageable);
+
+        return new PageDto<>(
+                reviewPage.getContent(),
+                (int) reviewPage.getTotalElements(),
+                criteria.getCurrentPageNo(),
+                criteria.getRecordsPerPage()
+        );
     }
 }

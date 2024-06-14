@@ -17,7 +17,7 @@ public class Review {
     //리뷰 조회수
     @Id
     @Column(name = "review_no")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewNo; //: 리뷰 번호
     //    @Column(name = "option_no", nullable = false)
 //    private int optionNo; //: 옵션 번호, 필요시 추후 수정 가능.

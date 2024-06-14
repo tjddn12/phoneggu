@@ -1,6 +1,7 @@
 package com.jsbs.casemall.controller;
 
-import com.jsbs.casemall.dto.ReviewDto;
+import com.jsbs.casemall.dto.Criteria;
+import com.jsbs.casemall.dto.PageDto;
 import com.jsbs.casemall.dto.ReviewFormDto;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Review;
@@ -10,15 +11,16 @@ import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
-//리뷰 게시판 페이지 매핑
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+//리뷰 게시판 뷰페이지 매핑
 @Slf4j
 @Controller
-//@RestController //: JSON 형식의 데이터 전송, 추후 필요시 수정.
 @RequestMapping("/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
@@ -32,10 +34,16 @@ public class ReviewController {
         this.reviewRepository = reviewRepository;
     }
     @GetMapping
-    public String getAllReviews(Model model){
+    public String getAllReviews(Criteria criteria, Model model){
+        PageDto<Review> pageDto = reviewService.getReviewList(criteria);
         List<Review> reviews = reviewService.getAllReviews();
+        List<Integer> pageNumbers = IntStream.rangeClosed(1, pageDto.getTotalRecordCount())
+                .boxed()
+                .collect(Collectors.toList());
 
+        model.addAttribute("pageDto", pageDto);
         model.addAttribute("reviews", reviews);
+        model.addAttribute("pageNumbers", pageNumbers);
 
         return "review/reviews";
     }
@@ -46,12 +54,12 @@ public class ReviewController {
 
         return "review/reviewWrite";
     }
-    @PostMapping
-    public String createReview(@ModelAttribute Review review){
-        reviewService.saveReview(review);
-
-        return "redirect:/reviews";
-    }
+//    @PostMapping
+//    public String createReview(@ModelAttribute Review review){
+//        reviewService.saveReview(review);
+//
+//        return "redirect:/reviews";
+//    }
     @GetMapping("/{reviewNo}")
     public String getReviewByNo(@PathVariable Long reviewNo, Model model){
         model.addAttribute("review", reviewService.getReviewByNo(reviewNo).orElse(null));
@@ -97,12 +105,5 @@ public class ReviewController {
         reviewService.deleteReview(reviewNo);
 
         return "redirect:/reviews";
-    }
-    @PostMapping("/submitRating")
-    public ResponseEntity<String> submitRating(@RequestBody ReviewDto reviewDto){
-        //평점을 reviewService를 통해 저장
-        reviewService.saveRating(reviewDto);
-
-        return ResponseEntity.ok("평점이 성공적으로 저장되었습니다.");
     }
 }

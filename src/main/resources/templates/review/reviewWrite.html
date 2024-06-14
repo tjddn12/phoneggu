@@ -11,14 +11,13 @@
     <!--    CSS-->
     <link rel="stylesheet" th:href="@{/css/review.css}">
     <link rel="stylesheet" th:href="@{/css/thumbnail.css}">
-<!--</head>-->
+</head>
 <body>
     <div layout:fragment="content">
         <div class="title-wrapper">
             <h2>리뷰쓰기</h2>
         </div>
         <div class="container content-wrapper">
-            <div class="writeBox">
                 <form id="writeForm" class="write-form" th:action="@{/reviews}" th:object="${review}" method="post">
                     <fieldset>
                         <legend>상품 정보</legend>
@@ -106,9 +105,12 @@
                                         </div>
                                     </li>
                                 </ul>
-                                <input type="text" id="image1" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
-                                <input type="text" id="image2" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
-                                <input type="text" id="image3" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                                <form id="reviewForm">
+                                    <input type="file" id="image1" onchange="previewFile()" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                                    <img src="#" alt="Preview1" id="previewImage" style="max-width: 200px;">
+                                    <input type="file" id="image2" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                                    <input type="file" id="image3" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                                </form>
                             </td>
                         </tr>
                         </tbody>
@@ -121,7 +123,5 @@
             </div>
         </div>
     </div>
-    <!--    JavaScript-->
-
 </body>
 </html>
