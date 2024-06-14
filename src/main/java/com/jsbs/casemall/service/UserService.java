@@ -92,7 +92,7 @@ public class UserService implements UserDetailsService {
     // 정보 수정
 
     public  UserEditDto getUserById(String userId) {
-        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return new  UserEditDto(user);
     }
 
@@ -102,7 +102,7 @@ public class UserService implements UserDetailsService {
 
         try {
             log.info("수정한값 : {} ",userEditDto);
-            Users user = userRepository.findById(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+            Users user = userRepository.findByUserId(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
             user.setUserPw(passwordEncoder.encode(userEditDto.getUserPw()));
             user.setPCode(userEditDto.getPCode());
             user.setLoadAddr(userEditDto.getLoadAddr());

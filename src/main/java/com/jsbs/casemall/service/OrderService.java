@@ -31,7 +31,7 @@ public class OrderService {
     // 주문 생성
     public OrderDto createOrder(String userId, List<Long> itemIds) {
         // 로그인한 유저 찾기
-        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다"));
+        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다"));
 
         // 기존에 생성된 주문이 있는지 확인
         List<Order> existingOrders = orderRepository.findByUsersAndOrderStatus(user, OrderStatus.STAY);
