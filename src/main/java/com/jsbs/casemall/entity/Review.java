@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "review")
 public class Review {
-    //전반적인 타입 수정이 필요
-
     //ReviewDto에서 먼저 구현 후, Review(엔티티)에서 열 속성으로 제작
     //필드 -> GPT 참고
     //리뷰 번호, 리뷰 제목, 리뷰 내용, 평점,

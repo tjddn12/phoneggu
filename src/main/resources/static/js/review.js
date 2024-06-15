@@ -50,24 +50,6 @@ $(document).ready(function(){
             }
         });
     });
-    // //드래그 앤 드롭 이벤트 핸들러 등록
-    // const dropZone = document.getElementById('dropZone');
-    //
-    // dropZone.addEventListener('dragover', handleDragOver);
-    // dropZone.addEventListener('drop', handleDrop);
-    // //드래그 오버 이벤트 핸들러
-    // function handleDragOver(e){
-    //     e.preventDefault();
-    //     e.dataTransfer.dropEffect = 'copy';
-    // }
-    // //드롭 이벤트 핸들러
-    // function handleDrop(e){
-    //     e.preventDefault();
-    //
-    //     const files = e.dataTransfer.files;
-    //
-    //     uploadFiles(files);
-    // }
     //파일 업로드 함수
     function uploadFiles(files){
         const formData = new FormData();
@@ -99,61 +81,6 @@ $(document).ready(function(){
             }
         });
     });
-    //이미지 미리보기 함수
-    function previewImage(index, file){
-        const previewImage = document.getElementById(`image${index}`);
 
-        previewImage.src = URL.createObjectURL(file);
-        previewImage.style.display = 'block';
-    }
-    function previewFile(){
-        const file = document.getElementById('file').files[0];
-        const previewImage = document.getElementById('previewImage');
 
-        if(file){
-            const objectURL = URL.createObjectURL(file);
-
-            previewImage.src = objectURL;
-        }else{
-            previewImage.src = '#';
-        }
-    }
-    // //썸네일 미리보기 및 클릭시 재선택
-    // let fileItems = document.querySelectorAll('[type=file]');
-    // let imageItem = document.querySelectorAll('.imageItem');
-    // let imageBox = document.querySelectorAll('.imageBox');
-    //
-    // fileItems.forEach(item => item.addEventListener('change', previewImage));
-    //
-    // function previewImage(){
-    //     let index = Array.from(fileItems).indexOf(this); //: fileItems 기준으로 index 생성
-    //
-    //     //console.log(index);
-    //     if(this.files && this.files[0]){
-    //         let reader = new FileReader();
-    //
-    //         reader.readAsDataURL(this.files[0]);
-    //         reader.onload = function(){
-    //             //: 사진 첨부 코드 추후 수정.
-    //         }
-    //     }else{
-    //
-    //     }
-    // };
-    // //리뷰 등록 폼 제출
-    // const urlParams = new URL(location.href).searchParams;
-    // const orderNo = urlParams.get('order');
-    //
-    // console.log(orderNo);
-    //
-    // function submitWriteForm(form, event){
-    //     event.preventDefault();
-    //     //양식 제출전 필수 입력값 확인
-    //     let text = '';
-    //
-    //     if(!document.querySelector('input[name=revwTitle]')).value.trim().length > 0){
-    //         text = "제목을 입력하세요";
-    //         //JSON 데이터 전송 코드 구현 예정.
-    //     }
-    // }
 });

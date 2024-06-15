@@ -7,6 +7,24 @@
     <title>리뷰쓰기 | 폰꾸</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--    JAVAScript: JQuery 라이브러리가 먼저 로드되고 바로 JS 코드가 로드되어야 작동함.-->
+    <script>
+        //이미지 미리보기 함수: 이 코드만 미작동하여 js 파일에서 분리.
+        function previewFile(inputId, imgId){
+            const file = document.getElementById(inputId).files[0];
+            const preview = document.getElementById(imgId);
+            const reader = new FileReader();
+
+            reader.onloadend = function(){
+                preview.src = reader.result;
+            };
+
+            if(file){
+                reader.readAsDataURL(file);
+            }else{
+                preview.src = "";
+            }
+        }
+    </script>
     <script th:src="@{/js/review.js}" type="text/javascript"></script>
     <!--    CSS-->
     <link rel="stylesheet" th:href="@{/css/review.css}">
@@ -75,46 +93,28 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th>사진첨부</th>
-                            <td class="thumbnailBox reviewImageBox">
-                                <ul>
-                                    <li class="imageItem" onclick="previewImage()">
-                                        <div class="imageBox reviewImage">
-                                            <label for="image1" class="imageLabel">
-                                                <i class="fa-solid fa-image" style="font-size: 300%"></i>
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <ul>
-                                    <li class="imageItem" onclick="previewImage()">
-                                        <div class="imageBox reviewImage">
-                                            <label for="image2" class="imageLabel">
-                                                <i class="fa-solid fa-image" style="font-size: 300%"></i>
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <ul>
-                                    <li class="imageItem" onclick="previewImage()">
-                                        <div class="imageBox reviewImage">
-                                            <label for="image3" class="imageLabel">
-                                                <i class="fa-solid fa-image" style="font-size: 300%"></i>
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <form id="reviewForm">
-                                    <input type="file" id="image1" onchange="previewFile()" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
-                                    <img src="#" alt="Preview1" id="previewImage" style="max-width: 200px;">
-                                    <input type="file" id="image2" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
-                                    <input type="file" id="image3" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
-                                </form>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
+                    <form id="reviewForm" enctype="multipart/form-data">
+                        <table>
+                            <tr>
+                                <th>사진첨부</th>
+                                <td class="thumbnailBox reviewImageBox">
+                                    <ul>
+                                        <li class="imageItem" onclick="document.getElementById('image1').click()">
+                                            <div class="imageBox reviewImage">
+                                                <label for="image1" class="imageLabel">
+                                                    <i class="fa-solid fa-image" style="font-size: 300%"></i>
+                                                </label>
+                                            </div>
+                                            <img src="#" alt="Preview1" id="previewImage1" style="max-width: 200px;">
+                                        </li>
+                                    </ul>
+                                    <input type="file" id="image1" name="images" onchange="previewFile('image1', 'previewImage1')" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                     <div class="buttonBox">
                         <button type="button" class="cancelBtn btn" onclick="history.back()">취소</button>
                         <button type="submit" class="writeBtn btn btn-dark">등록</button>

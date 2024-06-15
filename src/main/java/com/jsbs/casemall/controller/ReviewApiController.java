@@ -3,16 +3,18 @@ package com.jsbs.casemall.controller;
 import com.jsbs.casemall.dto.ReviewDto;
 import com.jsbs.casemall.entity.Review;
 import com.jsbs.casemall.repository.ReviewRepository;
+import com.jsbs.casemall.service.ReviewImgService;
 import com.jsbs.casemall.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 //JSON 데이터 전송
 @Slf4j
 @RestController
@@ -20,11 +22,13 @@ import java.time.LocalDateTime;
 public class ReviewApiController {
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
+    private final ReviewImgService reviewImgService;
 
     @Autowired
-    public ReviewApiController(ReviewService reviewService, ReviewRepository reviewRepository) {
+    public ReviewApiController(ReviewService reviewService, ReviewRepository reviewRepository, ReviewImgService reviewImgService) {
         this.reviewService = reviewService;
         this.reviewRepository = reviewRepository;
+        this.reviewImgService = reviewImgService;
     }
     @PostMapping("/submitRating")
     public ResponseEntity<String> submitRating(@RequestBody ReviewDto reviewDto){
@@ -39,4 +43,15 @@ public class ReviewApiController {
 
         return reviewRepository.save(review);
     }
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadReviewImages(@RequestParam("images") List<MultipartFile> images){
+        try{
+            reviewImgService.saveReviewImages(images);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
