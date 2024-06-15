@@ -81,6 +81,8 @@ $(document).ready(function(){
             }
         });
     });
-
-
+    //이미지 제출 폼
+    function submitForm(){
+        document.getElementById('reviewForm').submit();
+    }
 });

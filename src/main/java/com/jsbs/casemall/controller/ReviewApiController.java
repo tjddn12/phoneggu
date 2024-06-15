@@ -2,6 +2,7 @@ package com.jsbs.casemall.controller;
 
 import com.jsbs.casemall.dto.ReviewDto;
 import com.jsbs.casemall.entity.Review;
+import com.jsbs.casemall.entity.ReviewImg;
 import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.service.ReviewImgService;
 import com.jsbs.casemall.service.ReviewService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 //JSON 데이터 전송
@@ -43,15 +45,24 @@ public class ReviewApiController {
 
         return reviewRepository.save(review);
     }
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadReviewImages(@RequestParam("images") List<MultipartFile> images){
-        try{
-            reviewImgService.saveReviewImages(images);
+    @PostMapping("/add")
+    public ResponseEntity<String> addReview(@RequestParam("review") String reviewContent,
+                                            @RequestParam("files") List<MultipartFile> files){
+        Review review = new Review();
 
-            return new ResponseEntity<>(HttpStatus.OK);
-        }catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        review.setRevwContent(reviewContent);
+
+        List<ReviewImg> reviewImgs = new ArrayList<>();
+
+        for(MultipartFile file : files){
+            ReviewImg reviewImg = new ReviewImg();
+            //파일 저장 로직 추가
+            reviewImg.setFileName(file.getOriginalFilename());
+            reviewImgs.add(reviewImg);
         }
-    }
 
+        reviewService.saveReviewWithImages(review, reviewImgs);
+
+        return ResponseEntity.ok("Review added successfully");
+    }
 }

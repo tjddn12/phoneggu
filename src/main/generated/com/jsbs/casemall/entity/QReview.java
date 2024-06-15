@@ -24,6 +24,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public final QProduct prName;
 
+    public final ListPath<ReviewImg, QReviewImg> reviewImgs = this.<ReviewImg, QReviewImg>createList("reviewImgs", ReviewImg.class, QReviewImg.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> reviewNo = createNumber("reviewNo", Long.class);
 
     public final StringPath revwContent = createString("revwContent");

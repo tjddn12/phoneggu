@@ -49,6 +49,5 @@ public class ReviewImgService {
             reviewImg.setData(file.getBytes());
             reviewImgRepository.save(reviewImg);
         }
-
     }
 }

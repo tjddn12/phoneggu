@@ -3,6 +3,7 @@ package com.jsbs.casemall.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -38,11 +39,18 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "pr_name")
     private Product prName; //: 제품 엔티티
-    //    @ManyToOne
-//    @Column(name = "delivery_id")
-//    private DeliveryDto delivery; //: 배송 엔티티, 추후 추가 가능.
-//    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Attachment> attachmentDtoList; //: 첨부 파일 리스트, 이미지 첨부는 뷰에서 ProductImgDto로 같이 처리&삭제도 뷰에서 처리, 추후 수정 가능.
-    //void 메서드는 명시
-    //구체적인 메서드 -> ReviewRepository & ReviewService에서 구현
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<ReviewImg> reviewImgs;
+    //기본 생성자
+    public Review(){}
+    public Review(Users userId, String revwTitle, String revwContent, LocalDateTime revwRegDate,
+                  int revwHits, int revwRatings, Product prName){
+        this.userId = userId;
+        this.revwTitle = revwTitle;
+        this.revwContent = revwContent;
+        this.revwRegDate = revwRegDate;
+        this.revwHits = revwHits;
+        this.revwRatings = revwRatings;
+        this.prName = prName;
+    }
 }

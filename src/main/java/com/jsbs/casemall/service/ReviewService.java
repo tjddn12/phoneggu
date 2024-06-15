@@ -6,7 +6,9 @@ import com.jsbs.casemall.dto.ReviewDto;
 import com.jsbs.casemall.dto.ReviewFormDto;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Review;
+import com.jsbs.casemall.entity.ReviewImg;
 import com.jsbs.casemall.entity.Users;
+import com.jsbs.casemall.repository.ReviewImgRepository;
 import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.repository.ReviewRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,14 @@ import java.util.Optional;
 
 @Service
 public class ReviewService {
-    @Autowired
-    private ReviewRepository reviewRepository;
-    private ReviewRepositoryCustom reviewRepositoryCustom;
+    private final ReviewRepository reviewRepository;
+    private final ReviewImgRepository reviewImgRepository;
 
+    @Autowired
+    public ReviewService(ReviewRepository reviewRepository, ReviewImgRepository reviewImgRepository){
+        this.reviewRepository = reviewRepository;
+        this.reviewImgRepository = reviewImgRepository;
+    }
     public List<Review> getAllReviews(){
         return reviewRepository.findAll();
     }
@@ -51,10 +57,10 @@ public class ReviewService {
 //    }
     @Transactional
     public Review updateAReview(ReviewFormDto reviewFormDto){
-        int updatedRows = reviewRepositoryCustom.updateAReview(reviewFormDto);
+        int updatedRows = reviewRepository.updateAReview(reviewFormDto);
 
         if(updatedRows > 0){
-            return reviewRepositoryCustom.getReviewDetails(reviewFormDto.getReviewNo());
+            return reviewRepository.getReviewDetails(reviewFormDto.getReviewNo());
         }else{
             throw new RuntimeException("리뷰 수정 실패");
         }
@@ -81,5 +87,20 @@ public class ReviewService {
                 criteria.getCurrentPageNo(),
                 criteria.getRecordsPerPage()
         );
+    }
+    @Transactional
+    public void saveReviewAndImage(Review review, ReviewImg reviewImg) {
+        reviewRepository.save(review);
+        reviewImg.setReview(review);
+        reviewImgRepository.save(reviewImg);
+    }
+    @Transactional
+    public void saveReviewWithImages(Review review, List<ReviewImg> reviewImgs){
+        reviewRepository.save(review);
+
+        for(ReviewImg img : reviewImgs){
+            img.setReview(review);
+            reviewImgRepository.save(img);
+        }
     }
 }

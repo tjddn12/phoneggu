@@ -48,7 +48,6 @@
                             <td class="option-area" th:text="*{prName}"></td>
                         </tr>
                         <!--                    : 주문 내역에서 리뷰 작성시, 상품 이름&상품 사진을 받아오는 로직 구현 필요-->
-
                         </tbody>
                     </table>
                     <fieldset>
@@ -95,22 +94,22 @@
                         </tr>
                         </tbody>
                     </table>
-                    <form id="reviewForm" enctype="multipart/form-data">
+                    <form id="reviewForm" enctype="multipart/form-data" method="post" action="/upload">
                         <table>
                             <tr>
                                 <th>사진첨부</th>
                                 <td class="thumbnailBox reviewImageBox">
                                     <ul>
                                         <li class="imageItem" onclick="document.getElementById('image1').click()">
-                                            <div class="imageBox reviewImage">
+                                            <!---<div class="imageBox reviewImage">
                                                 <label for="image1" class="imageLabel">
                                                     <i class="fa-solid fa-image" style="font-size: 300%"></i>
                                                 </label>
-                                            </div>
-                                            <img src="#" alt="Preview1" id="previewImage1" style="max-width: 200px;">
+                                            </div>---->
+                                            <img src="#" alt="사진 추가" class="imageBox" id="previewImage1" style="max-width: 200px;">
+                                            <input type="file" id="image1" name="images" onchange="previewFile('image1', 'previewImage1')" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
                                         </li>
                                     </ul>
-                                    <input type="file" id="image1" name="images" onchange="previewFile('image1', 'previewImage1')" class="files" accept="image/gif, image/jpeg, image/png" style="display: none;">
                                 </td>
                             </tr>
                         </table>

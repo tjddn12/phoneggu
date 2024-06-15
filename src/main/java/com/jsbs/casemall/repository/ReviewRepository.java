@@ -1,5 +1,6 @@
 package com.jsbs.casemall.repository;
 
+import com.jsbs.casemall.dto.ReviewFormDto;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.Review;
 import com.jsbs.casemall.entity.Users;
@@ -14,4 +15,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
     List<Review> findReviewsByUserId(Users userId);
     List<Review> findReviewsByPrName(Product prName);
     Page<Review> findAll(Pageable pageable);
+    Review getReviewDetails(Long reviewNo);
+    int updateAReview(ReviewFormDto reviewFormDto);
 }
