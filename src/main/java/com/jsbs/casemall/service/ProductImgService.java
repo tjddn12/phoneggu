@@ -49,8 +49,8 @@ public class ProductImgService {
         productImgRepository.save(productImg); // 테이블저장
     }
 
-//productImg 상품이미지 정보
-//클라이언트 MultipartFile productImgFile 업로드된 이미지 파일을 나타내는 객체 -> 원본파일이름을 가져온다.
+    //productImg 상품이미지 정보
+    //클라이언트 MultipartFile productImgFile 업로드된 이미지 파일을 나타내는 객체 -> 원본파일이름을 가져온다.
     public void updateProductImg(Long prImgId, MultipartFile productImgFile) throws Exception {
         //prImgId 수정할 상품 이미지 식별자
         //prImgFile 업로드된 새로운 상품이미지 파일

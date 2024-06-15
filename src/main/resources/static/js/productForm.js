@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // 카테고리 및 타입 선택 관련 로직
     const categorySelect = document.querySelector(".select_category");
     const typeSelect = document.querySelector(".select_type");
     const modelCheckboxes = document.querySelectorAll(".model-checkbox");
@@ -51,67 +52,73 @@ document.addEventListener("DOMContentLoaded", function() {
             toggleStockInput(checkbox, stockItem);
         });
     });
-});
 
-function handleFiles(files) {
-    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
-    const previewContainer = document.getElementById('preview-images');
+    //이미지
+    function handleFiles(files) {
+        console.log("handleFiles 함수 호출됨, 파일들:", files);
+        const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
+        const previewContainer = document.getElementById('preview-images');
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
 
-        if (!allowedFileTypes.includes(file.type)) {
-            alert('이미지 파일 형식은 jpg, jpeg, bmp, png, gif 만 가능합니다.');
-            continue;
-        }
+            if (!allowedFileTypes.includes(file.type)) {
+                alert('이미지 파일 형식은 jpg, jpeg, bmp, png, gif 만 가능합니다.');
+                continue;
+            }
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const filePreview = document.createElement('div');
-            filePreview.className = 'file-preview d-flex align-items-center mb-2';
-            filePreview.innerHTML = `
-                    <input type="checkbox" class="form-check-input img-checkbox me-2" data-id="${i}">
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const filePreview = document.createElement('div');
+                filePreview.className = 'file-preview d-flex align-items-center mb-2';
+                filePreview.innerHTML = `
                     <img src="${e.target.result}" alt="이미지 미리보기" class="preview-image me-2" style="width: 100px; height: auto;">
                     <p class="file-name mb-0 me-2">${file.name}</p>
-                    <button type="button" class="btn btn-danger btn-sm remove-file" data-id="${i}">x</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-file" data-id="new-${i}" onclick="removeFile('new-${i}')">x</button>
                 `;
-            previewContainer.appendChild(filePreview);
+                previewContainer.appendChild(filePreview);
 
-            const imgCheckbox = filePreview.querySelector('.img-checkbox');
-            const previewImage = filePreview.querySelector('.preview-image');
-            const removeButton = filePreview.querySelector('.remove-file');
-
-            imgCheckbox.addEventListener('change', function () {
-                if (imgCheckbox.checked) {
-                    previewImage.style.filter = 'grayscale(100%)';
-                } else {
-                    previewImage.style.filter = 'none';
-                }
-            });
-
-            previewImage.addEventListener('click', function () {
-                imgCheckbox.checked = !imgCheckbox.checked;
-                imgCheckbox.dispatchEvent(new Event('change'));
-            });
-
-            removeButton.addEventListener('click', function () {
-                removeFile(i);
-            });
-        };
-        reader.readAsDataURL(file);
+                console.log("파일 미리보기 생성됨:", file.name);
+            };
+            reader.readAsDataURL(file);
+        }
     }
-}
 
-function removeFile(fileId) {
-    const previewContainer = document.getElementById('preview-images');
-    const filePreview = previewContainer.querySelector(`.file-preview input[data-id="${fileId}"]`).closest('.file-preview');
-    previewContainer.removeChild(filePreview);
-}
+    function removeFile(fileId) {
+        console.log("removeFile 함수 호출됨, 파일 ID:", fileId);
+        const previewContainer = document.getElementById('preview-images');
+        const filePreview = previewContainer.querySelector(`.file-preview button[data-id="${fileId}"]`).closest('.file-preview');
+        previewContainer.removeChild(filePreview);
+    }
 
-function removeSelectedFiles() {
-    const previewContainer = document.getElementById('preview-images');
-    const checkboxes = previewContainer.querySelectorAll('.img-checkbox:checked');
-    checkboxes.forEach((checkbox) => {
-        removeFile(parseInt(checkbox.getAttribute('data-id')));
+    function deleteImage(imageId) {
+        console.log("deleteImage 함수 호출됨, 이미지 ID:", imageId);
+        fetch(`/product/image/${imageId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("이미지 삭제 성공, 이미지 ID:", imageId);
+                    const filePreview = document.querySelector(`.file-preview .remove-file[data-id="${imageId}"]`).closest('.file-preview');
+                    filePreview.parentNode.removeChild(filePreview);
+                } else {
+                    console.error("이미지 삭제 오류, 이미지 ID:", imageId);
+                    alert('이미지 삭제 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(error => console.error('오류 발생:', error));
+    }
+
+    window.handleFiles = handleFiles;
+    window.removeFile = removeFile;
+    window.deleteImage = deleteImage;
+
+    // 기존 이미지들에 대해 X 버튼 이벤트 추가
+    const existingRemoveButtons = document.querySelectorAll('.remove-file');
+    existingRemoveButtons.forEach((button) => {
+        button.addEventListener('click', function() {
+            const imageId = button.getAttribute('data-id');
+            deleteImage(imageId);
+        });
     });
-}
+});

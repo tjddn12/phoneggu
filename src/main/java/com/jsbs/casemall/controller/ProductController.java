@@ -1,6 +1,5 @@
 package com.jsbs.casemall.controller;
 
-import ch.qos.logback.classic.Logger;
 import com.jsbs.casemall.constant.ProductCategory;
 import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.ProductFormDto;
@@ -9,22 +8,19 @@ import com.jsbs.casemall.dto.ProductSearchDto;
 import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -35,14 +31,12 @@ public class ProductController {
 
     private final ProductService productService;
 
-    // 새 상품 등록 폼을 반환
     @GetMapping("/admin/product/new")
     public String productForm(Model model) {
         model.addAttribute("productFormDto", new ProductFormDto());
         return "product/productForm";
     }
 
-    // 새 상품 등록 처리
     @PostMapping("/admin/product/new")
     public String productNew(@Valid @ModelAttribute ProductFormDto productFormDto, BindingResult bindingResult,
                              Model model, @RequestParam("productImgFile") List<MultipartFile> productImgFileList) {
@@ -71,7 +65,6 @@ public class ProductController {
         return "redirect:/";
     }
 
-    // 상품 상세 정보 조회
     @GetMapping(value = "/admin/product/{prId}")
     public String productDtl(@PathVariable("prId") Long prId, Model model) {
         try {
@@ -85,7 +78,6 @@ public class ProductController {
         return "product/productForm";
     }
 
-    // 상품 수정 처리
     @PostMapping(value = "/admin/product/{prId}")
     public String productUpdate(@PathVariable Long prId,
                                 @Valid @ModelAttribute ProductFormDto productFormDto, BindingResult bindingResult,
@@ -115,7 +107,6 @@ public class ProductController {
         return "redirect:/admin/product/management";
     }
 
-    // 상품 관리 페이지 및 검색 처리
     @GetMapping(value = {"/admin/product/management", "/admin/product/management/{page}"})
     public String productManage(ProductSearchDto productSearchDto,
                                 @PathVariable(name = "page", required = false) Integer page, Model model) {
@@ -130,28 +121,41 @@ public class ProductController {
         return "product/productManagement";
     }
 
-    // 상품 삭제 처리
     @PostMapping("/admin/product/delete/{prId}")
     public String deleteProduct(@PathVariable("prId") Long prId, Model model) {
+        log.info("상품 삭제 요청 받음, 상품 ID: {}", prId);
         try {
             productService.deleteProduct(prId);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "상품 삭제 중 오류가 발생했습니다.");
+            log.info("상품 삭제 성공, 상품 ID: {}", prId);
             return "redirect:/admin/product/management";
+        } catch (Exception e) {
+            log.error("상품 삭제 중 오류 발생, 상품 ID: {}", prId, e);
+            model.addAttribute("errorMessage", "상품 삭제 중 오류가 발생했습니다.");
+            return "admin/product/management";
         }
-        return "redirect:/admin/product/management";
     }
 
-    // 상품 상세 정보 조회 (일반 사용자용)
+    @DeleteMapping("/image/{imageId}")
+    public ResponseEntity<String> deleteProductImage(@PathVariable Long imageId) {
+        log.info("이미지 삭제 요청 받음, 이미지 ID: {}", imageId);
+        try {
+            productService.deleteProductImage(imageId);
+            log.info("이미지 삭제 성공, 이미지 ID: {}", imageId);
+            return new ResponseEntity<>("이미지 삭제 성공", HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("이미지 삭제 중 오류 발생, 이미지 ID: {}", imageId, e);
+            return new ResponseEntity<>("이미지 삭제 중 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value="/product/{prId}")
     public String productDtl(Model model, @PathVariable("prId") Long prId) {
-        ProductFormDto productFormDto = productService.getProductDtl(prId); // 상품 정보 조회
-        List<ProductModelDto> productModelDtoList = productService.getProductModelsByProductId(prId); // 기종 정보 조회
-        productFormDto.setProductModelDtoList(productModelDtoList); // 기종 정보 설정
-        model.addAttribute("product", productFormDto); // 모델에 상품 정보 추가
+        ProductFormDto productFormDto = productService.getProductDtl(prId);
+        List<ProductModelDto> productModelDtoList = productService.getProductModelsByProductId(prId);
+        productFormDto.setProductModelDtoList(productModelDtoList);
+        model.addAttribute("product", productFormDto);
         return "product/productDetail";
     }
-
 
     @GetMapping("/products")
     public String getProducts(@RequestParam(required = false) ProductCategory category,
@@ -169,7 +173,6 @@ public class ProductController {
         model.addAttribute("mainCategory", category);
         model.addAttribute("subCategory", type);
 
-        // 로깅 추가
         log.info("mainCategory: {}", category);
         log.info("subCategory: {}", type);
         log.info("Number of products: {}", products.size());
@@ -180,7 +183,7 @@ public class ProductController {
     @GetMapping("/products/{mainCategory}")
     public String showCategory(@PathVariable ProductCategory mainCategory, Model model) {
         model.addAttribute("mainCategory", mainCategory);
-        model.addAttribute("subCategory", null); // SubCategory가 없을 경우 null로 설정
+        model.addAttribute("subCategory", null);
         return "product/productList";
     }
 
