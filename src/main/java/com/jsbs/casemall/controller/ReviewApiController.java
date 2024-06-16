@@ -3,6 +3,7 @@ package com.jsbs.casemall.controller;
 import com.jsbs.casemall.dto.ReviewDto;
 import com.jsbs.casemall.entity.Review;
 import com.jsbs.casemall.entity.ReviewImg;
+import com.jsbs.casemall.exception.ResourceNotFoundException;
 import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.service.ReviewImgService;
 import com.jsbs.casemall.service.ReviewService;
@@ -45,24 +46,31 @@ public class ReviewApiController {
 
         return reviewRepository.save(review);
     }
-    @PostMapping("/add")
-    public ResponseEntity<String> addReview(@RequestParam("review") String reviewContent,
-                                            @RequestParam("files") List<MultipartFile> files){
-        Review review = new Review();
+    @GetMapping("/reviews/{reviewNo}/images")
+    public List<ReviewImg> getReviewImages(@PathVariable Long reviewNo){
+        Review review = reviewService.getReviewByNo(reviewNo)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
-        review.setRevwContent(reviewContent);
-
-        List<ReviewImg> reviewImgs = new ArrayList<>();
-
-        for(MultipartFile file : files){
-            ReviewImg reviewImg = new ReviewImg();
-            //파일 저장 로직 추가
-            reviewImg.setFileName(file.getOriginalFilename());
-            reviewImgs.add(reviewImg);
-        }
-
-        reviewService.saveReviewWithImages(review, reviewImgs);
-
-        return ResponseEntity.ok("Review added successfully");
+        return reviewImgService.getReviewImagesByReview(review);
     }
+//    @PostMapping("/add")
+//    public ResponseEntity<String> addReview(@RequestParam("review") String reviewContent,
+//                                            @RequestParam("files") List<MultipartFile> files){
+//        Review review = new Review();
+//
+//        review.setRevwContent(reviewContent);
+//
+//        List<ReviewImg> reviewImgs = new ArrayList<>();
+//
+//        for(MultipartFile file : files){
+//            ReviewImg reviewImg = new ReviewImg();
+//            //파일 저장 로직 추가
+//            reviewImg.setFileName(file.getOriginalFilename());
+//            reviewImgs.add(reviewImg);
+//        }
+//
+//        reviewService.saveReviewWithImages(review, reviewImgs);
+//
+//        return ResponseEntity.ok("Review added successfully");
+//    }
 }

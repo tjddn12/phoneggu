@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReviewImgRepository extends JpaRepository<ReviewImg, Long> {
-    List<ReviewImg> findByReviewOrderByIdAsc(Review reviewNo);
-    ReviewImg findByIdAndReviewMainImg(Long id, String reviewMainImg);
-    List<ReviewImg> findByReview(Review reviewNo);
+    List<ReviewImg> findByReviewIdOrderByIdAsc(Long reviewNo);
+    //: 리뷰 이미지 아이디의 오름차순으로 가져오는 쿼리 메서드
 }

@@ -7,31 +7,25 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class ReviewImg {
+@Table(name = "review_img")
+public class ReviewImg extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "review_img_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id; //: 리뷰 이미지 번호
 
-    private String fileName;
-    @Lob //: 해당 엔티티 속성이 큰 객체 유형을 나타내는 것을 지정하는 JPA에서 사용되는 어노테이션
-    private byte[] data;
-    private String reviewImgName;
-    private String reviewImgOriginName;
-    private String imgUrl;
-    private String reviewMainImg;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private String imgName; //: 이미지 파일명
+    private String oriImgName; //: 원본 이미지 파일명
+    private String imgUrl; //: 이미지 조회 경로
+//    private String repimgYn; //: 대표 이미지 여부
+
+    @ManyToOne(fetch = FetchType.LAZY) //: 연관 엔티티를 실제 사용할 때만 로드
     @JoinColumn(name = "review_no")
     private Review review;
-    //기본 생성자
-    public ReviewImg(){}
-    public ReviewImg(String fileName, byte[] data, String reviewImgName, String reviewImgOriginName,
-                     String imgUrl, String reviewMainImg, Review review){
-        this.fileName = fileName;
-        this.data = data;
-        this.reviewImgName = reviewImgName;
-        this.reviewImgOriginName = reviewImgOriginName;
+
+    public void updateReviewImg(String oriImgName, String imgName, String imgUrl){
+        this.oriImgName = oriImgName;
+        this.imgName = imgName;
         this.imgUrl = imgUrl;
-        this.reviewMainImg = reviewMainImg;
-        this.review = review;
     }
 }

@@ -1,14 +1,15 @@
 package com.jsbs.casemall.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @Entity
+@Data
 @Table(name = "review")
-public class Review {
+public class Review extends BaseEntity{
     //ReviewDto에서 먼저 구현 후, Review(엔티티)에서 열 속성으로 제작
     //필드 -> GPT 참고
     //리뷰 번호, 리뷰 제목, 리뷰 내용, 평점,
@@ -20,17 +21,31 @@ public class Review {
     private Long reviewNo; //: 리뷰 번호
     //    @Column(name = "option_no", nullable = false)
 //    private int optionNo; //: 옵션 번호, 필요시 추후 수정 가능.
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", updatable = false)
     private Users userId; //: 사용자 엔티티
+
     @Column(name = "revw_title", nullable = false)
     private String revwTitle; //: 리뷰 제목
+
     @Column(name = "revw_content", nullable = false)
     private String revwContent; //: 리뷰 내용
+
+    @Column(name = "file_name")
+    private String filename; //: 파일 이름
+    
+    @Column(name = "file_path")
+    private String filepath; //: 파일 저장 경로
+//    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+//    @OrderBy("id asc")
+//    private List<ReviewImg> reviewImgs;
+
     @Column(name = "revw_reg_date", nullable = false)
     private LocalDateTime revwRegDate; //: 리뷰 등록 날짜
+
     @Column(name = "revw_hits", nullable = false)
     private int revwHits; //: 조회수
+
     @Column(name = "revw_ratings", nullable = false)
     private int revwRatings; //: 평점
     //    @ManyToOne
@@ -39,18 +54,10 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "pr_name")
     private Product prName; //: 제품 엔티티
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
-    private List<ReviewImg> reviewImgs;
-    //기본 생성자
-    public Review(){}
-    public Review(Users userId, String revwTitle, String revwContent, LocalDateTime revwRegDate,
-                  int revwHits, int revwRatings, Product prName){
-        this.userId = userId;
+
+    public void update(String revwTitle, String revwContent, int revwRatings){
         this.revwTitle = revwTitle;
         this.revwContent = revwContent;
-        this.revwRegDate = revwRegDate;
-        this.revwHits = revwHits;
         this.revwRatings = revwRatings;
-        this.prName = prName;
     }
 }

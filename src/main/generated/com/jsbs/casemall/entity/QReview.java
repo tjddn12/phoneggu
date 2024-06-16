@@ -22,9 +22,22 @@ public class QReview extends EntityPathBase<Review> {
 
     public static final QReview review = new QReview("review");
 
+    public final QBaseEntity _super = new QBaseEntity(this);
+
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
+
+    public final StringPath filename = createString("filename");
+
+    public final StringPath filepath = createString("filepath");
+
+    //inherited
+    public final StringPath modifiedBy = _super.modifiedBy;
+
     public final QProduct prName;
 
-    public final ListPath<ReviewImg, QReviewImg> reviewImgs = this.<ReviewImg, QReviewImg>createList("reviewImgs", ReviewImg.class, QReviewImg.class, PathInits.DIRECT2);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
     public final NumberPath<Long> reviewNo = createNumber("reviewNo", Long.class);
 
@@ -37,6 +50,9 @@ public class QReview extends EntityPathBase<Review> {
     public final DateTimePath<java.time.LocalDateTime> revwRegDate = createDateTime("revwRegDate", java.time.LocalDateTime.class);
 
     public final StringPath revwTitle = createString("revwTitle");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
     public final QUsers userId;
 

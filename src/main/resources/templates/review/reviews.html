@@ -20,6 +20,7 @@
                         <!--                : 작성자가 추가한 이미지 불러오는 src 로직 필요-->
                         <h3 th:text="${review.revwTitle}"></h3>
                         <p th:text="${review.revwContent}"></p>
+                        <a th:href="@{${review.filepath}}"></a>
                         <span class="rating">
                             <th:block th:each="i : ${#numbers.sequence(1, 5)}">
                                 <span th:class="${i <= review.revwRatings} ? 'active' : ''">★</span>
