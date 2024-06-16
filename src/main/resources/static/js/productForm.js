@@ -53,7 +53,10 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    //이미지
+    // 이미지 처리
+    let fileIndex = 0;
+    const fileList = new DataTransfer(); // 데이터 전송 객체를 생성하여 파일 목록 관리
+
     function handleFiles(files) {
         console.log("handleFiles 함수 호출됨, 파일들:", files);
         const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
@@ -72,16 +75,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 const filePreview = document.createElement('div');
                 filePreview.className = 'file-preview d-flex align-items-center mb-2';
                 filePreview.innerHTML = `
-                    <img src="${e.target.result}" alt="이미지 미리보기" class="preview-image me-2" style="width: 100px; height: auto;">
-                    <p class="file-name mb-0 me-2">${file.name}</p>
-                    <button type="button" class="btn btn-danger btn-sm remove-file" data-id="new-${i}" onclick="removeFile('new-${i}')">x</button>
+                    <img src="${e.target.result}" alt="미리보기 이미지" class="preview-image me-2" style="width: 100px; height: auto;">
+                    <p class="file-name mb-0 me-2">미리보기</p>
+                    <button type="button" class="btn btn-danger btn-sm remove-file" data-id="new-${fileIndex}" onclick="removeFile('new-${fileIndex}')">x</button>
                 `;
                 previewContainer.appendChild(filePreview);
+
+                fileList.items.add(file); // 파일 목록에 추가
+                fileIndex++;
 
                 console.log("파일 미리보기 생성됨:", file.name);
             };
             reader.readAsDataURL(file);
         }
+
+        productImgInput.files = fileList.files; // 파일 입력 요소에 파일 목록 설정
     }
 
     function removeFile(fileId) {
@@ -89,11 +97,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const previewContainer = document.getElementById('preview-images');
         const filePreview = previewContainer.querySelector(`.file-preview button[data-id="${fileId}"]`).closest('.file-preview');
         previewContainer.removeChild(filePreview);
+
+        const index = parseInt(fileId.split('-')[1]);
+        fileList.items.remove(index); // 파일 목록에서 제거
+        productImgInput.files = fileList.files; // 파일 입력 요소에 파일 목록 설정
     }
 
     function deleteImage(imageId) {
         console.log("deleteImage 함수 호출됨, 이미지 ID:", imageId);
-        fetch(`/product/image/${imageId}`, {
+        fetch(`/image/${imageId}`, {
             method: 'DELETE'
         })
             .then(response => {

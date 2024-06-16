@@ -106,7 +106,6 @@
                         <button type="button" class="btn btn-primary me-2" onclick="document.getElementById('productImgFile').click()">이미지 추가</button>
                     </div>
                     <input type="file" id="productImgFile" class="form-control d-none" name="productImgFile" multiple onchange="handleFiles(this.files)">
-                    <div class="fieldError">이미지는 최대 5개 까지 등록 가능합니다</div>
                 </div>
             </div>
 
@@ -119,8 +118,8 @@
                     <div th:each="img : ${productFormDto.productImgDtoList}">
                         <div class="file-preview d-flex align-items-center mb-2">
                             <img th:src="@{${img.imgUrl}}" alt="Product Image" class="preview-image me-2" style="width: 100px; height: auto;">
-                            <p class="file-name mb-0 me-2" th:text="${img.prImgName}"></p>
-                            <button type="button" class="btn btn-danger btn-sm remove-file" th:data-id="${img.id}" onclick="deleteImage(${img.id})">x</button>
+                            <p class="file-name mb-0 me-2">이전 이미지</p>
+                            <button type="button" class="btn btn-danger btn-sm remove-file" th:data-id="${img.id}" th:onclick="'deleteImage(' + ${img.id} + ')'">x</button>
                         </div>
                     </div>
                 </div>

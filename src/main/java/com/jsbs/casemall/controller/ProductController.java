@@ -135,16 +135,15 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/image/{imageId}")
-    public ResponseEntity<String> deleteProductImage(@PathVariable Long imageId) {
-        log.info("이미지 삭제 요청 받음, 이미지 ID: {}", imageId);
+    @DeleteMapping("/product/image/{imageId}")
+    public ResponseEntity<Void> deleteProductImage(@PathVariable Long imageId) {
         try {
             productService.deleteProductImage(imageId);
-            log.info("이미지 삭제 성공, 이미지 ID: {}", imageId);
-            return new ResponseEntity<>("이미지 삭제 성공", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            log.error("이미지 삭제 중 오류 발생, 이미지 ID: {}", imageId, e);
-            return new ResponseEntity<>("이미지 삭제 중 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
