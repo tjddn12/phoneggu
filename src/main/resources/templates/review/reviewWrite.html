@@ -93,6 +93,21 @@
                 <tbody>
                     <tr>
                         <th>별점</th>
+                        <td colspan="2">
+                            <div class="stars">
+                                <input type="radio" id="one" name="revwRatings" value="1" th:checked="${reviewFormDto.revwRatings == 1}">
+                                <label for="one">&#9733;</label>
+                                <input type="radio" id="two" name="revwRatings" value="2" th:checked="${reviewFormDto.revwRatings == 2}">
+                                <label for="two">&#9733;</label>
+                                <input type="radio" id="three" name="revwRatings" value="3" th:checked="${reviewFormDto.revwRatings == 3}">
+                                <label for="three">&#9733;</label>
+                                <input type="radio" id="four" name="revwRatings" value="4" th:checked="${reviewFormDto.revwRatings == 4}">
+                                <label for="four">&#9733;</label>
+                                <input type="radio" id="five" name="revwRatings" value="5" th:checked="${reviewFormDto.revwRatings == 5}">
+                                <label for="five">&#9733;</label>
+                            </div>
+                        </td>
+                        <p th:if="${#fields.hasErrors('revwRatings')}" th:errors="*{revwRatings}" class="fieldError">Incorrect data</p>
                     </tr>
                 </tbody>
             </table>
