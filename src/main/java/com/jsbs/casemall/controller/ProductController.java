@@ -3,9 +3,11 @@ package com.jsbs.casemall.controller;
 import com.jsbs.casemall.constant.ProductCategory;
 import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.ProductFormDto;
+import com.jsbs.casemall.dto.ProductImgDto;
 import com.jsbs.casemall.dto.ProductModelDto;
 import com.jsbs.casemall.dto.ProductSearchDto;
 import com.jsbs.casemall.entity.Product;
+import com.jsbs.casemall.service.ProductImgService;
 import com.jsbs.casemall.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -30,6 +32,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductImgService productImgService; // 필드 추가
 
     @GetMapping("/admin/product/new")
     public String productForm(Model model) {
@@ -69,7 +72,9 @@ public class ProductController {
     public String productDtl(@PathVariable("prId") Long prId, Model model) {
         try {
             ProductFormDto productFormDto = productService.getProductDtl(prId);
+            List<ProductImgDto> savedImages = productImgService.getImagesByProductId(prId); // 저장된 이미지 불러오기
             model.addAttribute("productFormDto", productFormDto);
+            model.addAttribute("savedImages", savedImages); // 저장된 이미지를 모델에 추가
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("productFormDto", new ProductFormDto());
@@ -135,15 +140,14 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/product/image/{imageId}")
-    public ResponseEntity<Void> deleteProductImage(@PathVariable Long imageId) {
+    @DeleteMapping("/admin/product/image/{imageId}/delete")
+    @ResponseBody
+    public ResponseEntity<?> deleteImage(@PathVariable Long imageId) {
         try {
-            productService.deleteProductImage(imageId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            productImgService.deleteProductImg(imageId); // 이미지 삭제
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

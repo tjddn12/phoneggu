@@ -31,3 +31,20 @@ function handleFiles(files) {
         reader.readAsDataURL(file);
     }
 }
+
+function deleteImage(imageId) {
+    if(confirm('이미지를 삭제하시겠습니까?')) {
+        fetch('/admin/product/image/' + imageId + '/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('이미지 삭제에 실패했습니다.');
+            }
+        });
+    }
+}

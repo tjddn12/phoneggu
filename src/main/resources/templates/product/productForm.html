@@ -118,6 +118,20 @@
                 </div>
             </div>
 
+            <!-- 저장된 이미지 라벨 -->
+            <div class="form-group row mb-3">
+                <label class="col-form-label col-sm-2">저장된 이미지</label>
+                <div class="col-sm-10">
+                    <div id="saved-images" class="d-flex flex-wrap">
+                        <div th:each="image : ${savedImages}" class="saved-image-item me-2">
+                            <img th:src="${image.imgUrl}" class="img-thumbnail" style="width: 100px; height: 100px;">
+                            <button type="button" class="btn btn-danger btn-sm mt-1" th:onclick="'deleteImage(' + ${image.id} + ')'">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="text-center">
                 <button th:if="${#strings.isEmpty(productFormDto.id)}" th:formaction="@{/admin/product/new}" type="submit" class="btn btn-primary">저장</button>
                 <button th:unless="${#strings.isEmpty(productFormDto.id)}" th:formaction="@{'/admin/product/' + ${productFormDto.id}}" type="submit" class="btn btn-primary">수정</button>

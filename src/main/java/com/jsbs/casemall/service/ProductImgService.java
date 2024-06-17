@@ -1,5 +1,6 @@
 package com.jsbs.casemall.service;
 
+import com.jsbs.casemall.dto.ProductImgDto;
 import com.jsbs.casemall.entity.ProductImg;
 import com.jsbs.casemall.repository.ProductImgRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -87,4 +91,10 @@ public class ProductImgService {
         productImgRepository.delete(productImg);
     }
 
+    public List<ProductImgDto> getImagesByProductId(Long productId) {
+        List<ProductImg> productImgs = productImgRepository.findByProductId(productId);
+        return productImgs.stream()
+                .map(ProductImgDto::of)
+                .collect(Collectors.toList());
+    }
 }

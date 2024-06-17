@@ -118,13 +118,13 @@ public class ProductService {
         product.updateProduct(productFormDto);
         productRepository.save(product);
 
-        // productFormDto에서 기종 정보와 재고 수량을 저장하는 로직 구현
-        List<ProductModelDto> productModelDtoList = productFormDto.getProductModelDtoList();
-
         // 기존 모델 삭제
         productModelRepository.deleteByProduct(product);
 
-        // 새로운 모델 추가
+        // productFormDto에서 기종 정보와 재고 수량을 저장하는 로직 구현
+        List<ProductModelDto> productModelDtoList = productFormDto.getProductModelDtoList();
+
+        // 유효한 모델 추가
         for (ProductModelDto productModelDto : productModelDtoList) {
             //기종이 선택되지 않았어도 저장
             ProductModel productModel = new ProductModel();
@@ -154,14 +154,12 @@ public class ProductService {
             log.info("새로운 이미지가 추가되었습니다. 인덱스: {}", (currentSize + i));
         }
 
-        // NULL인 모델 삭제
-        productModelRepository.deleteByProductModelSelectIsNull();
-        log.info("NULL 값 모델이 삭제되었습니다.");
+        // pr_id가 null인 모델 삭제
+        productModelRepository.deleteByPrIdIsNull();
 
         productRepository.save(product);
         log.info("상품 정보가 성공적으로 업데이트되었습니다. 상품 ID: {}", product.getId());
     }
-
 
     @Transactional(readOnly = true)
     public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, Pageable pageable) {
