@@ -1,16 +1,24 @@
 package com.jsbs.casemall.controller;
 
 
+import com.jsbs.casemall.dto.AddUserRequest;
 import com.jsbs.casemall.dto.UserDto;
 import com.jsbs.casemall.dto.UserPwRequestDto;
 import com.jsbs.casemall.dto.UserEditDto;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,11 +52,6 @@ public class UserController {
         userService.JoinUser(userDTO);
 
         return "redirect:/login";
-    }
-    // 로그인 페이지
-    @GetMapping("/login")
-    public String login(){
-        return  "user/userLogin"; // 로그인 페이지
     }
 
     // 아이디 찾기 페이지
@@ -116,8 +119,9 @@ public class UserController {
     // 정보 수정
 
     @GetMapping("/userEdit")
-    public String showEditForm(Principal principal, Model model) {
+    public String showEditForm(Principal  principal, Model model) {
             String id = principal.getName();
+            log.info("아이디 값 : {}",id);
             UserEditDto dto = userService.getUserById(id);
             log.info(dto.toString());
             model.addAttribute("user", dto);
@@ -135,6 +139,55 @@ public class UserController {
         }
         return "redirect:/myPage";
     }
+
+//    -----------------------------------------------------------------------------------------
+
+@PostMapping("/user")
+public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {
+
+    if(bindingResult.hasErrors()) {
+        return "signup";
+    }
+
+    if (!request.getPassword().equals(request.getPasswordCheck())) {
+        bindingResult.rejectValue("passwordCheck", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
+        return "signup";
+    }
+    try {
+        userService.save(request);
+    }catch (DataIntegrityViolationException e) {
+        e.printStackTrace();
+        bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+        return "signup";
+    } catch(Exception e) {
+        e.printStackTrace();
+        bindingResult.reject("signupFailed", e.getMessage());
+        return "signup";
+    }
+
+    return "redirect:/login";
+}
+
+
+    @GetMapping("/login")
+    public String login() {
+        return "/user/userLogin";
+    }
+
+    @GetMapping("/signup")
+    public String signup(AddUserRequest addUserRequest) {
+        return "signup";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        new SecurityContextLogoutHandler().logout(request, response,
+                SecurityContextHolder.getContext().getAuthentication());
+
+        return "redirect:/login";
+    }
+
+
     }
 
 

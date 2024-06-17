@@ -1,12 +1,14 @@
 package com.jsbs.casemall.entity;
 
-
 import com.jsbs.casemall.constant.Role;
 import com.jsbs.casemall.dto.UserDto;
 import jakarta.persistence.*;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
@@ -16,55 +18,83 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 public class Users {
 
+    private String username;
 
     @Id
-    @Column(name = "userId")
-    private String userId; // 유저 아이디
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
+    private Long id;
 
-    @Column(name = "name", nullable = false) // 필수 입력 사항
-    private String name; // 이름
+    @Column(name = "userId", unique = true, nullable = false)
+    private String userId;
+
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "userPw", nullable = false)
-    private String userPw; // 비밀번호
+    private String userPw;
 
-    @Column(name = "email", nullable = false)
-    private String email; // 이메일
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @Column(name = "phone", nullable = false)
-    private String phone; // 전화번호
+    private String phone;
 
     @Column(name = "p_code", nullable = false)
-    private String pCode; // 우편 주소
+    private String pCode;
 
-    @Column(name = "loadAddr", nullable = false)
-    private String loadAddr; // 도로명 주소
+    @Column(name = "loadAddr", nullable = true)
+    private String loadAddr;
 
-    @Column(name = "lotAddr", nullable = false)
-    private String lotAddr; // 지번 주소
+    @Column(name = "lotAddr", nullable = true)
+    private String lotAddr;
 
-    @Column(name = "detailAddr", nullable = false)
-    private String detailAddr; // 우편 주소
+    @Column(name = "detailAddr", nullable = true)
+    private String detailAddr;
 
-//    권한추가
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "provider_id")
+    private String providerId;
+
+    @Column(name = "social_id")
+    private String socialId;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
-    public static Users createMember(UserDto userDto,
-                                     PasswordEncoder passwordEncoder){
-        Users users = new Users();
-        users.setUserId(userDto.getUserId());
-        users.setName(userDto.getName());
-        users.setEmail(userDto.getEmail());
-        users.setPhone(userDto.getPhone());
-        users.setPCode(userDto.getP_code());
-        users.setLoadAddr(userDto.getLoadAddr());
-        users.setLotAddr(userDto.getLotAddr());
-        users.setDetailAddr(userDto.getDetailAddr());
-        String password = passwordEncoder.encode(userDto.getUserPw());
-        users.setUserPw(password);
-        users.setRole(Role.ADMIN);
-        return users;
+    @Builder
+    public Users(String userId, String name, String userPw, String email, String phone, String pCode,
+                 String loadAddr, String lotAddr, String detailAddr, String provider, String providerId, String socialId, Role role) {
+        this.userId = userId;
+        this.name = name;
+        this.userPw = userPw;
+        this.email = email;
+        this.phone = phone;
+        this.pCode = pCode;
+        this.loadAddr = loadAddr;
+        this.lotAddr = lotAddr;
+        this.detailAddr = detailAddr;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.socialId = socialId;
+        this.role = role;
     }
 
+    public static Users createMember(UserDto userDto, PasswordEncoder passwordEncoder) {
+        String encodedPassword = passwordEncoder.encode(userDto.getUserPw());
+        return Users.builder()
+                .userId(userDto.getUserId())
+                .name(userDto.getName())
+                .email(userDto.getEmail())
+                .phone(userDto.getPhone())
+                .pCode(userDto.getP_code())
+                .loadAddr(userDto.getLoadAddr())
+                .lotAddr(userDto.getLotAddr())
+                .detailAddr(userDto.getDetailAddr())
+                .userPw(encodedPassword)
+                .role(Role.ADMIN)
+                .build();
+    }
 }

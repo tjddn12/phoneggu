@@ -25,7 +25,7 @@ public class HomeController {
     String test3(){return "product/productDetail";}
 
     // 장바구니
-    @GetMapping("/cart/test")
+    @GetMapping("/test/cart")
     public String tset222(){
         return "cart/cart";
     }

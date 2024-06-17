@@ -58,7 +58,7 @@ form {
 }
 
 #userId{
-    width: 200px;
+    width: 230px;
 }
 
 #userPw{
@@ -74,22 +74,38 @@ form {
     width: 400px;
 }
 #phone1{
-    width: 100px;
+    width:  100px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 #phone2{
     width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 #phone3{
-    width: 100px;
+    width:  100px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 #email{
     width: 350px;
 }
+.input-group-text{
+    height: 45px;
+}
 
+.form-select{
+    height: 45px;
+}
 
-
-
+#checkDuplicate{
+    width: 100px;
+}
 
 form label {
     margin: 10px 0 5px;
@@ -140,3 +156,43 @@ form button {
      .success {
          color: green;
      }
+
+.col-form-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.address-group {
+    display: flex;
+
+    margin-bottom: 10px;
+}
+
+.address {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.address:last-child {
+    margin-right: 0;
+}
+
+.address[type="button"] {
+    background-color: #999;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    flex: none;
+}
+
+.address[type="button"]:hover {
+    background-color: #777;
+}
+
+.text-danger {
+    color: red;
+}

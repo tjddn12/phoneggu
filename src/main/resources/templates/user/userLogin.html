@@ -14,13 +14,13 @@
         }
         window.onload = function () {
             google.accounts.id.initialize({
-            client_id: "1089300974383-qa6dvgqrs38j4g5k5upfoqecf1kad7v7.apps.googleusercontent.com",
-            callback: handleCredentialResponse
-        });
-        google.accounts.id.renderButton(document.getElementById("buttonDiv"),
-        { theme: "outline", size: "large" }  // customization attributes
-        );
-        google.accounts.id.prompt(); // also display the One Tap dialog
+                client_id: "1089300974383-qa6dvgqrs38j4g5k5upfoqecf1kad7v7.apps.googleusercontent.com",
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(document.getElementById("buttonDiv"),
+                { theme: "outline", size: "large" }  // customization attributes
+            );
+            google.accounts.id.prompt(); // also display the One Tap dialog
         }
     </script>
 </head>

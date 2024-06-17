@@ -1,9 +1,6 @@
 package com.jsbs.casemall.service;
 
-import com.jsbs.casemall.dto.MailDto;
-import com.jsbs.casemall.dto.UserDto;
-import com.jsbs.casemall.dto.UserPwRequestDto;
-import com.jsbs.casemall.dto.UserEditDto;
+import com.jsbs.casemall.dto.*;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,21 +26,32 @@ public class UserService implements UserDetailsService {
 
     private final SendService sendService;
 
-    private final PasswordEncoder passwordEncoder; // 저장할떄 passwordEncoder.encode(넘어온비밀번호)
+    private final PasswordEncoder passwordEncoder;// 저장할떄 passwordEncoder.encode(넘어온비밀번호)
+
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // 권한부여
-        Users user = userRepository.findById(username).orElseThrow(EntityNotFoundException::new);
-        return User.builder().username(user.getUserId()).password(user.getUserPw()).roles(user.getRole().toString()).build();
-
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users user = userRepository.findByUserId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with userId: " + username));
+        return User.builder()
+                .username(user.getUserId())
+                .password(user.getUserPw())
+                .roles(user.getRole().toString())
+                .build();
     }
+    public Long save(AddUserRequest dto) {
 
+        return userRepository.save(Users.builder()
+                .email(dto.getEmail())
+                .userPw(passwordEncoder.encode(dto.getPassword()))
+                .build()).getId();
+    }
 
 
     //세이브
 
     public void JoinUser(UserDto userDTO) {
-        // Check for duplicate userId
         Optional<Users> existingUser = userRepository.findByUserId(userDTO.getUserId());
         if (existingUser.isPresent()) {
             throw new IllegalArgumentException("User ID already exists");
@@ -83,7 +92,7 @@ public class UserService implements UserDetailsService {
     // 정보 수정
 
     public  UserEditDto getUserById(String userId) {
-        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return new  UserEditDto(user);
     }
 
@@ -93,7 +102,7 @@ public class UserService implements UserDetailsService {
 
         try {
             log.info("수정한값 : {} ",userEditDto);
-            Users user = userRepository.findById(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+            Users user = userRepository.findByUserId(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
             user.setUserPw(passwordEncoder.encode(userEditDto.getUserPw()));
             user.setPCode(userEditDto.getPCode());
             user.setLoadAddr(userEditDto.getLoadAddr());
