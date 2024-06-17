@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -26,6 +26,7 @@
         window.btoa(Math.random()).slice(0, 20);
     const paymentKey =generateRandomString();
     const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+    let isPaymentSuccess = false;
 
     const paymentWidget = PaymentWidget(clientKey, paymentKey);
     console.log("확인: ",orderId,amount,paymentKey)
@@ -49,10 +50,15 @@
             failUrl: window.location.origin + "/fail",
             customerEmail: order.email, // 회원 이메일
             customerName: order.userName,  // 회원 이름
-            customerMobilePhone:order.phone,
+            customerMobilePhone: order.phone,
+        }).then(() => {
+            isPaymentSuccess = true; // 결제 성공 시
+            console.log('결제 성공:', isPaymentSuccess);
+        }).catch(error => {
+            isPaymentSuccess = false; // 결제 실패 시
+            console.error('결제 요청 실패:', error);
         });
     });
-
 
     // 페이지 떠날 때 이벤트 처리
     window.addEventListener('beforeunload', function (e) {
@@ -62,7 +68,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({orderId: order.orderID})
+                body: JSON.stringify({orderId: order.orderId})
             }).then(response => {
                 if (!response.ok) {
                     console.error('Failed to cancel order');
