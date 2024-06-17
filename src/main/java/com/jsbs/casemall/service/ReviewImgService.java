@@ -1,18 +1,14 @@
 package com.jsbs.casemall.service;
 
-import com.jsbs.casemall.entity.Review;
 import com.jsbs.casemall.entity.ReviewImg;
 import com.jsbs.casemall.repository.ReviewImgRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 @Transactional

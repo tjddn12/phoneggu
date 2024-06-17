@@ -47,8 +47,6 @@ public class QReview extends EntityPathBase<Review> {
 
     public final NumberPath<Integer> revwRatings = createNumber("revwRatings", Integer.class);
 
-    public final DateTimePath<java.time.LocalDateTime> revwRegDate = createDateTime("revwRegDate", java.time.LocalDateTime.class);
-
     public final StringPath revwTitle = createString("revwTitle");
 
     //inherited

@@ -11,7 +11,7 @@ public class ReviewDto {
     //Users의 식별자만을 사용
     private String revwTitle;
     private String revwContent;
-    private LocalDateTime revwRegDate;
+    private LocalDateTime revwRegDate; //: 등록 시간
     //LocalDateTime: Date 타입에서 발전된 타입, 시간대가 제공됨.
 //    private int revwHits; //: 조회수, JS로 처리 or 추후 추가 가능.
     private int revwRatings; //: 평점

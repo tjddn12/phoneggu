@@ -41,10 +41,10 @@ public class ReviewApiController {
 
         return ResponseEntity.ok("평점이 성공적으로 저장되었습니다.");
     }
-        @PostMapping
-        public Review createReview(@RequestBody Review review){
-            review.setRevwRegDate(LocalDateTime.now()); //: 리뷰 등록 날짜 설정
-
-            return reviewRepository.save(review);
-    }
+//    @PostMapping
+//    public Review createReview(@RequestBody Review review){
+//        review.setRevwRegDate(LocalDateTime.now()); //: 리뷰 등록 날짜 설정
+//
+//        return reviewRepository.save(review);
+//    }
 }

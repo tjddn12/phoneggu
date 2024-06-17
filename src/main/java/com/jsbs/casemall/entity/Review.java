@@ -40,9 +40,9 @@ public class Review extends BaseEntity{
 //    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 //    @OrderBy("id asc")
 //    private List<ReviewImg> reviewImgs;
-
-    @Column(name = "revw_reg_date")
-    private LocalDateTime revwRegDate; //: 리뷰 등록 날짜
+//
+//    @Column(name = "revw_reg_date")
+//    private LocalDateTime revwRegDate; //: 리뷰 등록 날짜
 
     @Column(name = "revw_hits", nullable = false)
     private int revwHits; //: 조회수
