@@ -50,7 +50,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
         long updated = queryFactory.update(review) //.update(): DB에서 업데이트 작업을 수행하며,
                 //이 작업의 결과로 영향을 받은 행의 수를 반환.
-                .where(review.reviewNo.eq(reviewFormDto.getReviewNo()))
+                .where(review.reviewNo.eq(reviewFormDto.getId()))
                 .set(review.revwTitle, reviewFormDto.getRevwTitle())
                 .set(review.revwContent, reviewFormDto.getRevwContent())//: 제목과 내용, 평점만 수정하면 충분.
                 .set(review.revwRatings, reviewFormDto.getRevwRatings())

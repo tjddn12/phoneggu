@@ -1,5 +1,6 @@
 package com.jsbs.casemall.entity;
 
+import com.jsbs.casemall.dto.ReviewFormDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,7 +41,7 @@ public class Review extends BaseEntity{
 //    @OrderBy("id asc")
 //    private List<ReviewImg> reviewImgs;
 
-    @Column(name = "revw_reg_date", nullable = false)
+    @Column(name = "revw_reg_date")
     private LocalDateTime revwRegDate; //: 리뷰 등록 날짜
 
     @Column(name = "revw_hits", nullable = false)
@@ -55,9 +56,10 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "pr_name")
     private Product prName; //: 제품 엔티티
 
-    public void update(String revwTitle, String revwContent, int revwRatings){
-        this.revwTitle = revwTitle;
-        this.revwContent = revwContent;
-        this.revwRatings = revwRatings;
+    public void update(ReviewFormDto reviewFormDto){
+        this.reviewNo = reviewFormDto.getId();
+        this.revwTitle = reviewFormDto.getRevwTitle();
+        this.revwContent = reviewFormDto.getRevwContent();
+        this.revwRatings = reviewFormDto.getRevwRatings();
     }
 }

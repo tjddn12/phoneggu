@@ -12,6 +12,17 @@
     padding: 70px 0;
 }
 /* 본문 */
+.input-group{
+    margin-bottom: 15px;
+}
+.img-div{
+    margin-bottom: 10px;
+}
+.filedError{
+    color: #bd2130;
+}
+
+
 .content-wrapper{
     width: 700px !important;
 }

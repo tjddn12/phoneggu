@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class ReviewImgService {
     @Value("${reviewImgLocation}")
@@ -23,6 +22,12 @@ public class ReviewImgService {
     //reviewImgLocation 변수에 c:/~/review 이미지 경로 할당
     private final ReviewImgRepository reviewImgRepository;
     private final FileService fileService;
+
+    @Autowired
+    public ReviewImgService(ReviewImgRepository reviewImgRepository, FileService fileService) {
+        this.reviewImgRepository = reviewImgRepository;
+        this.fileService = fileService;
+    }
 
     public void saveReviewImg(ReviewImg reviewImg, MultipartFile reviewImgFile) throws Exception{
         //reviewImg: 리뷰 이미지 정보
@@ -32,7 +37,7 @@ public class ReviewImgService {
         String imgUrl = "";
         //파일 업로드
         if(!StringUtils.isEmpty(oriImgName)){
-            imgName = fileService.uploadFile(reviewImgLocation, oriImgName, reviewImgFile.getBytes());
+            imgName = fileService.reviewUploadFile(reviewImgLocation, oriImgName, reviewImgFile.getBytes());
             imgUrl = "/images/review/" + imgName;
         }
         //리뷰 이미지 정보 저장
@@ -53,7 +58,7 @@ public class ReviewImgService {
 
             String oriImgName = reviewImgFile.getOriginalFilename();
             //: 업로드된 이미지 원본 파일명
-            String imgName = fileService.uploadFile(reviewImgLocation, oriImgName, reviewImgFile.getBytes());
+            String imgName = fileService.reviewUploadFile(reviewImgLocation, oriImgName, reviewImgFile.getBytes());
             //: 새로운 파일 업로드 - 업로드한 파일명을 imgName 변수 저장
             String imgUrl = "/images/review/" + imgName;
 

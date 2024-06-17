@@ -9,11 +9,15 @@ import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.*;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,8 +37,59 @@ public class ReviewController {
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
     }
+    @GetMapping(value = "/reviewWrite")
+    public String reviewForm(Model model){
+        model.addAttribute("reviewFormDto", new ReviewFormDto());
+
+        return "review/reviewWrite";
+    }
+    @PostMapping("/reviewWrite")
+    public String reviewNew(@Valid ReviewFormDto reviewFormDto, BindingResult bindingResult, Model model,
+    @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList){
+        if(bindingResult.hasErrors()){
+            return "review/reviewWrite";
+        }
+        if(reviewImgFileList.get(0).isEmpty() && reviewFormDto.getId() == null){
+            model.addAttribute("errorMessage", "리뷰 이미지는 필수 입력값입니다.");
+
+            return "review/reviewWrite";
+        }
+
+        try{
+            reviewService.saveReview(reviewFormDto, reviewImgFileList);
+        }catch(Exception e){
+            model.addAttribute("errorMessage", "리뷰 등록 중 에러가 발생하였습니다.");
+
+            return "review/reviewWrite";
+        }
+
+        return "redirect:/reviews";
+    }
+    @PostMapping(value = "/{reviewNo}")
+    public String reviewUpdate(@Valid ReviewFormDto reviewFormDto, BindingResult bindingResult,
+                               Model model, @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList){
+        if(bindingResult.hasErrors()){
+            return "review/reviewWrite";
+        }
+        if(reviewImgFileList.get(0).isEmpty() && reviewFormDto.getId() == null){
+            model.addAttribute("errorMessage", "리뷰 이미지는 필수 입력값입니다.");
+
+            return "review/reviewWrite";
+        }
+
+        try{
+            reviewService.updateAReview(reviewFormDto, reviewImgFileList);
+        }catch(Exception e){
+            model.addAttribute("errorMessage", "리뷰 수정 중 에러가 발생하였습니다.");
+
+            return "review/reviewWrite";
+        }
+
+        return "redirect:/reviews";
+    }
+    //리뷰 게시판 페이징 처리
     @GetMapping
-    public String getAllReviews(Criteria criteria, Model model){
+    public String reviewManage(Criteria criteria, Model model){
         PageDto<Review> pageDto = reviewService.getReviewList(criteria);
         List<Review> reviews = reviewService.getAllReviews();
         List<Integer> pageNumbers = IntStream.rangeClosed(1, pageDto.getTotalRecordCount())
@@ -46,13 +101,6 @@ public class ReviewController {
         model.addAttribute("pageNumbers", pageNumbers);
 
         return "review/reviews";
-    }
-    @GetMapping("/reviewWrite")
-    public String createReviewForm(Model model){
-        //주문 내역에서 리뷰 작성시, 상품 이름&상품 사진을 받아오는 로직 구현
-        model.addAttribute("review", new Review());
-
-        return "review/reviewWrite";
     }
 //    @PostMapping
 //    public String createReview(@ModelAttribute Review review){
@@ -92,13 +140,6 @@ public class ReviewController {
         model.addAttribute("reviews", reviews);
 
         return "review/reviews";
-    }
-    @PutMapping("/{reviewNo}")
-    public String updateReview(@PathVariable Long reviewNo, @ModelAttribute ReviewFormDto reviewFormDto){
-        reviewFormDto.setReviewNo(reviewNo);
-        reviewService.updateAReview(reviewFormDto);
-
-        return "redirect:/reviews";
     }
     @DeleteMapping("/{reviewNo}")
     public String deleteReview(@PathVariable Long reviewNo){
