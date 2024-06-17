@@ -25,47 +25,62 @@ public class OrderController {
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);
     private final OrderService orderService;
 
-
     @GetMapping
-    public String order(Principal principal ,Model model) {
-        String userId =  principal.getName();
+    public String order(Principal principal, Model model) {
+        String userId = principal.getName();
         OrderDto order = orderService.getOrder(userId);
         model.addAttribute("order", order);
         return "order/orderPayment";
     }
-    // 각각 요청에따른 주문 페이지 보여주기
+
     @PostMapping
-    public String processOrder(@RequestParam("type") String orderType, @RequestParam("cartItemIds") List<Long> cartItemIds, Model model,Principal principal) {
-        // 장바구니에 저장되어있는 정보를 OrderDto 에 담아서 보여줌
-        // 장바구니 type=cart &  체크된 것들만 카트 아이디받아서 처리
-        // 바로 주문 주문
-        String id = principal.getName();
-        if(id==null){
+    public String processOrder(@RequestParam("type") String orderType, @RequestParam("cartItemIds") List<Long> cartItemIds, Model model, Principal principal) {
+        String userId = principal.getName();
+        if (userId == null) {
             return "redirect:/login";
         }
-        log.info("들어온 값 :{} " , cartItemIds);
-        log.info("들어온 타입 :{} " , orderType);
+
+        log.info("들어온 값 : {}", cartItemIds);
+        log.info("들어온 타입 : {}", orderType);
+
         OrderDto order;
-        if(orderType.equals("cart")) {
-           // 장바구니에서 선택한 cartItem 를 가지고 Order 생성
-            order = orderService.createOrder(id, cartItemIds);
+        if (orderType.equals("cart")) {
+            order = orderService.createOrder(userId, cartItemIds);
             model.addAttribute("order", order);
+
         }
-        return "order/orderPayment";
+        return "redirect:order";
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<Map<String, Object>> itemsRemove(@RequestParam("cartItemId") Long cartItemId, Principal principal) {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> removeOrderDetail(@RequestBody Map<String, Object> payload, Principal principal) {
+        Long orderId = Long.valueOf(payload.get("orderId").toString());
+        Long orderDetailId = Long.valueOf(payload.get("orderDetailId").toString());
         String userId = principal.getName();
+
         Map<String, Object> response = new HashMap<>();
         try {
-            orderService.removeOrder(cartItemId, userId);
+            orderService.removeOrderDetail(orderId, orderDetailId, userId);
             response.put("success", true);
-        } catch (IllegalArgumentException e) {
-            log.error("Error removing order item: {}", e.getMessage());
+        } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
         }
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/updateQuantity")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateOrderItemQuantity(@RequestBody Map<String, Object> payload) {
+        Long orderDetailId = Long.valueOf(payload.get("orderDetailId").toString());
+        int newCount = Integer.parseInt(payload.get("count").toString());
+
+        orderService.updateOrderItemQuantity(orderDetailId, newCount);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
         return ResponseEntity.ok(response);
     }
 
