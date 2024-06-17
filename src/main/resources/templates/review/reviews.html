@@ -12,8 +12,7 @@
     <div layout:fragment="content">
         <div class="container">
             <div class="grid-container">
-                <!-- 총 30개의 제품 정보를 동일한 구조로 추가 -->
-                <!--        (.grid-item>a[href="/reviews/$"]>img[src="product$.jpg" alt="Product $"]+h3{제품 $}+p{제품 $에 대한 설명}+.rating{★★★★★})*30-->
+                <!-- 총 30개의 리뷰 게시글을 동일한 구조로 추가 -->
                 <div class="grid-item" th:each="review : ${reviews}">
                     <a th:href="@{/reviews/{id}(id=${review.reviewNo})}">
                         <img th:src="${reviewImages[review.reviewNo]}" alt="Product Image">
@@ -26,6 +25,8 @@
                         </span>
                     </a>
                 </div>
+<!--                문제점: imgUrl로 어떤 값을 써야 출력되는지 확인 필요-->
+                <img src="C:/nsw/images/63940ec3-c77a-40c8-b619-13d1cfea9511.PNG" alt="Product Image">
             </div>
         </div>
         <nav aria-label="Page navigation">

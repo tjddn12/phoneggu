@@ -98,7 +98,6 @@ public class ReviewController {
                 .collect(Collectors.toList());
         //페이징 처리
         model.addAttribute("pageDto", pageDto);
-        model.addAttribute("reviews", reviews);
         model.addAttribute("pageNumbers", pageNumbers);
 
         for(Review review : reviews){
@@ -110,7 +109,7 @@ public class ReviewController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("reviewImages", reviewImages);
 
-        return "reviews";
+        return "review/reviews";
     }
 //    @PostMapping
 //    public String createReview(@ModelAttribute Review review){
