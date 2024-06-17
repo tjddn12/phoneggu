@@ -6,7 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>상품 등록/수정</title>
     <link rel="stylesheet" th:href="@{/css/productForm.css}">
-    <script defer th:src="@{/js/productForm.js}"></script>
+    <script defer th:src="@{/js/productFormStock.js}"></script>
+    <script defer th:src="@{/js/productFormImg.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -109,22 +110,13 @@
                 </div>
             </div>
 
-            <!-- 이미지 미리보기 및 기존 이미지 표시 -->
-            <div id="preview-container" class="preview-container mb-3">
-                <!-- 미리보기 이미지 -->
-                <div id="preview-images"></div>
-                <!-- 저장된 이미지 -->
-                <div th:if="${productFormDto.productImgDtoList != null}">
-                    <div th:each="img : ${productFormDto.productImgDtoList}">
-                        <div class="file-preview d-flex align-items-center mb-2">
-                            <img th:src="@{${img.imgUrl}}" alt="Product Image" class="preview-image me-2" style="width: 100px; height: auto;">
-                            <p class="file-name mb-0 me-2">이전 이미지</p>
-                            <button type="button" class="btn btn-danger btn-sm remove-file" th:data-id="${img.id}" th:onclick="'deleteImage(' + ${img.id} + ')'">x</button>
-                        </div>
-                    </div>
+            <!-- 이미지 미리보기 라벨 -->
+            <div class="form-group row mb-3">
+                <label class="col-form-label col-sm-2">이미지 미리보기</label>
+                <div class="col-sm-10">
+                    <div id="preview-images" class="d-flex flex-wrap"></div>
                 </div>
             </div>
-            <!-- End of 이미지 미리보기 및 기존 이미지 표시 -->
 
             <div class="text-center">
                 <button th:if="${#strings.isEmpty(productFormDto.id)}" th:formaction="@{/admin/product/new}" type="submit" class="btn btn-primary">저장</button>

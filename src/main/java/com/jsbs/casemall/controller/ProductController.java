@@ -37,7 +37,7 @@ public class ProductController {
         return "product/productForm";
     }
 
-    @PostMapping("/admin/product/new")
+    @PostMapping(value = "/admin/product/new")
     public String productNew(@Valid @ModelAttribute ProductFormDto productFormDto, BindingResult bindingResult,
                              Model model, @RequestParam("productImgFile") List<MultipartFile> productImgFileList) {
         log.info("productFormDto: {}", productFormDto);
@@ -47,9 +47,9 @@ public class ProductController {
             return "product/productForm";
         }
 
-        if (productImgFileList.get(0).isEmpty() && productFormDto.getId() == null) {
+        if (productImgFileList.isEmpty()) {
             log.info("첫 번째 상품 이미지가 비어있고 상품 ID가 null입니다");
-            model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
+            model.addAttribute("errorMessage", "적어도 하나의 이미지를 업로드해야 합니다.");
             return "product/productForm";
         }
 

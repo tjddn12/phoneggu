@@ -1,5 +1,6 @@
 package com.jsbs.casemall.repository;
 
+import com.jsbs.casemall.entity.Product;
 import com.jsbs.casemall.entity.ProductModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +25,6 @@ public interface ProductModelRepository extends JpaRepository<ProductModel, Long
     @Modifying
     @Query("DELETE FROM ProductModel pm WHERE pm.product.id = :productId")
     void deleteByProductId(@Param("productId") Long productId);
+
+    void deleteByProduct(Product product);
 }
