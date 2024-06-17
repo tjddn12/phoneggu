@@ -1,3 +1,5 @@
+// productDetail.js
+
 let selectedProducts = [];
 let totalPrice = 0;
 
