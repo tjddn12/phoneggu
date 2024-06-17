@@ -3,18 +3,24 @@ package com.jsbs.casemall.service;
 import com.jsbs.casemall.dto.MailDto;
 import com.jsbs.casemall.dto.UserDto;
 import com.jsbs.casemall.dto.UserPwRequestDto;
+import com.jsbs.casemall.dto.UserEditDto;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
@@ -31,11 +37,23 @@ public class UserService implements UserDetailsService {
 
     }
 
-    // 세이브
 
-    public void JoinUser(UserDto userDTO){
-        Users user = Users.createMember(userDTO,passwordEncoder);
+
+    //세이브
+
+    public void JoinUser(UserDto userDTO) {
+        // Check for duplicate userId
+        Optional<Users> existingUser = userRepository.findByUserId(userDTO.getUserId());
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("User ID already exists");
+        }
+
+        Users user = Users.createMember(userDTO, passwordEncoder);
         userRepository.save(user);
+    }
+    // 아이디 중복
+    public boolean checkUserIdExists(String userId) {
+        return userRepository.findByUserId(userId).isPresent();
     }
 
 
@@ -61,4 +79,35 @@ public class UserService implements UserDetailsService {
         sendService.mailSend(dto);
     }
 
-}
+
+    // 정보 수정
+
+    public  UserEditDto getUserById(String userId) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return new  UserEditDto(user);
+    }
+
+
+    @Transactional
+    public boolean updateUser(UserEditDto userEditDto) {
+
+        try {
+            log.info("수정한값 : {} ",userEditDto);
+            Users user = userRepository.findById(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+            user.setUserPw(passwordEncoder.encode(userEditDto.getUserPw()));
+            user.setPCode(userEditDto.getPCode());
+            user.setLoadAddr(userEditDto.getLoadAddr());
+            user.setLotAddr(userEditDto.getLotAddr());
+            user.setDetailAddr(userEditDto.getDetailAddr());
+            user.setPhone(userEditDto.getPhone());
+            user.setEmail(userEditDto.getEmail());
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    }
+

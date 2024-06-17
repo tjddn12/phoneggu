@@ -10,41 +10,71 @@
     <div layout:fragment="content">
     <section class="signup">
         <h1 class="tit">회원 정보 수정</h1>
-        <form action="#" method="post">
+        <form action="/userEdit" method="post">
             <label for="userId">아이디 <strong>*</strong></label>
-            <input type="text" id="userId" name="userId" disabled>
-            
+            <input type="text" id="userId"  name="userId" readonly="readonly" th:value="${user.getUserId()}" >
+
             <label for="userPw">비밀번호  <strong>*</strong></label>
             <input type="password" id="userPw" name="userPw">
-            
+
             <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
             <input type="password" id="confirm-userPw" name="confirm-userPw">
-            
-            <label for="name">이름  <strong>*</strong></label>
-            <input type="text" id="name" name="name" disabled>
+            <div id="passwordCheckResult"></div>
 
-            <label for="address">주소 <strong>*</strong></label>
-            <input type="text" id="address" name="address">
+            <label for="name" >이름  <strong>*</strong></label>
+            <input type="text" id="name" name="name"  readonly="readonly" th:value="${user.getName()}" >
+
+            <label for="pCode">우편 주소 <strong>*</strong></label>
+            <input type="text" id="pCode" name="pCode" th:value="${user.getPCode()}">
+
+            <label for="loadAddr">도로명 주소 <strong>*</strong></label>
+            <input type="text" id="loadAddr" name="loadAddr" th:value="${user.getLoadAddr()}">
+
+            <label for="lotAddr">지번 주소 <strong>*</strong></label>
+            <input type="text" id="lotAddr" name="lotAddr" th:value="${user.getLotAddr()}">
+
+            <label for="detailAddr">우편 주소 <strong>*</strong></label>
+            <input type="text" id="detailAddr" name="detailAddr" th:value="${user.getDetailAddr()}">
             <!-- pCode - 우편 주소  loadAddr - 도로명 주소  lotAddr - 지번 주소  detailAddr - 우편 주소 -->
 
             <label for="phone">휴대전화  <strong>*</strong></label>
 <!--            <label for="phone">-->
-            <input type="text" id="phone1" name="phone1"> 
-            -
-            <input type="text" id="phone2" name="phone2"> 
-            -
-            <input type="text" id="phone3" name="phone3"></label>
-            
+            <input type="text" id="phone" name="phone" th:value="${user.getPhone()}">
+
+
             <label for="email">이메일  <strong>*</strong></label>
-            <input type="email" id="email" name="email">
+            <input type="email" id="email" name="email" th:value="${user.getEmail()}">
 
             <!-- 수정을 누르면 수정되었습니다 라는 메시지와 함께 원래 있던 페이지로 리다이렉트 -->
             <div class="button-container">
                 <button type="submit" class="btn1">회원정보수정</button>
                 <button type="button" onclick="location.href='#'" class="btn2">취소</button>
             </div>
+            <script>
+
+                // 비밀번호 일치 확인
+                document.addEventListener('DOMContentLoaded', function() {
+                    var userPwInput = document.getElementById('userPw');
+                    var confirmUserPwInput = document.getElementById('confirm-userPw');
+                    var passwordCheckResult = document.getElementById('passwordCheckResult');
+
+                    function checkPasswordsMatch() {
+                        if (userPwInput.value === confirmUserPwInput.value) {
+                            passwordCheckResult.textContent = '비밀번호가 일치합니다.';
+                            passwordCheckResult.className = 'success';
+                        } else {
+                            passwordCheckResult.textContent = '비밀번호가 일치하지 않습니다. 다시 입력해 주세요.';
+                            passwordCheckResult.className = 'error';
+                        }
+                    }
+
+                    userPwInput.addEventListener('input', checkPasswordsMatch);
+                    confirmUserPwInput.addEventListener('input', checkPasswordsMatch);
+                });
+            </script>
         </form>
     </section>
     </div>
+
 </body>
 </html>

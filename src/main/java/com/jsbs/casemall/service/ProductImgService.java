@@ -1,5 +1,6 @@
 package com.jsbs.casemall.service;
 
+import com.jsbs.casemall.dto.ProductImgDto;
 import com.jsbs.casemall.entity.ProductImg;
 import com.jsbs.casemall.repository.ProductImgRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,8 +53,8 @@ public class ProductImgService {
         productImgRepository.save(productImg); // 테이블저장
     }
 
-//productImg 상품이미지 정보
-//클라이언트 MultipartFile productImgFile 업로드된 이미지 파일을 나타내는 객체 -> 원본파일이름을 가져온다.
+    //productImg 상품이미지 정보
+    //클라이언트 MultipartFile productImgFile 업로드된 이미지 파일을 나타내는 객체 -> 원본파일이름을 가져온다.
     public void updateProductImg(Long prImgId, MultipartFile productImgFile) throws Exception {
         //prImgId 수정할 상품 이미지 식별자
         //prImgFile 업로드된 새로운 상품이미지 파일
@@ -87,4 +91,10 @@ public class ProductImgService {
         productImgRepository.delete(productImg);
     }
 
+    public List<ProductImgDto> getImagesByProductId(Long productId) {
+        List<ProductImg> productImgs = productImgRepository.findByProductId(productId);
+        return productImgs.stream()
+                .map(ProductImgDto::of)
+                .collect(Collectors.toList());
+    }
 }

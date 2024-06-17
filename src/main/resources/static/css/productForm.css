@@ -34,31 +34,6 @@ h1 {
     font-size: 14px;
 }
 
-.preview-container {
-    margin-top: 20px;
-}
-
-.file-preview {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.file-preview .img-checkbox {
-    margin-right: 10px;
-}
-
-.file-preview .preview-image {
-    width: 100px;
-    height: auto;
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-.file-preview .file-name {
-    margin: 0;
-}
-
 .img-div {
     margin-bottom: 10px;
     display: flex;
@@ -87,4 +62,48 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+}
+
+.model-container, .stock-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.model-item, .stock-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* 모델 아이템 간의 간격 조정 */
+    margin-bottom: 10px; /* 모델 아이템의 아래쪽 간격 조정 */
+}
+
+.model-item label {
+    margin-right: 10px; /* 체크박스와 텍스트 간의 간격 조정 */
+}
+
+.stock-input {
+    width: 100px; /* 수량 입력란의 너비 조정 */
+}
+
+.preview-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin: 10px;
+}
+
+.img-container {
+    position: relative;
+    display: inline-block;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 5px;
 }

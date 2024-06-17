@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>My Page</title>
+    <script src="https://kit.fontawesome.com/b5bd807c1d.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
 </head>
 <body>
@@ -15,17 +16,14 @@
             <div class="balance-item">
                 <p>가용적립금</p>
                 <p>0원</p>
-                <button>조회</button>
             </div>
             <div class="balance-item">
-                <p>가용적립금</p>
+                <p>사용적립금</p>
                 <p>0원</p>
-                <button>조회</button>
             </div>
             <div class="balance-item">
-                <p>가용적립금</p>
+                <p>쿠폰</p>
                 <p>0원</p>
-                <button>조회</button>
             </div>
             <div class="balance-item">
                 <p>총적립금</p>
@@ -55,13 +53,10 @@
         </section>
 
         <section class="myPage-nav-links">
-            <a href="#" class="nav-item"> <img src="/images/마이페이지 1.png" alt="" class="items"><strong>ORDER</strong><br>주문내역 조회</a>
-            <a href="#" class="nav-item"><img src="/images/마이페이지 2.png" alt="" class="items"><strong>PROFILE</strong><br>회원정보</a>
-            <a href="#" class="nav-item"><img src="/images/마이페이지3.png" alt="" class="items"><strong>WISHLIST</strong><br>주문내역 조회</a>
-            <a href="#" class="nav-item"><img src="/images/마이페이지4.png" alt="" class="items"><strong>MILEAGE</strong><br>적립금</a>
-            <a href="#" class="nav-item"><img src="/images/마이페이지5.png" alt="" class="items"><strong>COUPON</strong><br>쿠폰</a>
-            <a href="#" class="nav-item"><img src="/images/마이페이지6.png" alt="" class="items"><strong>BOARD</strong><br>게시글 관리</a>
-            <a href="#" class="nav-item"><img src="/images/마이페이지7.png" alt="" class="items"><strong>ADDRESS</strong><br>배송 주소록 관리</a>
+            <a href="/orderHistory" class="nav-item"> <img src="/images/마이페이지 1.png" alt="" class="items"><strong>ORDER</strong><br>주문내역 조회</a>
+            <a href="/userEdit" class="nav-item"><img src="/images/마이페이지 2.png" alt="" class="items"><strong>PROFILE</strong><br>회원정보</a>
+            <a href="/cart" class="nav-item "><i class="fa-solid fa-cart-shopping  custom-size items"></i><strong>CART</strong><br>장바구니</a>
+            <a href="/reviewWrite" class="nav-item"><img src="/images/마이페이지6.png" alt="" class="items"><strong>BOARD</strong><br>게시글 관리</a>
         </section>
     </section>
 </div>

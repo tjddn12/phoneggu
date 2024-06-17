@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class SendService {
+public class    SendService {
 
 
     private final PasswordEncoder passwordEncoder;
@@ -29,20 +29,22 @@ public class SendService {
         String str = getTempPassword();
         MailDto dto = new MailDto();
         dto.setAddress(requestDto.getUserEmail());
-        dto.setTitle(requestDto.getUserName() + "님의 임시비밀번호 안내 이메일 입니다.");
-        dto.setContent("안녕하세요. 임시비밀번호 안내 관련 메일 입니다." + "[" + requestDto.getUserName() + "]" + "님의 임시 비밀번호는 "
-                + str + " 입니다.");
+        dto.setTitle(requestDto.getUserName() + "님의 임시 비밀번호 안내 이메일 입니다.");
+        dto.setContent("안녕하세요. 폰꾸입니다. " + requestDto.getUserName() + "님, 임시 비밀번호 안내 관련 메일 입니다." + "[" + requestDto.getUserName() + "]" + "님의 임시 비밀번호는 "
+                + str + " 입니다. " +
+                "임시 비밀번호로 로그인 후 마이페이지 [정보수정]에서 비밀번호를 변경해 주세요."); // 임시 비밀번호
         updatePassword(str, requestDto);
         return dto;
     }
 
+
     @Transactional
     public void updatePassword(String str, UserPwRequestDto requestDto) {
         String pw = passwordEncoder.encode(str);
-        log.info("암호화 비번 : {} ", pw);
+       // log.info("암호화 비번 : {} ", pw);
         Users users = userRepository.findByUserId(requestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
         users.setUserPw(pw);
-        log.info("업데이트된 내용 : {} ", users);
+      //  log.info("업데이트된 내용 : {} ", users);
         userRepository.save(users);
     }
 
@@ -58,6 +60,7 @@ public class SendService {
         }
         return str;
     }
+
 
     public void mailSend(MailDto mailDto) {
 

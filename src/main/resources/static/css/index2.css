@@ -57,7 +57,7 @@ a {
     width: 1500px;
     margin: 0 auto;
 }
-.container h1 {
+.best_text, event_text {
     padding: 40px;
     text-align: center;
     font-family: 'Mochiy Pop One', sans-serif;

@@ -122,3 +122,9 @@ form button {
     margin: auto;
     display: block;
 }
+.error {
+    color: red;
+}
+.success {
+    color: green;
+}

@@ -18,28 +18,35 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "pr_id")
+    private Product product;
+
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="cart_id")
     private Cart cart;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "model_id")
+    private ProductModel productModel;
 
-    @ManyToOne
-    @JoinColumn(name = "pr_id")
-    Product product;
+    private int count;
 
-
-    int count; // 수량
-
-    // CartItem 객체 생성 메서드
-    public static CartItem createCartItem(Product product, int count) {
+    // 정적 팩토리 메서드로 카트 아이템 생성
+    public static CartItem createCartItem(Product product, ProductModel productModel, int count) {
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
+        cartItem.setProductModel(productModel);
         cartItem.setCount(count);
         return cartItem;
     }
 
-
     public void addCount(int count) {
         this.count += count;
+    }
+
+    public void  updateCount(int count){
+        this.count = count;
     }
 }
