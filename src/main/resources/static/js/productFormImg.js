@@ -3,6 +3,7 @@ function handleFiles(files) {
     const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
     const preview = document.getElementById('preview-images');
     preview.innerHTML = ''; // 기존의 미리보기 내용 제거
+
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
