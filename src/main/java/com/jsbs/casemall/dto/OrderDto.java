@@ -28,8 +28,27 @@ public class OrderDto {
     private String userName; // 주문한 고객이름
 
     private String email; // 이메일
+    private String domain;
 
     private String phone; // 전화번호
+ // 우편번호 기본주소 나머지주소
+    private String pCode; // 우편번호
+    private String loadAddress; // 도로
+    private String lotAddress; //  지번
+    private String detailAddress; // 상세
+
+    private String tel1;
+    private String tel2;
+    private String tel3;
+
+    public void tranceOther(String phone, String email){ // 변환
+        this.tel1 = phone.substring(0,3); // 01036272884
+        this.tel2 = phone.substring(3,7);
+        this.tel3 = phone.substring(7);
+        this.email =email.split("@")[0];
+        this.domain = email.split("@")[1];
+    }
+
 
 
 
