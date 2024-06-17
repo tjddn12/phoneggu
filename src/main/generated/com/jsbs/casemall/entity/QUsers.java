@@ -33,9 +33,17 @@ public class QUsers extends EntityPathBase<Users> {
 
     public final StringPath phone = createString("phone");
 
+    public final StringPath provider = createString("provider");
+
+    public final StringPath providerId = createString("providerId");
+
     public final EnumPath<com.jsbs.casemall.constant.Role> role = createEnum("role", com.jsbs.casemall.constant.Role.class);
 
+    public final StringPath socialId = createString("socialId");
+
     public final StringPath userId = createString("userId");
+
+    public final StringPath username = createString("username");
 
     public final StringPath userPw = createString("userPw");
 

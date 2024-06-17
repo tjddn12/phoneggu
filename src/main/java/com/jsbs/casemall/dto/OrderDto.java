@@ -16,6 +16,8 @@ public class OrderDto {
 
     private Long orderNo; // 주문 번호
 
+    private String orderId; // 주문 아이디 (uuid로 생성된 )
+
     private List<OrderItemDto> items;
     private int totalPrice;    // 총  결제 금액
     private int count; // 개수
@@ -28,6 +30,12 @@ public class OrderDto {
     private String email; // 이메일
 
     private String phone; // 전화번호
+
+
+
+    // 결제 성공시 넘길 내용
+    private String payInfo; // 결제 수단
+
 
 
 
