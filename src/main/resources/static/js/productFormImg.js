@@ -1,10 +1,17 @@
 // productFormImg.js
 function handleFiles(files) {
+    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
     const preview = document.getElementById('preview-images');
     preview.innerHTML = ''; // 기존의 미리보기 내용 제거
+
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
+
+        if (!allowedFileTypes.includes(file.type)) {
+            alert('이미지 파일 형식은 jpg, jpeg, bmp, png, gif 만 가능합니다.');
+            continue;
+        }
 
         reader.onload = (function(file) {
             return function(e) {
