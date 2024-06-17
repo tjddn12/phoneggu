@@ -123,4 +123,18 @@ public class ReviewService {
             reviewImgRepository.save(img);
         }
     }
+
+    public String getImgUrlByReviewNo(Long reviewNo) {
+        Optional<Review> optionalReview = getReviewByNo(reviewNo);
+
+        if(optionalReview.isPresent()){
+            Review review = optionalReview.get();
+            ReviewImg reviewImg = reviewImgRepository.findByReview(review);
+
+            return reviewImg.getImgUrl();
+        }else{
+            return "https://via.placeholder.com/100"; //: 리뷰가 존재하지 않을 경우 기본 이미지 URL 반환
+
+        }
+    }
 }

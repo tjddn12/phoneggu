@@ -16,11 +16,9 @@
                 <!--        (.grid-item>a[href="/reviews/$"]>img[src="product$.jpg" alt="Product $"]+h3{제품 $}+p{제품 $에 대한 설명}+.rating{★★★★★})*30-->
                 <div class="grid-item" th:each="review : ${reviews}">
                     <a th:href="@{/reviews/{id}(id=${review.reviewNo})}">
-                        <img src="https://via.placeholder/100x100" alt="Product 1">
-                        <!--                : 작성자가 추가한 이미지 불러오는 src 로직 필요-->
+                        <img th:src="${reviewImages[review.reviewNo]}" alt="Product Image">
                         <h3 th:text="${review.revwTitle}"></h3>
                         <p th:text="${review.revwContent}"></p>
-                        <a th:href="@{${review.filepath}}"></a>
                         <span class="rating">
                             <th:block th:each="i : ${#numbers.sequence(1, 5)}">
                                 <span th:class="${i <= review.revwRatings} ? 'active' : ''">★</span>

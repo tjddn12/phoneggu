@@ -87,20 +87,30 @@ public class ReviewController {
 
         return "redirect:/reviews";
     }
-    //리뷰 게시판 페이징 처리
+    //리뷰 게시판 페이징 처리 및 매개변수 전달
     @GetMapping
-    public String reviewManage(Criteria criteria, Model model){
-        PageDto<Review> pageDto = reviewService.getReviewList(criteria);
+    public String getReviews(Criteria criteria, Model model){
         List<Review> reviews = reviewService.getAllReviews();
+        Map<Long, String> reviewImages = new HashMap<>();
+        PageDto<Review> pageDto = reviewService.getReviewList(criteria);
         List<Integer> pageNumbers = IntStream.rangeClosed(1, pageDto.getTotalRecordCount())
                 .boxed()
                 .collect(Collectors.toList());
-
+        //페이징 처리
         model.addAttribute("pageDto", pageDto);
         model.addAttribute("reviews", reviews);
         model.addAttribute("pageNumbers", pageNumbers);
 
-        return "review/reviews";
+        for(Review review : reviews){
+            String imageUrl = reviewService.getImgUrlByReviewNo(review.getReviewNo());
+
+            reviewImages.put(review.getReviewNo(), imageUrl);
+        }
+
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("reviewImages", reviewImages);
+
+        return "reviews";
     }
 //    @PostMapping
 //    public String createReview(@ModelAttribute Review review){
