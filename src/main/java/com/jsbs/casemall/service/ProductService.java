@@ -42,16 +42,15 @@ public class ProductService {
 
         log.info("상품 저장 완료: {}", product);
 
-        // 유효한 모델 필터링
-        List<ProductModelDto> validModelDtos = productFormDto.getProductModelDtoList().stream()
-                .filter(modelDto -> modelDto.getPrStock() != null && modelDto.getProductModelSelect() != null)
-                .collect(Collectors.toList());
+        // productFormDto에서 기종 정보와 재고 수량을 저장하는 로직 구현
+        List<ProductModelDto> productModelDtoList = productFormDto.getProductModelDtoList();
 
         // 유효한 모델 추가
-        for (ProductModelDto modelDto : validModelDtos) {
+        for (ProductModelDto productModelDto : productModelDtoList) {
+            //기종이 선택되지 않았어도 저장
             ProductModel productModel = new ProductModel();
-            productModel.setProductModelSelect(modelDto.getProductModelSelect());
-            productModel.setPrStock(modelDto.getPrStock());
+            productModel.setProductModelSelect(productModelDto.getProductModelSelect());
+            productModel.setPrStock(productModelDto.getPrStock());
             productModel.setProduct(product);
             product.addProductModel(productModel);
             log.info("유효한 상품 모델 추가 완료: {}", productModel);

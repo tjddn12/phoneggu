@@ -20,16 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
         typeSelect.innerHTML = types.map(type => `<option value="${type}">${type}</option>`).join("");
     }
 
-    // 체크박스 상태에 따라 재고 입력 필드를 토글하는 함수
-    function toggleStockInput(checkbox, stockItem) {
-        if (checkbox.checked) {
-            stockItem.style.display = 'flex';
-        } else {
-            stockItem.style.display = 'none';
-            const input = stockItem.querySelector("input[type='number']");
-        }
-    }
-
     if (categorySelect && typeSelect) {
         // 초기 호출을 통해 기본 카테고리에 따른 옵션 설정
         updateTypeOptions();
@@ -38,6 +28,17 @@ document.addEventListener("DOMContentLoaded", function() {
         categorySelect.addEventListener("change", updateTypeOptions);
     } else {
         console.error("카테고리 선택 요소 또는 타입 선택 요소를 찾을 수 없습니다");
+    }
+
+
+    // 체크박스 상태에 따라 재고 입력 필드를 토글하는 함수
+    function toggleStockInput(checkbox, stockItem) {
+        if (checkbox.checked) {
+            stockItem.style.display = 'flex';
+        } else {
+            stockItem.style.display = 'none';
+            const input = stockItem.querySelector("input[type='number']");
+        }
     }
 
     // 각 체크박스에 대해 초기 상태 설정 및 이벤트 리스너 추가
