@@ -42,7 +42,7 @@ public class    SendService {
     public void updatePassword(String str, UserPwRequestDto requestDto) {
         String pw = passwordEncoder.encode(str);
        // log.info("암호화 비번 : {} ", pw);
-        Users users = userRepository.findByUserId(requestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+        Users users = userRepository.findById(requestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
         users.setUserPw(pw);
       //  log.info("업데이트된 내용 : {} ", users);
         userRepository.save(users);

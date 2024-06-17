@@ -32,27 +32,27 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUserId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with userId: " + username));
+        Users user = userRepository.findById(username)
+                .orElseThrow(() -> new UsernameNotFoundException("회원을 찾을수 없습니다 : " + username));
         return User.builder()
                 .username(user.getUserId())
                 .password(user.getUserPw())
                 .roles(user.getRole().toString())
                 .build();
     }
-    public Long save(AddUserRequest dto) {
 
-        return userRepository.save(Users.builder()
+    public void save(AddUserRequest dto) {
+       userRepository.save(Users.builder()
                 .email(dto.getEmail())
                 .userPw(passwordEncoder.encode(dto.getPassword()))
-                .build()).getId();
+                .build());
     }
 
 
     //세이브
 
     public void JoinUser(UserDto userDTO) {
-        Optional<Users> existingUser = userRepository.findByUserId(userDTO.getUserId());
+        Optional<Users> existingUser = userRepository.findById(userDTO.getUserId());
         if (existingUser.isPresent()) {
             throw new IllegalArgumentException("User ID already exists");
         }
@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
     }
     // 아이디 중복
     public boolean checkUserIdExists(String userId) {
-        return userRepository.findByUserId(userId).isPresent();
+        return userRepository.findById(userId).isPresent();
     }
 
 
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
     // 비밀번호 찾기
 
     public void userCheck(UserPwRequestDto requestDto) {
-        Users user = userRepository.findByUserId(requestDto.getUserId()).orElseThrow(()->new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+        Users user = userRepository.findById(requestDto.getUserId()).orElseThrow(()->new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
 
             sendEmail(requestDto);
 
@@ -92,7 +92,7 @@ public class UserService implements UserDetailsService {
     // 정보 수정
 
     public  UserEditDto getUserById(String userId) {
-        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return new  UserEditDto(user);
     }
 
@@ -102,7 +102,7 @@ public class UserService implements UserDetailsService {
 
         try {
             log.info("수정한값 : {} ",userEditDto);
-            Users user = userRepository.findByUserId(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+            Users user = userRepository.findById(userEditDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
             user.setUserPw(passwordEncoder.encode(userEditDto.getUserPw()));
             user.setPCode(userEditDto.getPCode());
             user.setLoadAddr(userEditDto.getLoadAddr());

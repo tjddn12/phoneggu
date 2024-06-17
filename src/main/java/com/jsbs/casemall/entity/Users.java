@@ -20,13 +20,11 @@ public class Users {
 
     private String username;
 
+//    @Column(name = "id", updatable = false)
+//    private Long id;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
-    private Long id;
-
-    @Column(name = "userId", unique = true, nullable = false)
-    private String userId;
+    @Column(name = "userId")
+    private String userId; // 유저 아이디
 
     @Column(name = "name", nullable = false)
     private String name;

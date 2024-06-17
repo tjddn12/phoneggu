@@ -29,7 +29,7 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public CartDto getCartByUserId(String userId) {
-        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
+        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
         return cart != null ? new CartDto(cart) : null;
     }
@@ -38,7 +38,7 @@ public class CartService {
     public void addItemToCart(CartDto cartDto,String userId,Long productId) {
 
         // 이용 회원과 해당 상품이 디비에 있는지 확인
-        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
+        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("제품을 찾을수 없습니다"));
 
         // 카트 객체 생성
@@ -83,7 +83,7 @@ public class CartService {
 
     // 비우기 메소드
     public void clearCart(String userId) {
-        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
+        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
         if (cart != null) {
             cart.getCartItems().clear();
@@ -95,7 +95,7 @@ public class CartService {
 
     // 장바구니에서 삭제
     public void removeItemFromCart(String userId, Long cartItemId) {
-        Users user = userRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다"));
+        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
         // 장바구니가 비어있지 않으면
         if (cart != null) {

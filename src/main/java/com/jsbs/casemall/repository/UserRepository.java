@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<Users, String > {
 
     Optional<Users> findByEmail(String email);
 
@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     Optional<Users> findByEmailAndPhone(String email, String phone);
 
-    Optional<Users> findByUserId(String userId);
+
 
 //    Users findByUserName(String Name);
 

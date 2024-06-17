@@ -195,13 +195,13 @@
             document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('checkDuplicate').addEventListener('click', function (event) {
                     event.preventDefault();
-                    var userId = document.getElementById('userId').value;
+                    let userId = document.getElementById('userId').value;
                     if (userId === '') {
                         alert('아이디를 입력해 주세요.');
                         return;
                     }
 
-                    var xhr = new XMLHttpRequest();
+                    let xhr = new XMLHttpRequest();
                     xhr.open('GET', '/checkUserId?userId=' + encodeURIComponent(userId), true);
                     xhr.onload = function () {
                         if (xhr.status === 200) {

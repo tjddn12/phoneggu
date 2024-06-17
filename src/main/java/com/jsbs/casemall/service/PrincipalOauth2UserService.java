@@ -6,6 +6,7 @@ import com.jsbs.casemall.oauth.GoogleUserInfo;
 import com.jsbs.casemall.oauth.NaverUserInfo;
 import com.jsbs.casemall.oauth.OAuth2UserInfo;
 import com.jsbs.casemall.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -22,14 +23,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public PrincipalOauth2UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -80,11 +77,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         }
 
         Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
-        attributes.put("socialId", socialId);  // socialId를 attributes에 추가
+        // 변경된 부분: attributes에 userId 추가
+        attributes.put("userId", users.getUserId());
 
+        // 변경된 부분: DefaultOAuth2User 객체 생성 시 기본 속성을 userId로 설정
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
                 attributes,
-                "socialId");  // socialId를 기본 속성으로 설정
+                "userId");
     }
 }
