@@ -65,7 +65,7 @@ public class ProductController {
             return "product/productForm";
         }
 
-        return "redirect:/";
+        return "redirect:/admin/product/management";
     }
 
     @GetMapping(value = "/admin/product/{prId}")

@@ -144,21 +144,6 @@ public class ProductService {
         // 상품 정보 업데이트
         product.updateProduct(productFormDto);
 
-//        // 기존 이미지를 유지하고 새로운 이미지 추가
-//        int currentSize = product.getProductImgList().size();
-//        int newSize = productImgFileList.size();
-//        log.info("기존 이미지 수: {}, 새 이미지 수: {}. 새로운 이미지를 추가합니다.", currentSize, newSize);
-//
-//        if(newSize != 0){
-//            for (int i = 0; i < newSize; i++) {
-//                ProductImg productImg = new ProductImg();
-//                productImg.setProduct(product);
-//                productImg.setPrMainImg((currentSize + i) == 0 ? "Y" : "N"); // 첫 번째 이미지만 메인으로 설정
-//                productImgService.saveProductImg(productImg, productImgFileList.get(i));
-//                product.addProductImg(productImg);
-//                log.info("새로운 이미지가 추가되었습니다. 인덱스: {}", (currentSize + i));
-//            }
-//        }
         // 새로운 이미지가 업로드된 경우에만 추가합니다.
         if (!productImgFileList.isEmpty()) {
             for (MultipartFile file : productImgFileList) {
