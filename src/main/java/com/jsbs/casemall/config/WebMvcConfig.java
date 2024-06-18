@@ -14,12 +14,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${uploadPath}")
     String uploadPath;
 
+    @Value("c:/nsw/images/")
+    String reviewUploadPath;
+
 
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:///" + uploadPath + "/")
+                .addResourceLocations("classpath:/static/images/");
+        // URL 패턴이 /images/**로 시작하는 경우
+        // 1. 로컬 파일 시스템에서 파일을 제공
+        // 2. 클래스패스의 static/images 디렉토리에서 파일을 제공
+
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:///" + reviewUploadPath + "/")
                 .addResourceLocations("classpath:/static/images/");
         // URL 패턴이 /images/**로 시작하는 경우
         // 1. 로컬 파일 시스템에서 파일을 제공
