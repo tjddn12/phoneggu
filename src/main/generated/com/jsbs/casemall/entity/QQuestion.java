@@ -24,6 +24,8 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final ListPath<Answer, QAnswer> answers = this.<Answer, QAnswer>createList("answers", Answer.class, QAnswer.class, PathInits.DIRECT2);
+
     public final StringPath contents = createString("contents");
 
     //inherited

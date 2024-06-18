@@ -3,10 +3,13 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>질문 상세</title>
 </head>
 <body>
+<!--디자인 및 변수 일치 추후 수정.-->
     <div layout:fragment="content">
+<!--        question-->
         <div class="panel panel-default">
             <header class="qna-header">
                 <h2 class="qna-title">{{title}}</h2>
@@ -36,6 +39,7 @@
                             <li>
                                 <form class="form-delete" action="/questions/{{id}}" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">
+<!--                                    : 표준 HTML에서는 POST, GET 요청만 처리 가능, PUT, DELETE 요청 처리를 위해선 태그 value 값 지정 필요-->
                                     <button class="link-delete-article" type="submit">삭제</button>
                                 </form>
                             </li>
@@ -47,6 +51,46 @@
                 </article>
             </div>
         </div>
+<!--        answers-->
+<!--        유저 아이디에 따라 아이디, 클래스, href 링크 조정 필요-->
+        <article class="article" id="answer-1405">
+            <div class="article-header">
+                <div class="article-header-thumb">
+                    <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
+                </div>
+                <div class="article-header-text">
+                    <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
+                    <a href="#answer-1434" class="article-header-time" title="퍼머링크">
+                        {{formattedCreateDate}}
+                    </a>
+                </div>
+            </div>
+            <div class="article-doc comment-doc">
+                {{contents}}
+            </div>
+            <div class="article-util">
+                <ul class="article-util-list">
+                    <li>
+                        <a class="link-modify-article" href="">수정</a>
+                    </li>
+                    <li>
+                        <form class="delete-answer-form" action="" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="delete-answer-button">삭제</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </article>
+        {{/answers}}
+        <form class="submit-write" method="post" action="/questions/{{id}}/answers">
+            <div class="form-group" style="padding:14px;">
+                <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
+            </div>
+            <input type="submit" class="btn btn-success pull-right" value="답변하기">
+            <div class="clearfix"></div>
+        </form>
+
     </div>
 </body>
 </html>

@@ -1,8 +1,15 @@
 package com.jsbs.casemall.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
 //QnA 게시판 질문 엔티티
 @Entity
+@Getter
+@Setter
 public class Question extends BaseEntity {
     @Id
     @GeneratedValue
@@ -15,11 +22,19 @@ public class Question extends BaseEntity {
     private String title;
     private String contents;
 
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC") //: 오름차순 정렬
+    private List<Answer> answers;
+
     public Question(){
 
     }
     public Question(Users user, String title, String contents){
         this.user= user;
+        this.title = title;
+        this.contents = contents;
+    }
+    public void update(String title, String contents){
         this.title = title;
         this.contents = contents;
     }
