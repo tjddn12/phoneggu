@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>질문 목록</title>
 </head>
 <body>
-
+<!--디자인 및 변수 일치 추후 수정.-->
+<div layout:fragment="content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">질문</th>
+                <th scope="col">내용</th>
+                <th scope="col">답변</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>{{id}}</th>
+                <td><a href="/qna/{{id}}">{{title}}</a></td>
+                <td>{{content}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/qna/write">질문 작성</a>
+</div>
 </body>
 </html>
