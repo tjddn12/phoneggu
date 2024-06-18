@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,20 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/home")
+    public String home(@AuthenticationPrincipal OAuth2User principal, Model model) {
+
+        String name = principal.getAttribute("name");
+        String email = principal.getAttribute("email");
+        log.info(":: name : "+name+" / email : "+email);
+
+        model.addAttribute("name", name);
+        model.addAttribute("email", email);
+
+        return "index";
+    }
+
 
     // 회원가입 페이지 출력 요청
     @GetMapping("/join")
@@ -53,7 +69,6 @@ public class UserController {
     }
 
     // 아이디 찾기 페이지
-
     @GetMapping("/findUser")
     public String findForm() {
 
@@ -93,6 +108,7 @@ public class UserController {
     }
 
 
+
     // 아이디 중복
     @GetMapping("/checkUserId")
     @ResponseBody
@@ -106,10 +122,11 @@ public class UserController {
     // 마이페이지
 
     @GetMapping("/myPage")
-    public String myPage() {
+    public String myPage(){
 
-        return "user/myPage";
+        return  "user/myPage";
     }
+
 
 
     // 정보 수정
