@@ -40,7 +40,7 @@ public class ProductImgService {
             //파일 업로드 파라미터로 uploadFile 매서드 호출
             //호출 결과 실제 저장되는 파일의 이름을 prImgName에 저장
 
-            imgUrl="/images/"+prImgName;
+            imgUrl="/images/product/"+prImgName;
             //저장한 상품 이미지를 불러올 경로를 설정
             //그래서 내부에서만 실제 경로를 사용하고 외부에서는 접근권한이 있는 경로로
             //사용하도록 리소스 연결작업을 해주었다.
@@ -71,7 +71,7 @@ public class ProductImgService {
             String prImgName = fileService.uploadFile(productImgLocation,
                     prImgOriginName, productImgFile.getBytes());
             //새로운파일업로드 - 업로드한 파일명을 -> prImgName 변수저장
-            String imgUrl = "/images/" + prImgName;
+            String imgUrl = "/images/product/" + prImgName;
             //이미지 url 을 /images 경로와 업로드된 이미지 이름을 합쳐생성
             savedProductImg.updateProductImg(prImgOriginName, prImgName, imgUrl);
             //updateProductImg 메서드를 호출하여 원본이미지 이름, 업로드된 이미지이름, 이미지 url 정보 업데이트
