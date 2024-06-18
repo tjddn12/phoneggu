@@ -38,18 +38,21 @@ public class PaymentController {
 
     @PostMapping(value = "/confirm")
     public String confirmPayment(@RequestBody String jsonBody) {
+        log.info("confirmPayment called with body: {}", jsonBody);  // 요청이 들어오는지 로그 확인
         JSONParser parser = new JSONParser();
-        String orderId; // 주문아이디
-        String amount; // 가격
-        String paymentKey; // 고객 식별 키
-        String paymentMethod; // 결제 방법
-        String payInfo; // 결제방식
+        String orderId;
+        String amount;
+        String paymentKey;
+        String paymentMethod;
+        String payInfo;
 
         try {
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
+
+            log.info("결제 정보: paymentKey={}, orderId={}, amount={}", paymentKey, orderId, amount);
 
             if (paymentKey == null || paymentKey.isEmpty() || orderId == null || orderId.isEmpty() || amount == null || amount.isEmpty()) {
                 throw new IllegalArgumentException("결제 정보가 잘못되었습니다.");
@@ -109,6 +112,8 @@ public class PaymentController {
                 paymentMethod = (String) easyPayObject.get("provider");
                 payInfo = (String) jsonObject.get("method");
 
+                log.info("성공 로그: paymentMethod={}, payInfo={}", paymentMethod, payInfo);
+
                 // 검증시작
                 if (orderService.validatePayment(orderId, Integer.parseInt(amount))) {
                     orderService.updateOrderWithPaymentInfo(orderId, paymentMethod, payInfo);
@@ -134,17 +139,13 @@ public class PaymentController {
         }
     }
 
+
     @GetMapping(value = "/success")
     public String paymentRequest(HttpServletRequest request, Model model) {
         // 결제 성공시 주문 한 객체를 쏴준다
         model.addAttribute("orderId", request.getParameter("orderId"));
         model.addAttribute("amount", request.getParameter("amount"));
         model.addAttribute("paymentKey", request.getParameter("paymentKey"));
-
-
-
-
-
         return "order/orderComplete";
     }
 
@@ -153,7 +154,7 @@ public class PaymentController {
     public ResponseEntity<Map<String, String>> initiatePayment(@RequestBody Map<String, String> payload, Principal principal) {
         String orderId = payload.get("orderId");
         String userId = principal.getName();
-        log.info("결제 요청 넘어온값 : " + payload);
+        log.info("결제 요청 넘어온값 오더아이디 : " + payload);
 
         try {
             OrderDto orderDto = orderService.getOrder(userId);
