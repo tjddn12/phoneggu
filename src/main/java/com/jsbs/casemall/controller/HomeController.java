@@ -1,17 +1,35 @@
 package com.jsbs.casemall.controller;
 
+import com.jsbs.casemall.entity.Product;
+import com.jsbs.casemall.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
+    private final ProductService productService;
+
     @GetMapping("/")
-    public String member() {
-        return "index";
+    public String member(Model model) {
+        List<Product> products = productService.getProducts(0, 10); // 처음에 10개의 상품만 로드
+        model.addAttribute("indexProducts", products);
+        return "index"; // index.html을 렌더링
     }
 
-
+    @GetMapping("/api/indexProducts")
+    @ResponseBody
+    public List<Product> getMoreIndexProducts(@RequestParam(defaultValue = "0") int offset,
+                                              @RequestParam(defaultValue = "5") int limit) {
+        return productService.getProducts(offset, limit);
+    }
 
 //   각 사이트  테스트용 (없는것도 있음 예- 각 컨트롤러에 매핑한것도 있음)
     @GetMapping("/case")

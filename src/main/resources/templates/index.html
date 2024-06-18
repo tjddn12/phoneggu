@@ -6,6 +6,8 @@
     <title>Index</title>
 <!--    <link rel="stylesheet" th:href="@{/css/index2.css}">-->
     <link rel="stylesheet" th:href="@{/css/index2.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer th:src="@{/js/index.js}"></script>
 </head>
 <body>
 
@@ -42,43 +44,39 @@
         </div>
     </div>
 
-    <div class="container">
-        <h1 class="best_text">BEST ITEM</h1>
-        <div class="item_group">
-            <div class="item"><img src="/images/image1.png" alt="Item1"></div>
-            <div class="item"><img src="/images/image2.png" alt="Item2"></div>
-            <div class="item"><img src="/images/image3.png" alt="Item3"></div>
-            <div class="item"><img src="/images/image4.png" alt="Item4"></div>
-            <div class="item"><img src="/images/image5.png" alt="Item5"></div>
-            <div class="item"><img src="/images/image6.png" alt="Item6"></div>
-            <div class="item"><img src="/images/image7.png" alt="Item7"></div>
-            <div class="item"><img src="/images/image8.png" alt="Item8"></div>
-        </div>
+    <div class="index-container">
         <div class="circle_group cf">
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='HARD')}"><img src="images/hard_case.png" alt="Circle1"></a> </div> <!-- 할것 : 해당 하는 url 매핑 하기 -->
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='JELLY')}"><img src="images/card_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='CARD')}"><img src="images/jelly_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='TOK', type='ROUND')}"><img src="images/tok_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='ZFLIP')}"><img src="images/flip_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='AIRPODS', type='AIRPODS_1_2')}"><img src="images/airpods_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='HARD')}"><img src="images/mainImg/hard_case.png" alt="Circle1"></a> </div> <!-- 할것 : 해당 하는 url 매핑 하기 -->
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='JELLY')}"><img src="images/mainImg/card_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='CARD')}"><img src="images/mainImg/jelly_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/products(category='TOK', type='ROUND')}"><img src="images/mainImg/tok_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='ZFLIP')}"><img src="images/mainImg/flip_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/products(category='AIRPODS', type='AIRPODS_1_2')}"><img src="images/mainImg/airpods_case.png" alt="Circle1"></a> </div>
         </div>
-    </div>
+        <h1 class="item_text">전체 상품</h1>
 
-    <div class="event">
-        <h1 class="event_text">EVENT</h1>
-        <div class="event_imgs">
-            <div class="event_sale1">
-                <a href="#"><img src="images/mainImg/event_frame1.png" alt=""></a>
-                <img src="images/mainImg/event_frame2.png" alt="">
-                <img src="images/mainImg/event_frame3.png" alt="">
-                <img src="images/mainImg/event_frame4.png" alt="">
+        <!-- 실제 DB에 저장된 상품 나열 -->
+        <div class="product-list cf" id="product-list" th:fragment="product-list">
+            <div class="product" th:each="product : ${indexProducts}">
+                <div class="product-image">
+                    <a th:href="@{'/product/' + ${product.id}}">
+                        <img th:src="@{${product.productImgList[0].imgUrl}}" th:alt="${product.prName} + ' 이미지'">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <p class="product-name">
+                        <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
+                    </p>
+                    <div class="price-info">
+                        <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="event_sale2">
-                <img src="images/mainImg/event_frame5.png" alt="">
-                <img src="images/mainImg/event_frame6.png" alt="">
-                <img src="images/mainImg/event_frame7.png" alt="">
-                <img src="images/mainImg/event_frame8.png" alt="">
+        <div>
+            <div class="more text-center" id="load-more">
+                <h3>more</h3>
             </div>
         </div>
     </div>
