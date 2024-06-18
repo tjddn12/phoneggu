@@ -8,12 +8,12 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <body>
-    <div layout:fragment="content">
+<div layout:fragment="content">
     <section class="signup">
         <h1 class="tit">회원 정보 수정</h1>
-        <form action="/userEdit" method="post">
+        <form id="userEditForm" action="/userEdit" method="post">
             <label for="userId">아이디 <strong>*</strong></label>
-            <input type="text" id="userId"  name="userId" readonly="readonly" th:value="${user.getUserId()}" >
+            <input type="text" id="userId" name="userId" readonly="readonly" th:value="${user.getUserId()}" >
 
             <label for="userPw">비밀번호  <strong>*</strong></label>
             <input type="password" id="userPw" name="userPw">
@@ -22,11 +22,10 @@
             <input type="password" id="confirm-userPw" name="confirm-userPw">
             <div id="passwordCheckResult"></div>
 
-            <label for="name" >이름  <strong>*</strong></label>
-            <input type="text" id="name" name="name"  readonly="readonly" th:value="${user.getName()}" >
+            <label for="name">이름  <strong>*</strong></label>
+            <input type="text" id="name" name="name" readonly="readonly" th:value="${user.getName()}" >
 
             <label class="col-sm-2 col-form-label">주소 <span class="text-danger">*</span></label>
-
             <div class="address-group">
                 <input type="text" class="address" id="sample4_postcode" name="pCode" placeholder="우편번호">
                 <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
@@ -41,102 +40,103 @@
             </div>
             <span id="guide" style="color:#999;display:none"></span>
 
-
             <label for="phone">휴대전화  <strong>*</strong></label>
-<!--            <label for="phone">-->
             <input type="text" id="phone" name="phone" th:value="${user.getPhone()}">
-
 
             <label for="email">이메일  <strong>*</strong></label>
             <input type="email" id="email" name="email" th:value="${user.getEmail()}">
 
-            <!-- 수정을 누르면 수정되었습니다 라는 메시지와 함께 원래 있던 페이지로 리다이렉트 -->
             <div class="button-container">
                 <button type="submit" class="btn1">회원정보수정</button>
                 <button type="button" onclick="location.href='#'" class="btn2">취소</button>
             </div>
-            <script>
+        </form>
 
-                // 비밀번호 일치 확인
-                document.addEventListener('DOMContentLoaded', function() {
-                    var userPwInput = document.getElementById('userPw');
-                    var confirmUserPwInput = document.getElementById('confirm-userPw');
-                    var passwordCheckResult = document.getElementById('passwordCheckResult');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var form = document.getElementById('userEditForm');
+                var userPwInput = document.getElementById('userPw');
+                var confirmUserPwInput = document.getElementById('confirm-userPw');
+                var passwordCheckResult = document.getElementById('passwordCheckResult');
 
-                    function checkPasswordsMatch() {
-                        if (userPwInput.value === confirmUserPwInput.value) {
-                            passwordCheckResult.textContent = '비밀번호가 일치합니다.';
-                            passwordCheckResult.className = 'success';
+                // 비밀번호가 일치하는지 확인하는 함수
+                function checkPasswordsMatch() {
+                    if (userPwInput.value === confirmUserPwInput.value) {
+                        passwordCheckResult.textContent = '비밀번호가 일치합니다.';
+                        passwordCheckResult.className = 'success';
+                    } else {
+                        passwordCheckResult.textContent = '비밀번호가 일치하지 않습니다. 다시 입력해 주세요.';
+                        passwordCheckResult.className = 'error';
+                    }
+                }
+
+                // 비밀번호 입력 시 일치 여부를 확인
+                userPwInput.addEventListener('input', checkPasswordsMatch);
+                confirmUserPwInput.addEventListener('input', checkPasswordsMatch);
+
+                // 폼 제출 시 필수 입력 항목이 비어 있는지 확인
+                form.addEventListener('submit', function(event) {
+                    var pCode = document.getElementById('sample4_postcode').value;
+                    var roadAddr = document.getElementById('sample4_roadAddress').value;
+                    var lotAddr = document.getElementById('sample4_jibunAddress').value;
+                    var phone = document.getElementById('phone').value;
+
+                    // 필수 입력 항목이 비어 있는 경우 제출 중단 및 경고 메시지 표시
+                    if (pCode.trim() === '' || roadAddr.trim() === '' || lotAddr.trim() === '' || phone.trim() === '') {
+                        event.preventDefault();
+                        alert('주소와 전화번호 입력은 필수입니다.');
+                    }
+                });
+            });
+
+            // 주소 검색 API 실행 함수
+            function sample4_execDaumPostcode() {
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                        var roadAddr = data.roadAddress;
+                        var extraRoadAddr = '';
+
+                        // 법정동 및 건물명 추가
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraRoadAddr += data.bname;
+                        }
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        if(extraRoadAddr !== ''){
+                            extraRoadAddr = ' (' + extraRoadAddr + ')';
+                        }
+
+                        // 검색 결과를 폼 필드에 반영
+                        document.getElementById("sample4_postcode").value = data.zonecode;
+                        document.getElementById("sample4_roadAddress").value = roadAddr;
+                        document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+
+                        if(roadAddr !== ''){
+                            document.getElementById("sample4_extraAddress").value = extraRoadAddr;
                         } else {
-                            passwordCheckResult.textContent = '비밀번호가 일치하지 않습니다. 다시 입력해 주세요.';
-                            passwordCheckResult.className = 'error';
+                            document.getElementById("sample4_extraAddress").value = '';
+                        }
+
+                        // 예상 주소 안내
+                        var guideTextBox = document.getElementById("guide");
+                        if(data.autoRoadAddress) {
+                            var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                            guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                            guideTextBox.style.display = 'block';
+                        } else if(data.autoJibunAddress) {
+                            var expJibunAddr = data.autoJibunAddress;
+                            guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                            guideTextBox.style.display = 'block';
+                        } else {
+                            guideTextBox.innerHTML = '';
+                            guideTextBox.style.display = 'none';
                         }
                     }
-
-                    userPwInput.addEventListener('input', checkPasswordsMatch);
-                    confirmUserPwInput.addEventListener('input', checkPasswordsMatch);
-                });
-
-                // 주소 api
-
-                function sample4_execDaumPostcode() {
-                    new daum.Postcode({
-                        oncomplete: function(data) {
-                            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                            // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                            var roadAddr = data.roadAddress; // 도로명 주소 변수
-                            var extraRoadAddr = ''; // 참고 항목 변수
-
-                            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                                extraRoadAddr += data.bname;
-                            }
-                            // 건물명이 있고, 공동주택일 경우 추가한다.
-                            if(data.buildingName !== '' && data.apartment === 'Y'){
-                                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                            }
-                            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                            if(extraRoadAddr !== ''){
-                                extraRoadAddr = ' (' + extraRoadAddr + ')';
-                            }
-
-                            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                            document.getElementById("sample4_postcode").value = data.zonecode;
-                            document.getElementById("sample4_roadAddress").value = roadAddr;
-                            document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
-
-                            // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
-                            if(roadAddr !== ''){
-                                document.getElementById("sample4_extraAddress").value = extraRoadAddr;
-                            } else {
-                                document.getElementById("sample4_extraAddress").value = '';
-                            }
-
-                            var guideTextBox = document.getElementById("guide");
-                            // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                            if(data.autoRoadAddress) {
-                                var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                                guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                                guideTextBox.style.display = 'block';
-
-                            } else if(data.autoJibunAddress) {
-                                var expJibunAddr = data.autoJibunAddress;
-                                guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-                                guideTextBox.style.display = 'block';
-                            } else {
-                                guideTextBox.innerHTML = '';
-                                guideTextBox.style.display = 'none';
-                            }
-                        }
-                    }).open();
-                }
-            </script>
-        </form>
+                }).open();
+            }
+        </script>
     </section>
-    </div>
-
+</div>
 </body>
 </html>

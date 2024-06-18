@@ -1,6 +1,5 @@
 package com.jsbs.casemall.controller;
 
-
 import com.jsbs.casemall.dto.AddUserRequest;
 import com.jsbs.casemall.dto.UserDto;
 import com.jsbs.casemall.dto.UserEditDto;
@@ -16,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +36,6 @@ public class UserController {
     // 회원가입 페이지 출력 요청
     @GetMapping("/join")
     public String saveForm() {
-
         return "user/join";
     }
 
@@ -48,18 +47,14 @@ public class UserController {
         }
         System.out.println("userDTO" + userDTO);
         userService.JoinUser(userDTO);
-
         return "redirect:/login";
     }
 
     // 아이디 찾기 페이지
-
     @GetMapping("/findUser")
     public String findForm() {
-
         return "user/findUser";
     }
-
 
     @GetMapping("/findId")
     public String showFindIdPage() {
@@ -78,11 +73,10 @@ public class UserController {
         }
         return "user/findId";
     }
-    // 비밀번호 변경
 
+    // 비밀번호 변경
     @GetMapping("/findPw")
     public String findPwForm() {
-
         return "user/findPw";
     }
 
@@ -91,7 +85,6 @@ public class UserController {
         userService.userCheck(requestDto);
         return "user/EditPw";
     }
-
 
     // 아이디 중복
     @GetMapping("/checkUserId")
@@ -104,22 +97,22 @@ public class UserController {
     }
 
     // 마이페이지
-
     @GetMapping("/myPage")
     public String myPage() {
-
         return "user/myPage";
     }
 
-
     // 정보 수정
-
     @GetMapping("/userEdit")
     public String showEditForm(Principal principal, Model model) {
         String id = principal.getName();
         log.info("아이디 값 : {}", id);
         UserEditDto dto = userService.getUserById(id);
         log.info(dto.toString());
+
+        // 소셜 로그인 여부 확인
+        boolean isSocialLogin = principal instanceof OAuth2AuthenticationToken;
+        model.addAttribute("isSocialLogin", isSocialLogin);
         model.addAttribute("user", dto);
 
         return "user/userEdit";
@@ -136,11 +129,8 @@ public class UserController {
         return "redirect:/myPage";
     }
 
-//    -----------------------------------------------------------------------------------------
-
     @PostMapping("/user")
     public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             return "signup";
         }
@@ -153,17 +143,14 @@ public class UserController {
             log.info("리퀘스트 {} ", request);
             userService.save(request);
         } catch (DataIntegrityViolationException e) {
-
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup";
         } catch (Exception e) {
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup";
         }
-
         return "redirect:/login";
     }
-
 
     @GetMapping("/login")
     public String login() {
@@ -179,21 +166,6 @@ public class UserController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response,
                 SecurityContextHolder.getContext().getAuthentication());
-
         return "redirect:/login";
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

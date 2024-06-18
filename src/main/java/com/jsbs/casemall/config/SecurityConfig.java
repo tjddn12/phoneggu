@@ -31,7 +31,7 @@ public class SecurityConfig  {
                 .oauth2Login(oauth2Login ->
                         oauth2Login
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/", true)
+                                .defaultSuccessUrl("/userEdit", true)
                 )
                 .formLogin(login -> login
                         .usernameParameter("userId")
