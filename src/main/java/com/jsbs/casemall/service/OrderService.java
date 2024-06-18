@@ -1,6 +1,8 @@
 package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.constant.OrderStatus;
+import com.jsbs.casemall.dto.CartDto;
+import com.jsbs.casemall.dto.CartItemDto;
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.dto.OrderItemDto;
 import com.jsbs.casemall.entity.*;
@@ -26,6 +28,8 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final CartService cartService;
+    private final ProductRepository productRepository;
+    private final ProductModelRepository productModelRepository;
 
     // 주문 목록 가져오기
     @Transactional(readOnly = true)
@@ -69,6 +73,7 @@ public class OrderService {
         return dto;
     }
 
+    // 결재 성공 내역
     @Transactional(readOnly = true)
     public List<OrderDto> history(String userId){
         Users users = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("회원을 찾을 수 없습니다"));
@@ -338,4 +343,82 @@ public class OrderService {
             throw new RuntimeException("Order cancellation failed", e);
         }
     }
+
+    public OrderDto createOrderByNow(CartDto cartDto, long prId, String userid) {
+        Users user = userRepository.findById(userid).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다"));
+
+        int totalAmount = (int)cartDto.getTotalPrice();
+
+        // 기존 주문이 있는지 확인하고, 있는 경우 기존 주문에 항목 추가
+        List<Order> existingOrders = findExistingOrders(user);
+        Order order;
+        if (!existingOrders.isEmpty()) {
+            order = existingOrders.get(0);
+        } else {
+            order = Order.createOrder(user, new ArrayList<>());
+            orderRepository.save(order);
+        }
+
+        for (CartItemDto cartItemDto : cartDto.getItems()) {
+            long modelId = cartItemDto.getModelId();
+            ProductModel productModel = productModelRepository.findById(modelId)
+                    .orElseThrow(() -> new IllegalArgumentException("찾는 모델이 없습니다"));
+
+            Product product = productRepository.findById(prId)
+                    .orElseThrow(() -> new IllegalArgumentException("찾는 제품이 없습니다"));
+
+            // 기존 주문 항목 중 동일한 제품 및 모델이 있는지 확인
+            boolean exists = order.getOrderItems().stream()
+                    .anyMatch(item -> item.getProduct().getId().equals(product.getId()) &&
+                            item.getProductModel().getId().equals(productModel.getId()));
+
+            if (!exists) {
+                // 기존 주문 항목이 없는 경우 새로 추가
+                OrderDetail orderDetail = OrderDetail.createOrderDetails(product, productModel, cartItemDto.getCount());
+                order.addOrderItem(orderDetail); // OrderDetail 객체를 Order 객체에 추가
+            } else {
+                // 기존 주문 항목에 있고 수량의 차이가 있다면
+                OrderDetail existingOrderDetail = order.getOrderItems().stream()
+                        .filter(item -> item.getProduct().getId().equals(product.getId()) &&
+                                item.getProductModel().getId().equals(productModel.getId()))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("주문 항목을 찾을 수 없습니다."));
+
+                int newCount = cartItemDto.getCount();
+                int oldCount = existingOrderDetail.getCount();
+                int difference = newCount - oldCount;
+
+                if (difference > 0) {
+                    existingOrderDetail.getProductModel().removeStock(difference);
+                } else {
+                    existingOrderDetail.getProductModel().addStock(Math.abs(difference));
+                }
+
+                existingOrderDetail.setCount(newCount);
+            }
+        }
+
+        orderRepository.save(order);
+
+        List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
+                .map(OrderItemDto::new)
+                .collect(Collectors.toList());
+        OrderDto dto = OrderDto.builder()
+                .orderNo(order.getId())
+                .orderId(order.getOrderId())
+                .totalPrice(totalAmount)
+                .items(orderItemDtos)
+                .userName(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .pCode(user.getPCode())
+                .loadAddress(user.getLoadAddr())
+                .lotAddress(user.getLotAddr())
+                .detailAddress(user.getDetailAddr())
+                .build();
+        dto.tranceOther(dto.getPhone(), dto.getEmail());
+
+        return dto;
+    }
+
 }
