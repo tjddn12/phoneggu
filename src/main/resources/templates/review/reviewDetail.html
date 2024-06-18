@@ -15,6 +15,7 @@
         <div class="container my-5">
             <h1 th:text="${review.revwTitle}"></h1>
             <p th:text="${review.revwContent}"></p>
+            <p>상품명: <span th:text="${review.prName}"></span></p>
             <p>작성자: <span th:text="${review.userId}"></span></p>
             <p>작성일: <span th:text="${#temporals.format(review.regTime, 'yyyy-MM-dd HH:mm')}"></span></p>
 <!--            이미지 출력-->
