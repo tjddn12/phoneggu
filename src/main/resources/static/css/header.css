@@ -5,11 +5,23 @@
     padding: 20px 0;
     font-family: 'Mochiy Pop One' , sans-serif ;
 }
-
+.header-container{
+    max-width: 1500px;
+    height: 150px;
+    margin: 0 auto;
+}
+.header .ggu-logo{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    font-size: 40px;
+}
 .header-container a{
     text-decoration: none;
-
 }
+
 .header_bottom > .container{
     margin: 50px auto;
 }
@@ -105,14 +117,18 @@
         align-items: flex-start;
     }
     .header-notices{
-        top: 10px;
+        bottom: 30px;
         left: 50%;
         transform: translate(-50%);
     }
     .header-links {
-        bottom: 10px;
+        bottom: 0;
         left: 50%;
         transform: translate(-50%);
+        white-space: nowrap;
+    }
+    .header .ggu-logo{
+        top: 30%;
     }
 
     .navbar-collapse {

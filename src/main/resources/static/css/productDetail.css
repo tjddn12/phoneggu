@@ -105,6 +105,12 @@ a{text-decoration:none;}
     width: 50%;
 }
 
+.ptc{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
 .detailguide {
     display: flex;
     justify-content: center;
@@ -145,4 +151,23 @@ a{text-decoration:none;}
 }
 #totalPrice{
     font-weight: bold;
+}
+
+@media (max-width: 1000px) {
+    .product-container {
+        flex-direction: column;
+    }
+    .product-image {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+    }
+    .product-details {
+        width: 100%;
+        padding: 20px;
+    }
+    .additional-info .info-box {
+        width: 100%;
+        max-width: 100%;
+    }
 }

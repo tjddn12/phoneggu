@@ -35,31 +35,24 @@ public class ProductService {
     public Long saveProduct(ProductFormDto productFormDto, List<MultipartFile> productImgFileList) throws Exception {
         log.info("상품 등록 시작: {}", productFormDto);
 
-        // 유효한 모델만 필터링
-        List<ProductModelDto> validModels = productFormDto.getProductModelDtoList().stream()
-                .filter(modelDto -> modelDto.getPrStock() != null && modelDto.getPrStock() > 0
-                        && modelDto.getProductModelSelect() != null)
-                .collect(Collectors.toList());
-
-        // 유효한 모델이 없는 경우 예외 처리
-        if (validModels.isEmpty()) {
-            log.error("유효한 모델이 없습니다. 상품을 저장할 수 없습니다.");
-            throw new Exception("유효한 모델이 없습니다. 상품을 저장할 수 없습니다.");
-        }
-
         // 상품 등록
         Product product = productFormDto.createProduct();
-        product = productRepository.save(product);  // 여기서 저장
-        productRepository.flush();  // 여기서 flush 호출하여 pr_id를 생성
+        product = productRepository.save(product);
+        productRepository.flush();
 
         log.info("상품 저장 완료: {}", product);
 
-        // 모델 저장
-        for (ProductModelDto modelDto : validModels) {
+        // productFormDto에서 기종 정보와 재고 수량을 저장하는 로직 구현
+        List<ProductModelDto> productModelDtoList = productFormDto.getProductModelDtoList();
+
+        // 유효한 모델 추가
+        for (ProductModelDto productModelDto : productModelDtoList) {
+            //기종이 선택되지 않았어도 저장
             ProductModel productModel = new ProductModel();
-            productModel.setProductModelSelect(modelDto.getProductModelSelect());
-            productModel.setPrStock(modelDto.getPrStock());
-            product.addProductModel(productModel); // 유효한 모델만 product에 추가
+            productModel.setProductModelSelect(productModelDto.getProductModelSelect());
+            productModel.setPrStock(productModelDto.getPrStock());
+            productModel.setProduct(product);
+            product.addProductModel(productModel);
             log.info("유효한 상품 모델 추가 완료: {}", productModel);
         }
 
@@ -78,6 +71,14 @@ public class ProductService {
 
         log.info("상품 이미지 저장 완료");
 
+        // 최종적으로 product를 다시 저장하여 null 값이 포함된 모델 삭제 반영
+        productRepository.save(product);
+
+        // pr_id가 null인 모델 삭제
+        productModelRepository.deleteByPrIdIsNull();
+
+        log.info("pr_id가 null인 모델 삭제 완료");
+
         return product.getId();
     }
 
@@ -88,20 +89,23 @@ public class ProductService {
 
         ProductFormDto productFormDto = ProductFormDto.of(product);
 
-        List<ProductImg> productImgList = productImgRepository.findByIdOrderByIdAsc(prId);
+        List<ProductImg> productImgList = productImgRepository.findByProductId(prId);
         if (productImgList.isEmpty()) {
             log.warn("No product images found for ID: {}", prId);
         }
 
-        List<ProductImgDto> productImgDtoList = product.getProductImgList().stream()
-                .map(img -> {
-                    ProductImgDto productImgDto = new ProductImgDto();
-                    productImgDto.setImgUrl(img.getImgUrl());
-                    return productImgDto;
-                })
+        List<ProductImgDto> productImgDtoList = productImgList.stream()
+                .map(ProductImgDto::of)
                 .collect(Collectors.toList());
 
         productFormDto.setProductImgDtoList(productImgDtoList);
+
+        // 기종 정보 추가
+        List<ProductModel> productModels = productModelRepository.findByProductId(prId);
+        List<ProductModelDto> productModelDtoList = productModels.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        productFormDto.setProductModelDtoList(productModelDtoList);
 
         return productFormDto;
     }
@@ -111,25 +115,61 @@ public class ProductService {
         Product product = productRepository.findById(productFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
 
+        product.updateProduct(productFormDto);
+        productRepository.save(product);
+
+        // 기존 모델 삭제
+        productModelRepository.deleteByProduct(product);
+
+        // productFormDto에서 기종 정보와 재고 수량을 저장하는 로직 구현
+        List<ProductModelDto> productModelDtoList = productFormDto.getProductModelDtoList();
+
+        // 유효한 모델 추가
+        for (ProductModelDto productModelDto : productModelDtoList) {
+            //기종이 선택되지 않았어도 저장
+            ProductModel productModel = new ProductModel();
+            productModel.setProductModelSelect(productModelDto.getProductModelSelect());
+            productModel.setPrStock(productModelDto.getPrStock());
+            productModel.setProduct(product);
+            product.addProductModel(productModel);
+            log.info("유효한 상품 모델 추가 완료: {}", productModel);
+        }
+
+        log.info("product : {}", product);
+
+        // pr_id가 null인 모델 삭제
+        productModelRepository.deleteByPrIdIsNull();
+        log.info("pr_id가 null인 모델 삭제 완료");
+
         // 상품 정보 업데이트
         product.updateProduct(productFormDto);
 
-        // 상품 이미지가 비어있을 경우 처리
-        if (productImgFileList.isEmpty()) {
-            throw new IllegalArgumentException("Product image list cannot be empty");
-        }
+        // 새로운 이미지가 업로드된 경우에만 추가합니다.
+        if (!productImgFileList.isEmpty()) {
+            for (MultipartFile file : productImgFileList) {
+                if (!file.isEmpty()) {
+                    ProductImg productImg = new ProductImg();
+                    productImg.setProduct(product);
 
-        // 상품 이미지 업데이트
-        for (int i = 0; i < productImgFileList.size(); i++) {
-            MultipartFile productImgFile = productImgFileList.get(i);
+                    if (product.getProductImgList().isEmpty()) {
+                        productImg.setPrMainImg("Y");
+                    } else {
+                        productImg.setPrMainImg("N");
+                    }
+                    productImgService.saveProductImg(productImg, file);
+                    product.addProductImg(productImg);
+                    log.info("새로운 이미지가 추가되었습니다: {}", file.getOriginalFilename());
+                }
+            }
         }
 
         productRepository.save(product);
+        log.info("상품 정보가 성공적으로 업데이트되었습니다. 상품 ID: {}", product.getId());
     }
 
     @Transactional(readOnly = true)
     public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, Pageable pageable) {
-        log.info("Fetching products for admin page with pageable: {}", pageable);
+        log.info("관리 페이지에서 페이징된 상품 목록을 가져옵니다. 페이징 정보: {}", pageable);
         return productRepository.getAdminProductPage(productSearchDto, pageable);
     }
 
@@ -140,18 +180,36 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long prId) throws Exception {
+        log.info("삭제할 상품 ID: {}", prId);
+
         Product product = productRepository.findById(prId)
                 .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
 
         List<ProductImg> productImgList = productImgRepository.findByProductId(prId);
 
+        log.info("연관된 이미지 수: {}", productImgList.size());
+
         // 상품에 연관된 이미지 삭제
         for (ProductImg productImg : productImgList) {
+            log.info("삭제할 이미지 ID: {}", productImg.getId());
             productImgService.deleteProductImg(productImg.getId());
         }
 
         // 상품 삭제
         productRepository.delete(product);
+
+        log.info("상품 삭제 완료: {}", prId);
+    }
+
+    public void deleteProductImage(Long imageId) {
+        log.info("이미지 삭제 중, 이미지 ID: {}", imageId);
+        try {
+            productImgService.deleteProductImg(imageId);
+            log.info("이미지 삭제 성공, 이미지 ID: {}", imageId);
+        } catch (Exception e) {
+            log.error("이미지 삭제 중 오류 발생, 이미지 ID: {}", imageId, e);
+            throw new RuntimeException("이미지 삭제 중 오류가 발생했습니다.", e);
+        }
     }
 
     public List<Product> getProductsByCategory(ProductCategory category) {

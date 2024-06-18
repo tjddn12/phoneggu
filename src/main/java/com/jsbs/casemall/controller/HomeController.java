@@ -21,16 +21,16 @@ public class HomeController {
     String test2(){return "user/myPage";}
 
     // 상품 상세
-    @GetMapping("/test/productDtl")
+    @GetMapping("/productDtl")
     String test3(){return "product/productDetail";}
 
     // 장바구니
-    @GetMapping("/cart/test")
+    @GetMapping("/test/cart")
     public String tset222(){
         return "cart/cart";
     }
     // 결제
-    @GetMapping("/test/order")
+    @GetMapping("/orderTest")
     String orderTest(){
         return "order/orderPayment";
     }
@@ -50,14 +50,6 @@ public class HomeController {
     String test7(){
         return "user/userEdit";
     }
-    @GetMapping("/test/pay")
-    String test9(){
-        return "order/orderPayment";
-    }
-//    @GetMapping("/test/cart")
-//    String test10(){
-//        return "cart/cart";
-//    }
 
     // 결제 성공페이지
     @GetMapping("/test/success")

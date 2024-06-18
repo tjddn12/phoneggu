@@ -3,9 +3,7 @@ package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.dto.CartDto;
 import com.jsbs.casemall.dto.CartItemDto;
-import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.entity.*;
-import com.jsbs.casemall.exception.OutOfStockException;
 import com.jsbs.casemall.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +24,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final ProductModelRepository productModelRepository;
+    private final CartItemRepository cartItemRepository;
 
 
     @Transactional(readOnly = true)
@@ -81,48 +79,7 @@ public class CartService {
     }
 
 
-//        // 장바구니에서 주문 목록 처리
-//    public OrderDto checkoutCart(String userId) {
-//        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
-//        Cart cart = cartRepository.findByUser(user);
-//        if (cart == null || cart.getCartItems().isEmpty()) {
-//            throw new IllegalArgumentException("Cart is empty");
-//        }
 //
-//        List<OrderDetail> orderDetails = new ArrayList<>();
-//        List<String> productNames = new ArrayList<>(); // 주문 상품 이름 목록
-//        int totalAmount = 0; // 총 금액
-//
-//        for (CartItem cartItem : cart.getCartItems()) {
-//            Product product = cartItem.getProduct();
-//            if (product.getPrStock() < cartItem.getCount()) {
-//                throw new OutOfStockException("재고가 부족합니다: " + product.getPrName());
-//            }
-//            product.removeStock(cartItem.getCount());
-//            productRepository.save(product);
-//
-//            OrderDetail orderDetail = OrderDetail.createOrderDetails(product, cartItem.getCount());
-//            orderDetails.add(orderDetail);
-//            productNames.add(product.getPrName()); // 상품 이름 추가
-//            totalAmount += orderDetail.getTotalPrice();
-//        }
-//
-//        Order order = Order.createOrder(user, orderDetails);
-//        orderRepository.save(order);
-//
-//        // 장바구니 비우기
-//        cart.clearItems();
-//        cartRepository.save(cart);
-//
-//        return OrderDto.builder()
-//                .orderID(order.getOrderId())
-//                .amount(totalAmount)
-//                .userName(user.getName())
-//                .email(user.getEmail())
-//                .phone(user.getPhone())
-//                .orderName(productNames) // 주문 상품 이름 목록 설정
-//                .build();
-//    }
 
     // 비우기 메소드
     public void clearCart(String userId) {
@@ -159,9 +116,22 @@ public class CartService {
         }
     }
 
+    // 업데이트
+
+    public void updateCartItemQuantity(Long cartItemId, int count) {
+        Optional<CartItem> findCartItem = cartItemRepository.findById(cartItemId);
+        if (findCartItem.isPresent()) {
+            CartItem cartItem = findCartItem.get();
+            cartItem.updateCount(count);
+            cartItemRepository.save(cartItem);
+        }
+    }
 
 
-
-
-
+    public int getItemStock(Long cartItemId) {
+        int stock = 0 ;
+        CartItem item = cartItemRepository.findById(cartItemId).orElseThrow(()->new EntityNotFoundException("찾을 수 없습니다"));
+        stock = item.getProductModel().getPrStock();
+        return  stock;
+    }
 }

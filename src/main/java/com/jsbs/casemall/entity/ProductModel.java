@@ -24,7 +24,7 @@ public class ProductModel {
     private ProductModelSelect productModelSelect;
 
     @Column(name = "pr_stock")
-    private int prStock;
+    private Integer prStock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pr_id")

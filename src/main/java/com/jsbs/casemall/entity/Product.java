@@ -39,9 +39,6 @@ public class Product extends BaseEntity{
     @Column(name = "pr_price", nullable = false)
     private int prPrice; //상품 가격
 
-//    @Column(name = "pr_stock", nullable = false)
-//    private int prStock; //상품 재고
-
 //    @Max(value = 100, message = "최대 할인율은 100입니다")
 //    private int discount; //할인율
 //
@@ -92,18 +89,4 @@ public class Product extends BaseEntity{
             this.addProductModel(productModel);
         }
     }
-
-//    public void removeStock(int prStock){
-//        int restStock = this.prStock - prStock;
-//        if(restStock < 0){
-//            throw new OutOfStockException("상품의 재고가 부족합니다. " +
-//                    "(현재 재고 수량 : "+ this.prStock + ")" );
-//        }
-//        this.prStock = restStock;
-//    }
-//    //재고가 0보다 적으면 예외 발생
-//    // 재고 - 주문수량 = 재고
-//    public void addStock(int prStock){
-//        this.prStock += prStock;
-//    }
 }

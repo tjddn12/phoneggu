@@ -32,7 +32,8 @@
                     <label for="options">기종:</label>
                     <select id="options" name="selectedOption" onchange="addProduct(this)">
                         <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
-                        <option th:each="model : ${product.productModelDtoList}" th:value="${model.id}" th:text="${model.productModelSelect}" th:attr="data-stock=${model.prStock}"></option>
+                        <option th:each="model : ${product.productModelDtoList}" th:if="${model.productModelSelect != null}"
+                                th:value="${model.id}" th:text="${model.productModelSelect}" th:attr="data-stock=${model.prStock}"></option>
                     </select>
                 </div>
         
@@ -65,10 +66,11 @@
         <div th:each="img : ${product.productImgDtoList}" class="text-center">
             <img th:src="@{${img.imgUrl}}" alt="제품 상세 이미지" class="rounded mgb-15">
         </div>
+        <span th:text="${product.prDetail}" class="ptc"></span>
     </div>
 
     <div class="detailguide">
-        <img alt="" src="/images/detailguide.png">
+        <img alt="" src="/images/mainImg/detailguide.png">
     </div>
 
 </div>
