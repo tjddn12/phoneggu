@@ -85,4 +85,15 @@ public class OrderController {
     }
 
 
+
+    // 주문확인
+    @GetMapping("/history")
+    public String history(Model model, Principal principal) {
+        String userId = principal.getName();
+        List<OrderDto> order = orderService.history(userId);
+        model.addAttribute("orders", order);
+        return "order/orderHistory";
+    }
+
+
 }

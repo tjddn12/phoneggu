@@ -143,9 +143,14 @@ public class PaymentController {
     @GetMapping(value = "/success")
     public String paymentRequest(HttpServletRequest request, Model model) {
         // 결제 성공시 주문 한 객체를 쏴준다
-        model.addAttribute("orderId", request.getParameter("orderId"));
-        model.addAttribute("amount", request.getParameter("amount"));
-        model.addAttribute("paymentKey", request.getParameter("paymentKey"));
+
+        String orderId = request.getParameter("orderId");
+
+        OrderDto orderDto = orderService.getOrderByOrderId(orderId);
+        log.info("성공 객체 : {}",orderDto);
+        model.addAttribute("order", orderDto);
+        model.addAttribute("test","테스트");
+
         return "order/orderComplete";
     }
 

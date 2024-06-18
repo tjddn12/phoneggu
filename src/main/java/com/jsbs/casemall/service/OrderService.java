@@ -40,6 +40,69 @@ public class OrderService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public OrderDto getOrderByOrderId(String orderId) {
+        // 최정 주문 완료한것 만 보여주기
+        Order order = orderRepository.findByOrderId(orderId).orElseThrow(()-> new IllegalArgumentException("찾는 주문이 없습니다"));
+
+
+        List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
+                .map(OrderItemDto::new)
+                .collect(Collectors.toList());
+        OrderDto dto =  OrderDto.builder()
+                .orderNo(order.getId())
+                .totalPrice(order.getOrderItems().stream().mapToInt(OrderDetail::getTotalPrice).sum())
+                .items(orderItemDtos)
+                .userName(order.getUsers().getName())
+                .orderId(order.getOrderId())
+                .email(order.getUsers().getEmail())
+                .phone(order.getUsers().getPhone())
+                .pCode(order.getUsers().getPCode())
+                .loadAddress(order.getUsers().getLoadAddr())
+                .lotAddress(order.getUsers().getLotAddr())
+                .detailAddress(order.getUsers().getDetailAddr())
+                .orderTime(order.getOrderDate().toLocalDate())
+                .payInfo(order.getPaymentMethod())
+                .build();
+        dto.tranceOther(dto.getPhone(),dto.getEmail());
+
+        return dto;
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderDto> history(String userId){
+        Users users = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("회원을 찾을 수 없습니다"));
+        List<Order> findStatuesOrders = orderRepository.findByUsersAndOrderStatus(users,OrderStatus.ORDER);
+        List<OrderDto> orderDtos = new ArrayList<>();
+
+        for (Order order : findStatuesOrders) {
+            List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
+                    .map(OrderItemDto::new)
+                    .collect(Collectors.toList());
+
+            OrderDto dto = OrderDto.builder()
+                    .orderNo(order.getId())
+                    .totalPrice(order.getOrderItems().stream().mapToInt(OrderDetail::getTotalPrice).sum())
+                    .items(orderItemDtos)
+                    .userName(order.getUsers().getName())
+                    .orderId(order.getOrderId())
+                    .email(order.getUsers().getEmail())
+                    .phone(order.getUsers().getPhone())
+                    .pCode(order.getUsers().getPCode())
+                    .loadAddress(order.getUsers().getLoadAddr())
+                    .lotAddress(order.getUsers().getLotAddr())
+                    .detailAddress(order.getUsers().getDetailAddr())
+                    .orderTime(order.getOrderDate().toLocalDate())
+                    .build();
+            dto.tranceOther(dto.getPhone(), dto.getEmail());
+
+            orderDtos.add(dto);
+        }
+        log.info("사이즈 확인 : {} " , orderDtos.size());
+        return orderDtos;
+    }
+
+
     // 기존에 있는 오더 있는지 확인
     @Transactional(readOnly = true)
     public OrderDto getExistingOrderDto(Users user) {

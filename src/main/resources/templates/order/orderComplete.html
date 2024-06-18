@@ -7,6 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>주문성공</title>
     <link rel="stylesheet" th:href="@{/css/orderComplete.css}">
+    <script th:src="@{/js/complete.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -17,22 +18,20 @@
                 <img alt="Logo" src="/images/orderComplete.png">
             </div>
             <div class="orderHeader_right">
+
                 <p>고객님의 주문이 완료 되었습니다.</p>
                 <p>주문내역 및 배송에 관한 안내는 <strong>주문조회</strong>를 통하여 확인 가능합니다.</p>
 
                 <div class="order_info">
-                    <p><strong>주문번호:</strong> <span class="orderNumber">0</span></p>
-                    <p><strong>주문일자:</strong> <span class="orderDate">0</span></p>
+                    <p><strong>주문일자:</strong> <span class="orderDate" th:text="${order.getOrderTime()}">0</span></p>
                 </div>
             </div>
         </div>
 
         <div class="payment_info">
             <p><strong>결제정보</strong></p>
-            <p class="amount"><strong>최종결제금액 :</strong> <span class="totalPrice">0</span>원</p>
-            <p><strong>결제수단 :</strong> <span class="paymentMethod"></span></p>
-            <p><strong>입금자 :</strong> <span class="payer"></span></p>
-            <p><strong>계좌번호 :</strong> <span class="accountNumber"></span></p>
+            <p class="amount"><strong>최종결제금액 :</strong> <span class="totalPrice" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원</p>
+            <p><strong>결제수단 :</strong> <span class="paymentMethod" th:text="${order.getPayInfo()}"></span></p>
         </div>
 
         <table class="table">
@@ -48,28 +47,30 @@
             </tr>
             </thead>
             <tbody class="table-group-divider align-middle ">
-            <tr>
+            <tr th:each="item : ${order.items}">
                 <td class="prImg">
-                    <img alt="상품 이미지" class="img-fluid" src="">
+                    <img alt="상품 이미지" class="img-fluid" th:src="@{${item.getImgUrl()}}">
                 </td>
                 <td class="prInfo">
-                    <p class="prName">상품 이름</p>
-                    <p class="prDetail">상품 설명</p>
+                    <p class="prName" th:text="${item.productName}">상품 이름</p>
+                    <p class="prDetail" th:text="${item.modelName}">상품 기종</p>
                 </td>
-                <td><p><span class="prPrice">0</span>원</p></td>
+                <td><p><span class="prPrice" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'COMMA')}">0</span>원</p></td>
                 <td class="prCount">
-                    <span class="totalCount">0</span>
+                    <input class="form-control d-inline-block item-count" name="count" min="1" th:value="${item.count}" type="number" readonly="readonly">
                 </td>
+
                 <td><span class="shippingCost">0</span>원</td>
-                <td><span class="shipping">기본배송</span></td>
-                <td><span class="totalPrice">0</span>원</td>
+                <td><span class="shipping">무료배송</span></td>
+                <td><span class="totalPrice" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
+
             </tr>
             </tbody>
         </table>
         <table class="table tbBot">
             <th>[<span class="shipping">기본배송</span>]</th>
-            <td>상품구매금액 <span class="sumPrice bb">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
-                    class="sumTotalPrice bb">0</span>원
+            <td>상품구매금액 <span class="sumPrice bb " th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
+                    class="sumTotalPrice bb" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원
             </td>
         </table>
 
@@ -79,14 +80,14 @@
                 <tr>
                     <th>총 상품금액</th>
                     <th>총 배송비</th>
-                    <th>결제예정금액</th>
+                    <th>총 결제금액</th>
                 </tr>
                 </thead>
                 <tbody class="">
                 <tr>
-                    <th scope="row"><span class="price">0</span>원</th>
+                    <th scope="row"><span class="price"  th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원</th>
                     <td><span class="cost">0</span>원</td>
-                    <td><span class="totalPrice">0</span>원</td>
+                    <td><span class="totalPrice" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
                 </tr>
                 </tbody>
             </table>
@@ -102,34 +103,26 @@
                 <tbody>
                 <tr>
                     <th>받으시는분</th>
-                    <td>홍길동</td>
+                    <td th:text="${order.getUserName()}"></td>
                 </tr>
                 <tr>
                     <th>우편번호</th>
-                    <td>12345</td>
+                    <td th:text="${order.getPCode()}"></td>
                 </tr>
                 <tr>
                     <th>주 소</th>
-                    <td>서울특별시 강남구 역삼동</td>
-                </tr>
-                <tr>
-                    <th>일반전화</th>
-                    <td>02-123-4567</td>
+                    <td th:text="${order.loadAddress} + ' ' + ${order.detailAddress}"></td>
                 </tr>
                 <tr>
                     <th>휴대전화</th>
-                    <td>010-1234-5678</td>
-                </tr>
-                <tr>
-                    <th>배송메시지</th>
-                    <td>문 앞에 놓아주세요.</td>
+                    <td th:text="${order.getTel1()} + ' - ' +${order.getTel2()} +' - ' + ${order.getTel3()}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <div class="actions text-end">
-            <button class="btn btn-secondary">쇼핑계속하기</button>
-            <button class="btn btn-primary">주문확인하기</button>
+            <a href="/" class="btn btn-secondary">쇼핑계속하기</a>
+            <a href="/order/history" class="btn btn-primary">주문확인하기</a>
         </div>
 
         <div class="usage-info">
@@ -159,30 +152,9 @@
         </div>
     </div>
 </div>
+
 </body>
-<script >
-const urlParams = new URLSearchParams(window.location.search);
-async function confirm() {
-var requestData = {
-paymentKey: urlParams.get("paymentKey"),
-orderId: urlParams.get("orderId"),
-amount: urlParams.get("amount"),
-};
 
-const response = await fetch("/confirm", {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(requestData),
-});
 
-const json = await response.json();
 
-if (!response.ok) {
-window.location.href = `/fail?message=${json.message}&code=${json.code}`;
-}
-}
-confirm();
-</script>
 </html>
