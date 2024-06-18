@@ -137,21 +137,21 @@ public class ReviewController {
 
         return "review/reviewDetail";
     }
-    @GetMapping("/user/{userId}")
-    public String getReviewsByUserId(@PathVariable String userId, Model model){
-        Optional<Users> userOpt = userRepository.findByUserId(userId);
-
-        if(userOpt.isPresent()){
-            Users user = userOpt.get();
-
-            model.addAttribute("reviews", reviewService.getReviewsByUserId(user));
-        }else{
-            model.addAttribute("reviews", List.of());
-            model.addAttribute("error", "해당 사용자 ID를 찾을 수 없습니다.");
-        }
-
-        return "review/reviews";
-    }
+//    @GetMapping("/user/{userId}")
+//    public String getReviewsByUserId(@PathVariable String userId, Model model){
+//        Optional<Users> userOpt = userRepository.findByUserId(userId);
+//
+//        if(userOpt.isPresent()){
+//            Users user = userOpt.get();
+//
+//            model.addAttribute("reviews", reviewService.getReviewsByUserId(user));
+//        }else{
+//            model.addAttribute("reviews", List.of());
+//            model.addAttribute("error", "해당 사용자 ID를 찾을 수 없습니다.");
+//        }
+//
+//        return "review/reviews";
+//    }
     @GetMapping("/product/{prName}")
     public String getReviewsByPrName(@PathVariable String prName, Model model){
         Product product = new Product();
