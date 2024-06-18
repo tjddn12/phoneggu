@@ -215,17 +215,11 @@ public class OrderService {
             Order order = orderRepository.findByOrderId(orderId)
                     .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
 
-            // 주문이 존재하지 않을 경우 예외 발생
-            if (order == null) {
-                throw new IllegalArgumentException("주문 정보를 찾을 수 없습니다.");
-            }
-
             // 주문 상세 항목의 가격을 합산합니다.
             int price = 0;
             for (OrderDetail orderDetail : order.getOrderItems()) {
                 price += orderDetail.getTotalPrice();
             }
-//            log.info("졀제 금액 {} ", price);
 
             // 결제 금액 확인
             if (price == amount) {

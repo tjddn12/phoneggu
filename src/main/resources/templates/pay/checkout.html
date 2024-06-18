@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>결제 페이지</title>
     <link rel="stylesheet" th:href="@{/css/payment.css}">
     <link rel="stylesheet" th:href="@{/css/pay.css}">
-    <script th:src="@{https://js.tosspayments.com/v1/payment-widget}"></script>
-
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 </head>
 <body>
 <div class="container">
@@ -24,12 +23,12 @@
     const amount = [[${amount}]];
     const generateRandomString = () =>
         window.btoa(Math.random()).slice(0, 20);
-    const paymentKey =generateRandomString();
+    const paymentKey = generateRandomString();
     const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
     let isPaymentSuccess = false;
 
-    const paymentWidget = PaymentWidget(clientKey, paymentKey);
-    console.log("확인: ",orderId,amount,paymentKey)
+    const paymentWidget = PaymentWidget(clientKey, paymentKey); // 회원 결제
+    console.log("확인: ", orderId, amount, paymentKey)
 
     // 결제 UI 렌더링
     const paymentMethodWidget = paymentWidget.renderPaymentMethods(
