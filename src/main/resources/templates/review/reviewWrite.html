@@ -7,26 +7,11 @@
     <title>리뷰쓰기 | 폰꾸</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--    JAVAScript: JQuery 라이브러리가 먼저 로드되고 바로 JS 코드가 로드되어야 작동함.-->
-    <script>
-        $(document).ready(function() {
-            //별 색상 변경
-            $('.stars input').change(function(){
-                var $this = $(this);
-                var $rating = $this.val();
-                var $labels = $this.closest('.stars').find('label');
-                // 모든 레이블 색상 초기화
-                $labels.css('color', '#E5E5E5');
-                // 선택된 라디오 버튼과 이전 형제 레이블을 색상 변경
-                var index = $labels.index($this.next('label'));
 
-                $labels.slice(0, index + 1).css('color', '#fc0');
-            });
-        });
-    </script>
-    <script th:src="@{/js/review.js}" type="text/javascript"></script>
-    <!--    CSS-->
+        <!--    CSS-->
     <link rel="stylesheet" th:href="@{/css/review.css}">
-    <link rel="stylesheet" th:href="@{/css/thumbnail.css}">
+    <script defer th:src="@{/js/reviewWrite.js}"></script>
+<!--    <link rel="stylesheet" th:href="@{/css/thumbnail.css}">-->
 </head>
 <body>
 <div layout:fragment="content">
@@ -97,26 +82,24 @@
                     </tr>
                 </tbody>
             </table>
-            <div th:if="${#lists.isEmpty(reviewFormDto.reviewImgDtoList)}">
-                <div class="form-group">
-                    <div class="custom-file img-div">
-                        <input type="file" class="custom-file-input" name="reviewImgFile" onchange="previewImage(event, 'preview1')" accept="image/gif, image/jpeg, image/png">
-                        <label class="custom-file-label"></label>
-                        <img id="preview1" src="#" alt="이미지 미리보기" style="display:none; width: 200px; height: 200px; margin-top: 10px;">
+
+            <div class="form-group row mb-3">
+                <div class="col-sm-10">
+                    <div class="d-flex mb-2">
+                        <button type="button" class="btn btn-primary me-2" onclick="document.getElementById('productImgFile').click()">이미지 추가</button>
                     </div>
+                    <input type="file" id="productImgFile" class="form-control d-none" name="productImgFile" multiple onchange="handleFiles(this.files)">
                 </div>
             </div>
-            <div th:if="${not #lists.isEmpty(reviewFormDto.reviewImgDtoList)}">
-                <div class="form-group" th:each="reviewImgDto, status: ${reviewFormDto.reviewImgDtoList}">
-                    <div class="custom-file img-div">
-                        <input type="file" class="custom-file-input" name="reviewImgFile" onchange="previewImage(event, 'preview' + ${status.index + 1})">
-                        <input type="hidden" name="itemImgIds" th:value="${reviewImgDto.id}">
-                        <label class="custom-file-label" th:text="${not #strings.isEmpty(reviewImgDto.oriImgName)} ? ${reviewImgDto.oriImgName} : '상품이미지' + ${status.index + 1}"></label>
-                        <img id="preview" th:if="${not #strings.isEmpty(reviewImgDto.oriImgName)}" th:src="@{/images/{name}(name=${reviewImgDto.oriImgName})}" alt="이미지 미리보기" style="width: 200px; height: 200px; margin-top: 10px;">
-                        <img id="preview" th:if="${#strings.isEmpty(reviewImgDto.oriImgName)}" src="#" alt="이미지 미리보기" style="display:none; width: 200px; height: 200px; margin-top: 10px;">
-                    </div>
+
+            <!-- 이미지 미리보기 라벨 -->
+            <div class="form-group row mb-3">
+                <label class="col-form-label col-sm-2">이미지 미리보기</label>
+                <div class="col-sm-10">
+                    <div id="preview-images" class="d-flex flex-wrap"></div>
                 </div>
             </div>
+
             <div th:if="${#strings.isEmpty(reviewFormDto.id)}" style="text-align: center">
                 <button th:formaction="@{/reviews/reviewWrite}" type="submit" class="btn btn-primary">저장</button>
             </div>
