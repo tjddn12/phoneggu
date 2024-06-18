@@ -29,14 +29,14 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .loginPage("/login")
-                                .defaultSuccessUrl("/userEdit", true)
+                                .loginPage("/login")  // 로그인 페이지 설정
+                                .defaultSuccessUrl("/userEdit", true) // 성공 시 이동할 페이지 설정
                 )
                 .formLogin(login -> login
                         .usernameParameter("userId")
                         .passwordParameter("userPw")
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/")
+                        .loginPage("/login") // 로그인 페이지 설정
+                        .defaultSuccessUrl("/") // 성공 시 이동할 페이지 설정
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/") // 로그아웃 성공 시 메인페이지로 갈 수 있게

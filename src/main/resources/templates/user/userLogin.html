@@ -4,168 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>PHONE GGU 회원가입</title>
-    <link rel="stylesheet" th:href="@{/css/join.css}">
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>Login Page</title>
+    <link rel="stylesheet" th:href="@{/css/userLogin.css}">
+<!--    <script src="https://accounts.google.com/gsi/client" async defer></script>-->
+    <script>
+        function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+        }
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "1089300974383-qa6dvgqrs38j4g5k5upfoqecf1kad7v7.apps.googleusercontent.com",
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(document.getElementById("buttonDiv"),
+                { theme: "outline", size: "large" }  // customization attributes
+            );
+            google.accounts.id.prompt(); // also display the One Tap dialog
+        }
+    </script>
 </head>
+
 <body>
-<div layout:fragment="content">
-    <section class="signup">
-        <h2 class="tit">회원가입</h2>
-        <p class="back-login">이미 계정이 있으신가요? <a class="bk-link" href="/login">로그인 하러 가기</a></p>
-        <button class="kakao-login">카카오 로그인</button>
-
-        <form action="/join" method="post" onsubmit="return validateForm();">
-            <label for="userId">아이디 <strong>*</strong></label>
-            <input id="userId" name="userId" type="text" required>
-            <button type="button" id="checkDuplicate">중복 확인</button>
-            <span id="duplicateCheckResult"></span>
-            <br><br>
-
-            <label for="userPw">비밀번호 <strong>*</strong></label>
-            <input id="userPw" name="userPw" type="password" required>
-
-            <label for="confirm-userPw">비밀번호 확인 <strong>*</strong></label>
-            <input id="confirm-userPw" name="confirm-userPw" type="password" required>
-            <div id="passwordCheckResult"></div>
-
-            <label for="name">이름 <strong>*</strong></label>
-            <input id="name" name="name" type="text" required>
-
-            <label for="phone">휴대전화 <strong>*</strong></label>
-            <label for="phone">
-                <input id="phone" name="phone" type="hidden" value="">
-                <input id="phone1" name="phone1" maxlength="3" size="3" type="tel" required> -
-                <input id="phone2" name="phone2" maxlength="4" size="4" type="tel" required> -
-                <input id="phone3" name="phone3" maxlength="4" size="4" type="tel" required>
-            </label>
-            <br><br>
-
-            <!-- 주소 입력 필드 -->
-            <label class="col-sm-2 col-form-label">주소 <span class="text-danger">*</span></label>
-            <div class="address-group">
-                <input type="text" class="address" id="sample4_postcode" name="p_code" placeholder="우편번호" required>
-                <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
+<th:block layout:fragment="content">
+    <div class="login-container">
+        <h1>LOGIN</h1>
+        <div class="tabs">
+            <div class="tab active">회원 로그인</div>
+            <div class="tab">비회원 주문조회</div>
+        </div>
+        <div class="form-container">
+            <div class="member-login">
+                <h2>회원 로그인</h2>
+                <form method="post" th:action="@{/login}">
+                    <input class="login-id" placeholder="아이디" type="text" name="userId">
+                    <input class="login-pw" placeholder="비밀번호" type="password" name="userPw">
+                    <button class="login-button" type="submit">로그인</button>
+                </form>
+                <a href="/oauth2/authorization/kakao" class="kakao-login">카카오 로그인</a>
+                <a href="/oauth2/authorization/google" class="google-login">구글 계정으로 로그인</a>
+                <a href="/oauth2/authorization/naver" class="social-btn naver naver-login">네이버로 로그인</a>
             </div>
-            <div class="address-group">
-                <input type="text" class="address" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" required>
-                <input type="text" class="address" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" required>
+            <div id="buttonDiv" class="g_id_signin" data-type="standard" data-size="large"
+                 data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
             </div>
-            <div class="address-group">
-                <input type="text" class="address" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" required>
-                <input type="text" class="address" id="sample4_extraAddress" placeholder="참고항목">
-            </div>
-            <span id="guide" style="color:#999;display:none"></span>
+        </div>
+        <div class="links">
+            <div class="line"></div>
+            <a href="/findUser">아이디찾기</a> | <a href="/findPw">비밀번호찾기</a> | <a href="/join">회원가입</a>
+        </div>
 
-            <label for="email">이메일 <strong>*</strong></label>
-            <div class="input-group">
-                <input class="form-control" id="email" placeholder="이메일" style="max-width: 150px;" type="text" required>
-                <span class="input-group-text">@</span>
-                <input class="form-control" id="email-domain" placeholder="직접입력" style="max-width: 150px;" type="text" required>
-                <select class="form-select" style="max-width: 120px;" id="domain-select" onchange="updateEmailValue()">
-                    <option value="">직접입력</option>
-                    <option value="naver.com">naver.com</option>
-                    <option value="daum.net">daum.net</option>
-                    <option value="gmail.com">gmail.com</option>
-                    <option value="nate.com">nate.com</option>
-                </select>
-                <input type="hidden" name="email" id="resultEmail">
-            </div>
-
-            <div>
-                <label>이메일 수신여부 <strong>*</strong></label>
-                <input id="receive-email" name="email-opt" type="radio" value="receive">
-                <label for="receive-email">수신함</label>
-                <input checked id="no-receive-email" name="email-opt" type="radio" value="no-receive">
-                <label for="no-receive-email">수신안함</label>
-            </div>
-
-            <div>
-                <label>SMS 수신여부 <strong>*</strong></label>
-                <input id="receive-sms" name="sms-opt" type="radio" value="receive">
-                <label for="receive-sms">수신함</label>
-                <input checked id="no-receive-sms" name="sms-opt" type="radio" value="no-receive">
-                <label for="no-receive-sms">수신안함</label>
-            </div>
-
-            <div>
-                <button class="btn" type="submit">회원가입</button>
-            </div>
-        </form>
-
-        <script>
-            let isDuplicateChecked = false; // 중복 확인 여부를 추적하는 변수
-
-            // 모든 필드가 채워져 있는지 확인하는 함수
-            function validateForm() {
-                const requiredFields = document.querySelectorAll("input[required]");
-                for (let field of requiredFields) {
-                    if (!field.value) {
-                        alert("모든 필드를 채워주세요.");
-                        field.focus();
-                        return false;
-                    }
-                }
-
-                if (!isDuplicateChecked) {
-                    alert("중복 검사는 필수입니다.");
-                    document.getElementById('userId').focus();
-                    return false;
-                }
-
-                return validatePassword() && validatePhoneNumber(); // 비밀번호와 전화번호 유효성 검사
-            }
-
-            // 비밀번호 유효성 검사 함수
-            function validatePassword() {
-                const password = document.getElementById('userPw').value;
-                if (password.length < 6 || password.length > 16) {
-                    alert('비밀번호는 6자에서 16자 사이여야 합니다.');
-                    document.getElementById('userPw').focus();
-                    return false;
-                }
-                return true;
-            }
-
-            // 전화번호 입력 값 합치기 및 유효성 검사 함수
-            function updatePhoneValue() {
-                var phone1 = document.getElementById("phone1").value;
-                var phone2 = document.getElementById("phone2").value;
-                var phone3 = document.getElementById("phone3").value;
-                let phone = document.getElementById("phone");
-                phone.value = phone1 + phone2 + phone3;
-            }
-
-            function validatePhoneNumber() {
-                updatePhoneValue(); // 전화번호 값 업데이트
-
-                const phone = document.getElementById('phone').value;
-
-                if (phone.length !== 11) {
-                    alert('전화번호를 다시 한 번 확인해 주세요.');
-                    document.getElementById('phone1').focus();
-                    return false;
-                }
-                return true;
-            }
-
-            function enforceNumericInput(event) {
-                const input = event.target;
-                input.value = input.value.replace(/[^0-9]/g, '');
-            }
-
-            document.getElementById("phone1").addEventListener("input", enforceNumericInput);
-            document.getElementById("phone2").addEventListener("input", enforceNumericInput);
-            document.getElementById("phone3").addEventListener("input", enforceNumericInput);
-
-            document.getElementById("phone1").addEventListener("input", updatePhoneValue);
-            document.getElementById("phone2").addEventListener("input", updatePhoneValue);
-            document.getElementById("phone3").addEventListener("input", updatePhoneValue);
-
-            // 이메일 주소 업데이트 함수
-            function updateEmailValue() {
-                var selectBox = document.getElementById('domain-select');
-                var customDomainInput = document.getElementById('email-domain');
-
-                if (select
+    <div class="login-bottom">
+        <p class="big">아직도 회원이 아니세요?</p>
+        <p>지금 회원 가입 하시고 더욱 다양한 이벤트에 참여해보세요.</p>
+        <p>회원만의 특별한 혜택을 가장 먼저 만나보세요.</p>
+    </div>
+    </div>
+</th:block>
+</body>
+</html>

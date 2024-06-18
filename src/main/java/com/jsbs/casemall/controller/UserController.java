@@ -154,7 +154,7 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-        return "/user/userLogin";
+        return "user/userLogin";
     }
 
     @GetMapping("/signup")
