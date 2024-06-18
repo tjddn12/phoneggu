@@ -1,6 +1,5 @@
 package com.jsbs.casemall.config;
 
-import com.jsbs.casemall.service.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,7 +37,7 @@ public class SecurityConfig  {
 //                )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/", "/login").permitAll()
+                                .requestMatchers("/home", "/login").permitAll()
 //                                .anyRequest().authenticated()
                                 .requestMatchers("/user/**", "/order/**","/pay/**").authenticated() // 로그인성공한 사람만  user /밑에 모든  경로에 접근 가능 예를 들면 마이페이지 구매 진행 이런거
                                 .requestMatchers("/admin/**") // 관리자로 저장된 회원만 admin / 아래 모든 모든곳에 접근 가능
@@ -49,7 +48,7 @@ public class SecurityConfig  {
                 .oauth2Login(oauth2Login ->
                         oauth2Login
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/home", true)
+                                .defaultSuccessUrl("/", true)
                                 .userInfoEndpoint(userInfoEndpoint ->
                                         userInfoEndpoint
                                                 .oidcUserService(oidcUserService())

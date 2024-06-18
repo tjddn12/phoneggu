@@ -45,7 +45,7 @@ public class UserController {
         model.addAttribute("name", name);
         model.addAttribute("email", email);
 
-        return "index";
+        return "user/index";
     }
 
 
