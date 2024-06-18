@@ -102,18 +102,19 @@ a { text-decoration: none;  color: #000; }
 .more h3:hover {
     color: #ff9900;
 }
+
 .product-list{
-    width: 80%;
+    max-width: 1500px;
     margin: 0 auto;
 }
 .product {
     width: 20%;
-    margin: 20px 6.6% 20px 0;
     float: left;
     text-align: center;
 }
-.product:nth-child(4n){
-    margin-right: 0;
+
+.product-image{
+    width: 90%;
 }
 .product-image img {
     width: 100%;
@@ -123,19 +124,9 @@ a { text-decoration: none;  color: #000; }
 .product-info {
     margin-top: 10px;
 }
-
-.product-name {
-    font-size: 18px;
-    font-weight: bold;
+.hidden {
+    display: none;
 }
-
-.price-info {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
 .original-price a {
     /*text-decoration: line-through;*/
     color: #888;
