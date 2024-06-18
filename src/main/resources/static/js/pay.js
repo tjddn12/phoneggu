@@ -1,35 +1,15 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>결제 페이지</title>
-    <link rel="stylesheet" th:href="@{/css/payment.css}">
-    <link rel="stylesheet" th:href="@{/css/pay.css}">
-    <script th:src="@{https://js.tosspayments.com/v1/payment-widget}"></script>
-
-</head>
-<body>
-<div class="container">
-    <h1>결제하기</h1>
-    <div id="payment-method" class="payment-methods"></div>
-    <div id="agreement" class="agreement"></div>
-    <button id="payButton">결제하기</button>
-</div>
-
-<script th:inline="javascript">
-    const order = [[${order}]]; // 주문 dto > 객체로 변환
+// checkout.js
+document.addEventListener('DOMContentLoaded', function () {
+    const order = JSON.parse(document.getElementById('orderData').textContent); // 주문 dto
     const productName = order.items[0].productName;
-    const orderId = [[${paymentKey}]];
-    const amount = [[${amount}]];
-    const generateRandomString = () =>
-        window.btoa(Math.random()).slice(0, 20);
-    const paymentKey =generateRandomString();
+    const orderId = document.getElementById('paymentKey').value;
+    const amount = document.getElementById('amount').value;
+    const generateRandomString = () => window.btoa(Math.random()).slice(0, 20);
+    const paymentKey = generateRandomString();
     const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-    let isPaymentSuccess = false;
 
     const paymentWidget = PaymentWidget(clientKey, paymentKey);
-    console.log("확인: ",orderId,amount,paymentKey)
+    console.log("확인: ", orderId, amount, paymentKey);
 
     // 결제 UI 렌더링
     const paymentMethodWidget = paymentWidget.renderPaymentMethods(
@@ -51,12 +31,6 @@
             customerEmail: order.email, // 회원 이메일
             customerName: order.userName,  // 회원 이름
             customerMobilePhone: order.phone,
-        }).then(() => {
-            isPaymentSuccess = true; // 결제 성공 시
-            console.log('결제 성공:', isPaymentSuccess);
-        }).catch(error => {
-            isPaymentSuccess = false; // 결제 실패 시
-            console.error('결제 요청 실패:', error);
         });
     });
 
@@ -68,7 +42,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({orderId: order.orderId})
+                body: JSON.stringify({orderId: order.orderID})
             }).then(response => {
                 if (!response.ok) {
                     console.error('Failed to cancel order');
@@ -82,6 +56,4 @@
             e.returnValue = '주문을 취소합니다.';
         }
     });
-</script>
-</body>
-</html>
+});

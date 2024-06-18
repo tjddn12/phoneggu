@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig  {
 
     // 인증 인가 부여
     @Bean
@@ -27,6 +27,11 @@ public class SecurityConfig {
                         .hasRole("ADMIN")
                         .requestMatchers("/test/**").authenticated()
                         .anyRequest().permitAll() // 그 외에 는 접근 허용
+                )
+                .oauth2Login(oauth2Login ->
+                        oauth2Login
+                                .loginPage("/login")
+                                .defaultSuccessUrl("/", true)
                 )
                 .formLogin(login -> login
                         .usernameParameter("userId")

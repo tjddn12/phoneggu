@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>결제 페이지</title>
+    <script th:src="@{https://js.tosspayments.com/v1/payment-widget}"></script>
+</head>
+<body>
+<h1>결제하기</h1>
+<button id="payButton">결제하기</button>
+
+
+<!-- 테스트 용입니다 TODO : 테스트 페이지  -->
+
+<script th:inline="javascript">
+    const order = [[${order}]]; // 주문 dto > 객체로 변환
+    const button = document.getElementById("payment-button");
+    const coupon = document.getElementById("coupon-box");
+    const generateRandomString = () =>
+        window.btoa(Math.random()).slice(0, 20);
+    let amount = order.amount; // 금액 담기
+    // ------ 결제위젯 초기화 ------
+    // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
+    // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
+    // @docs https://docs.tosspayments.com/reference/widget-sdk#sdk-설치-및-초기화
+    const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+    const customerKey = generateRandomString(); // 바꿀예정
+    const paymentWidget = PaymentWidget(clientKey, customerKey); // 회원 결제
+    // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS); // 비회원 결제
+
+    // ------ 결제 UI 렌더링 ------
+    // @docs https://docs.tosspayments.com/reference/widget-sdk#renderpaymentmethods선택자-결제-금액-옵션
+    paymentMethodWidget = paymentWidget.renderPaymentMethods(
+        "#payment-method",
+        {value: amount},
+        {variantKey: "DEFAULT"}
+    );
+    // ------ 이용약관 UI 렌더링 ------
+    paymentWidget.renderAgreement("#agreement", {variantKey: "AGREEMENT"});
+
+    // ------ 결제 금액 업데이트 쿠폰 이용시 ------
+    coupon.addEventListener("change", function () {
+        if (coupon.checked) {
+            paymentMethodWidget.updateAmount(amount - 5000); // 쿠폰
+        } else {
+            paymentMethodWidget.updateAmount(amount);
+        }
+    });
+
+    // 결제하기 버튼 누르면 결제창 띄우기
+    button.addEventListener("click", function () {
+        paymentWidget.requestPayment({
+            orderId: order.orderID,        // 고유 식별자 코드 생성
+            orderName: order.orderName,       // 해당 상품의 이름 외 +count
+            successUrl: window.location.origin + "/success",
+            failUrl: window.location.origin + "/fail",
+            customerEmail: order.email, // 회원 이메일
+            customerName: order.userName,  // 회원 이름
+            customerMobilePhone: order.phone, // 회원 번호
+        }).then(() => {
+            isPaymentSuccess = true; // 결제 성공 시  isPaymentSuccess < true 를 넣어줌
+        });
+    });
+
+    // 페이지 떠날 때 이벤트 처리
+    window.addEventListener('beforeunload', function (e) {
+        if (!isPaymentSuccess) { // 결제 한것이 아니면 cancel 로 이동
+            fetch('/cancel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({orderId: order.orderID})
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to cancel order');
+                }
+            }).catch(error => {
+                console.error('Error canceling order:', error);
+            });
+
+            // 사용자에게 경고 메시지 표시
+            e.preventDefault();
+            e.returnValue = '주문을 취소합니다.';
+        }
+    });
+</script>
+</body>
+</html>

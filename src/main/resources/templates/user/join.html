@@ -6,6 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>PHONE GGU 회원가입</title>
     <link rel="stylesheet" th:href="@{/css/join.css}">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -13,7 +15,8 @@
         <h2 class="tit">회원가입</h2>
         <p class="back-login">이미 계정이 있으신가요? <a class="bk-link" href="/login">로그인 하러 가기</a></p>
         <button class="kakao-login">카카오 로그인</button>
-        <form action="/join" method="post">
+
+        <form action="/join" method="post" onsubmit="return validateForm();">
             <label for="userId">아이디 <strong>*</strong></label>
             <input id="userId" name="userId" type="text" required>
             <button type="button" id="checkDuplicate">중복 확인</button>
@@ -21,43 +24,44 @@
             <br><br>
 
             <label for="userPw">비밀번호 <strong>*</strong></label>
-            <input id="userPw" name="userPw" type="password">
+            <input id="userPw" name="userPw" type="password" required>
 
             <label for="confirm-userPw">비밀번호 확인 <strong>*</strong></label>
-            <input id="confirm-userPw" name="confirm-userPw" type="password">
+            <input id="confirm-userPw" name="confirm-userPw" type="password" required>
             <div id="passwordCheckResult"></div>
 
             <label for="name">이름 <strong>*</strong></label>
-            <input id="name" name="name" type="text">
-
-            <label class="col-sm-2 col-form-label" for="address">주소 <span
-                    class="text-danger">*</span></label>
-            <div class="input-group mb-2">
-                <input class="form-control" id="address" placeholder="우편번호"
-                       type="text" name="p_code">
-                <button class="btn btn-outline-secondary" type="button">우편번호</button>
-            </div>
-            <input class="form-control mb-2" placeholder="도로명 주소" type="text" name="loadAddr">
-            <input class="form-control mb-2" placeholder="지번 주소" type="text" name="lotAddr">
-            <input class="form-control" placeholder="상세 주소" type="text" name="detailAddr">
-            <!-- pCode - 우편 주소  loadAddr - 도로명 주소  lotAddr - 지번 주소  detailAddr - 우편 주소 -->
+            <input id="name" name="name" type="text" required>
 
             <label for="phone">휴대전화 <strong>*</strong></label>
             <label for="phone">
                 <input id="phone" name="phone" type="hidden" value="">
-                <input id="phone1" name="phone1" th:maxlength="3" type="tel">
-                -
-                <input id="phone2" name="phone2" th:maxlength="4" type="tel">
-                -
-                <input id="phone3" name="phone3" th:maxlength="4" type="tel">
+                <input id="phone1" name="phone1" maxlength="3" size="3" type="tel" required> -
+                <input id="phone2" name="phone2" maxlength="4" size="4" type="tel" required> -
+                <input id="phone3" name="phone3" maxlength="4" size="4" type="tel" required>
             </label>
+            <br><br>
+
+            <label class="col-sm-2 col-form-label">주소 <span class="text-danger">*</span></label>
+            <div class="address-group">
+                <input type="text" class="address" id="sample4_postcode" name="p_code" placeholder="우편번호" required>
+                <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
+            </div>
+            <div class="address-group">
+                <input type="text" class="address" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" required>
+                <input type="text" class="address" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" required>
+            </div>
+            <div class="address-group">
+                <input type="text" class="address" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" required>
+                <input type="text" class="address" id="sample4_extraAddress" placeholder="참고항목">
+            </div>
+            <span id="guide" style="color:#999;display:none"></span>
 
             <label for="email">이메일 <strong>*</strong></label>
             <div class="input-group">
-                <input class="form-control" id="email" placeholder="이메일" style="max-width: 150px;"
-                       type="text" >
+                <input class="form-control" id="email" placeholder="이메일" style="max-width: 150px;" type="text" required>
                 <span class="input-group-text">@</span>
-                <input class="form-control" id="email-domain" placeholder="직접입력" style="max-width: 150px;" type="text" >
+                <input class="form-control" id="email-domain" placeholder="직접입력" style="max-width: 150px;" type="text" required>
                 <select class="form-select" style="max-width: 120px;" id="domain-select" onchange="updateEmailValue()">
                     <option value="">직접입력</option>
                     <option value="naver.com">naver.com</option>
@@ -90,20 +94,66 @@
         </form>
 
         <script>
-            function updatePhoneValue() {  // 전화번호 phone 값 전달하는 스크립트
+            let isDuplicateChecked = false; // 중복 확인 여부를 추적하는 변수
+
+            // 모든 필드가 채워져 있는지 확인하는 함수
+            function validateForm() {
+                const requiredFields = document.querySelectorAll("input[required]");
+                for (let field of requiredFields) {
+                    if (!field.value) {
+                        alert("모든 필드를 채워주세요.");
+                        field.focus();
+                        return false;
+                    }
+                }
+
+                if (!isDuplicateChecked) {
+                    alert("중복 검사는 필수입니다.");
+                    document.getElementById('userId').focus();
+                    return false;
+                }
+
+                return validatePassword() && validatePhoneNumber(); // 비밀번호와 전화번호 유효성 검사
+            }
+
+            // 비밀번호 유효성 검사 함수
+            function validatePassword() {
+                const password = document.getElementById('userPw').value;
+                if (password.length < 6 || password.length > 16) {
+                    alert('비밀번호는 6자에서 16자 사이여야 합니다.');
+                    document.getElementById('userPw').focus();
+                    return false;
+                }
+                return true;
+            }
+
+            // 전화번호 입력 값 합치기 및 유효성 검사 함수
+            function updatePhoneValue() {
                 var phone1 = document.getElementById("phone1").value;
                 var phone2 = document.getElementById("phone2").value;
                 var phone3 = document.getElementById("phone3").value;
                 let phone = document.getElementById("phone");
                 phone.value = phone1 + phone2 + phone3;
-                console.log(phone.value) // 확인용
+            }
+
+            function validatePhoneNumber() {
+                updatePhoneValue(); // 전화번호 값 업데이트
+
+                const phone = document.getElementById('phone').value;
+
+                if (phone.length !== 11) {
+                    alert('전화번호를 다시 한 번 확인해 주세요.');
+                    document.getElementById('phone1').focus();
+                    return false;
+                }
+                return true;
             }
 
             document.getElementById("phone1").addEventListener("change", updatePhoneValue);
             document.getElementById("phone2").addEventListener("change", updatePhoneValue);
             document.getElementById("phone3").addEventListener("change", updatePhoneValue);
 
-
+            // 이메일 도메인 선택 시 값 업데이트 함수
             function updateEmailValue() {
                 let selectBox = document.getElementById('domain-select');
                 let customDomainInput = document.getElementById('email-domain');
@@ -116,20 +166,19 @@
                     customDomainInput.disabled = false;
                 }
 
-                emailHiddenInput();  // Select 박스가 변경될 때 이메일 업데이트
+                emailHiddenInput();
             }
 
+            // 이메일 입력 값 합치기 함수
             function emailHiddenInput() {
                 let e1 = document.getElementById("email").value;
                 let domain = document.getElementById("email-domain").value;
                 let result = document.getElementById("resultEmail");
                 result.value = e1 + "@" + domain;
-                console.log(result.value)
             }
 
             document.getElementById("email").addEventListener("input", emailHiddenInput);
             document.getElementById("email-domain").addEventListener("input", emailHiddenInput);
-
 
             document.querySelector('.kakao-login').addEventListener('click', function () {
                 var width = 500;
@@ -139,48 +188,51 @@
 
                 var popupUrl = 'http://localhost/join'; // 여기에 팝업으로 띄울 URL을 입력하세요
 
-                window.open(popupUrl, '로그인 팝업', 'width=' + 400 + ', height=' + 500 + ', top=' + 200 + ', left=' + 400);
+                window.open(popupUrl, '로그인 팝업', 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
             });
 
-                // 아이디 중복
-
-            document.addEventListener('DOMContentLoaded', function() {
-                document.getElementById('checkDuplicate').addEventListener('click', function(event) {
+            // 아이디 중복 확인 함수
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('checkDuplicate').addEventListener('click', function (event) {
                     event.preventDefault();
-                    var userId = document.getElementById('userId').value;
+                    let userId = document.getElementById('userId').value;
                     if (userId === '') {
-                        alert('Please enter a User ID.');
+                        alert('아이디를 입력해 주세요.');
                         return;
                     }
 
-                    var xhr = new XMLHttpRequest();
+                    let xhr = new XMLHttpRequest();
                     xhr.open('GET', '/checkUserId?userId=' + encodeURIComponent(userId), true);
-                    xhr.onload = function() {
+                    xhr.onload = function () {
                         if (xhr.status === 200) {
                             var response = JSON.parse(xhr.responseText);
                             var resultElement = document.getElementById('duplicateCheckResult');
                             if (response.exists) {
                                 resultElement.textContent = '중복된 아이디입니다.';
                                 resultElement.style.color = 'red';
+                                isDuplicateChecked = false; // 중복된 경우 false로 설정
                             } else {
                                 resultElement.textContent = '사용 가능한 아이디입니다.';
                                 resultElement.style.color = 'green';
+                                isDuplicateChecked = true; // 사용 가능한 경우 true로 설정
                             }
                         } else {
-                            document.getElementById('duplicateCheckResult').textContent = 'An error occurred. Please try again.';
+                            document.getElementById('duplicateCheckResult').textContent = '에러가 발생했습니다. 다시 시도해 주세요.';
                             document.getElementById('duplicateCheckResult').style.color = 'red';
+                            isDuplicateChecked = false; // 에러가 발생한 경우 false로 설정
                         }
                     };
-                    xhr.onerror = function() {
-                        document.getElementById('duplicateCheckResult').textContent = 'An error occurred. Please try again.';
+                    xhr.onerror = function () {
+                        document.getElementById('duplicateCheckResult').textContent = '에러가 발생했습니다. 다시 시도해 주세요.';
                         document.getElementById('duplicateCheckResult').style.color = 'red';
+                        isDuplicateChecked = false; // 에러가 발생한 경우 false로 설정
                     };
                     xhr.send();
                 });
             });
 
             // 비밀번호 확인 일치
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 var userPwInput = document.getElementById('userPw');
                 var confirmUserPwInput = document.getElementById('confirm-userPw');
                 var passwordCheckResult = document.getElementById('passwordCheckResult');
@@ -198,15 +250,81 @@
                 userPwInput.addEventListener('input', checkPasswordsMatch);
                 confirmUserPwInput.addEventListener('input', checkPasswordsMatch);
             });
-        </script>
 
+            // 주소 API 함수
+            function sample4_execDaumPostcode() {
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                        // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                        var roadAddr = data.roadAddress; // 도로명 주소 변수
+                        var extraRoadAddr = ''; // 참고 항목 변수
+
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraRoadAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraRoadAddr !== ''){
+                            extraRoadAddr = ' (' + extraRoadAddr + ')';
+                        }
+
+                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                        document.getElementById("sample4_postcode").value = data.zonecode;
+                        document.getElementById("sample4_roadAddress").value = roadAddr;
+                        document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+
+                        // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                        if(roadAddr !== ''){
+                            document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                        } else {
+                            document.getElementById("sample4_extraAddress").value = '';
+                        }
+
+                        var guideTextBox = document.getElementById("guide");
+                        // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                        if(data.autoRoadAddress) {
+                            var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                            guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                            guideTextBox.style.display = 'block';
+
+                        } else if(data.autoJibunAddress) {
+                            var expJibunAddr = data.autoJibunAddress;
+                            guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                            guideTextBox.style.display = 'block';
+                        } else {
+                            guideTextBox.innerHTML = '';
+                            guideTextBox.style.display = 'none';
+                        }
+                    }
+                }).open();
+            }
+
+            // 구글 로그인 API
+            function handleCredentialResponse(response) {
+                console.log("Encoded JWT ID token: " + response.credential);
+            }
+
+            window.onload = function () {
+                google.accounts.id.initialize({
+                    client_id: "1089300974383-qa6dvgqrs38j4g5k5upfoqecf1kad7v7.apps.googleusercontent.com",
+                    callback: handleCredentialResponse
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById("buttonDiv"),
+                    { theme: "outline", size: "large" }  // customization attributes
+                );
+                google.accounts.id.prompt(); // also display the One Tap dialog
+            }
+        </script>
     </section>
 </div>
-
 </body>
 </html>
-
-
-
-
-
