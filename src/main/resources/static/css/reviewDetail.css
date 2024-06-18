@@ -34,7 +34,13 @@ body {
 }
 
 .rating {
-    color: #ff9900;
     font-size: 1.2rem;
     margin-top: 10px;
+    white-space: nowrap;
+}
+.rating span {
+    color: #ccc; /* 기본 색상 */
+}
+.rating span.active {
+    color: #f5b301; /* 활성화된 별 색상 */
 }

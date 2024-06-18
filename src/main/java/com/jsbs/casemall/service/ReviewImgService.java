@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional
 public class ReviewImgService {
-    @Value("c:/nsw/images")
+    @Value("${reviewImgLocation}")
     private String reviewImgLocation;
     //reviewImgLocation 변수에 c:/~/review 이미지 경로 할당
     private final ReviewImgRepository reviewImgRepository;

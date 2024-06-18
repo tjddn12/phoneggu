@@ -16,6 +16,7 @@
                 <div class="grid-item" th:each="review : ${reviews}">
                     <a th:href="@{/reviews/{id}(id=${review.reviewNo})}">
                         <img th:src="${reviewImages[review.reviewNo]}" alt="Product Image">
+<!--                        작성자&상품명 추가 필요-->
                         <h3 th:text="${review.revwTitle}"></h3>
                         <p th:text="${review.revwContent}"></p>
                         <span class="rating">

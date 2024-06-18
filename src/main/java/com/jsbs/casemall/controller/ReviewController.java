@@ -30,12 +30,15 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewImgService reviewImgService;
+
     //    private final ProductImgService productImgService; //: 이미지는 뷰에서 JS로 처리.
     @Autowired
-    public ReviewController(ReviewService reviewService, UserRepository userRepository, ReviewRepository reviewRepository){
+    public ReviewController(ReviewService reviewService, UserRepository userRepository, ReviewRepository reviewRepository, ReviewImgService reviewImgService){
         this.reviewService = reviewService;
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
+        this.reviewImgService = reviewImgService;
     }
     @GetMapping(value = "/reviewWrite")
     public String reviewForm(Model model){
@@ -118,8 +121,19 @@ public class ReviewController {
 //        return "redirect:/reviews";
 //    }
     @GetMapping("/{reviewNo}")
-    public String getReviewByNo(@PathVariable Long reviewNo, Model model){
-        model.addAttribute("review", reviewService.getReviewByNo(reviewNo).orElse(null));
+    public String getReviewDetail(@PathVariable Long reviewNo, Model model){
+        List<Review> reviews = reviewService.getAllReviews();
+        Review review = reviewService.getReviewByNo(reviewNo).orElse(null);
+
+        Map<Long, String> reviewImages = new HashMap<>();
+        for(Review revw : reviews){
+            String imageUrl = reviewService.getImgUrlByReviewNo(revw.getReviewNo());
+
+            reviewImages.put(review.getReviewNo(), imageUrl);
+        }
+
+        model.addAttribute("review", review);
+        model.addAttribute("reviewImages", reviewImages);
 
         return "review/reviewDetail";
     }
