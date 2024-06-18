@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>결제 페이지</title>
     <link rel="stylesheet" th:href="@{/css/payment.css}">
     <link rel="stylesheet" th:href="@{/css/pay.css}">
-    <script th:src="@{https://js.tosspayments.com/v1/payment-widget}"></script>
-
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 </head>
 <body>
 <div class="container">
     <h1>결제하기</h1>
-    <div id="payment-method" class="payment-methods"></div>
-    <div id="agreement" class="agreement"></div>
+    <div class="payment-methods" id="payment-method"></div>
+    <div class="agreement" id="agreement"></div>
     <button id="payButton">결제하기</button>
 </div>
 
@@ -24,12 +23,12 @@
     const amount = [[${amount}]];
     const generateRandomString = () =>
         window.btoa(Math.random()).slice(0, 20);
-    const paymentKey =generateRandomString();
+    const paymentKey = generateRandomString();
     const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
     let isPaymentSuccess = false;
 
-    const paymentWidget = PaymentWidget(clientKey, paymentKey);
-    console.log("확인: ",orderId,amount,paymentKey)
+    const paymentWidget = PaymentWidget(clientKey, paymentKey); // 회원 결제
+    console.log("확인: ", orderId, amount, paymentKey);
 
     // 결제 UI 렌더링
     const paymentMethodWidget = paymentWidget.renderPaymentMethods(
@@ -61,27 +60,27 @@
     });
 
     // 페이지 떠날 때 이벤트 처리
-    window.addEventListener('beforeunload', function (e) {
-        if (!isPaymentSuccess) { // 결제 한것이 아니면 cancel 로 이동
-            fetch('/cancel', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({orderId: order.orderId})
-            }).then(response => {
-                if (!response.ok) {
-                    console.error('Failed to cancel order');
-                }
-            }).catch(error => {
-                console.error('Error canceling order:', error);
-            });
-
-            // 사용자에게 경고 메시지 표시
-            e.preventDefault();
-            e.returnValue = '주문을 취소합니다.';
-        }
-    });
+    // window.addEventListener('beforeunload', function (e) {
+    //     if (!isPaymentSuccess) { // 결제 하지 않으면 cancel 로 이동
+    //         fetch('/cancel', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({orderId: order.orderId})
+    //         }).then(response => {
+    //             if (!response.ok) {
+    //                 console.error('Failed to cancel order');
+    //             }
+    //         }).catch(error => {
+    //             console.error('Error canceling order:', error);
+    //         });
+    //         // 사용자에게 경고 메시지 표시
+    //         e.preventDefault();
+    //         e.returnValue = '주문을 취소합니다.';
+    //     }
+    // });
 </script>
+
 </body>
 </html>
