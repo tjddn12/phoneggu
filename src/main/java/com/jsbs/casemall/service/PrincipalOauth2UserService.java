@@ -3,11 +3,11 @@ package com.jsbs.casemall.service;
 import com.jsbs.casemall.constant.Role;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.oauth.GoogleUserInfo;
+import com.jsbs.casemall.oauth.KakaoUserInfo;  // 카카오 사용자 정보 처리 클래스 추가
 import com.jsbs.casemall.oauth.NaverUserInfo;
 import com.jsbs.casemall.oauth.OAuth2UserInfo;
 import com.jsbs.casemall.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -39,6 +39,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         } else if ("naver".equals(provider)) {
             oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+        } else if ("kakao".equals(provider)) {  // 카카오 추가
+            oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         }
 
         if (oAuth2UserInfo == null) {
@@ -77,10 +79,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         }
 
         Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
-        // 변경된 부분: attributes에 userId 추가
         attributes.put("userId", users.getUserId());
 
-        // 변경된 부분: DefaultOAuth2User 객체 생성 시 기본 속성을 userId로 설정
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
                 attributes,
