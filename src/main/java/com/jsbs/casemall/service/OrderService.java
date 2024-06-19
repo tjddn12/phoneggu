@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -419,6 +420,36 @@ public class OrderService {
         dto.tranceOther(dto.getPhone(), dto.getEmail());
 
         return dto;
+    }
+
+    public List<OrderDto> findOrdersByDateRange(LocalDate startDate, LocalDate endDate) {
+        log.info("{}", orderRepository.findAllByOrderDateBetween(startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay()).size());
+        List<Order> orders = orderRepository.findAllByOrderDateBetween(startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay());
+        List<OrderDto> orderDtos = new ArrayList<>();
+        for (Order order : orders) {
+            List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
+                    .map(OrderItemDto::new)
+                    .collect(Collectors.toList());
+
+            OrderDto dto = OrderDto.builder()
+                    .orderNo(order.getId())
+                    .totalPrice(order.getOrderItems().stream().mapToInt(OrderDetail::getTotalPrice).sum())
+                    .items(orderItemDtos)
+                    .userName(order.getUsers().getName())
+                    .orderId(order.getOrderId())
+                    .email(order.getUsers().getEmail())
+                    .phone(order.getUsers().getPhone())
+                    .pCode(order.getUsers().getPCode())
+                    .loadAddress(order.getUsers().getLoadAddr())
+                    .lotAddress(order.getUsers().getLotAddr())
+                    .detailAddress(order.getUsers().getDetailAddr())
+                    .orderTime(order.getOrderDate().toLocalDate())
+                    .build();
+            dto.tranceOther(dto.getPhone(), dto.getEmail());
+
+            orderDtos.add(dto);
+        }
+        return orderDtos;
     }
 
 }

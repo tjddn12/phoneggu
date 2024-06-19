@@ -117,7 +117,8 @@ public class OrderController {
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             Model model
     ) {
-        List<Order> orders = orderService.findOrdersByDateRange(startDate, endDate);
+//        log.info("{},{}",startDate,endDate);
+        List<OrderDto> orders = orderService.findOrdersByDateRange(startDate, endDate);
         model.addAttribute("orders", orders);
         return "order/orderHistory";
     }

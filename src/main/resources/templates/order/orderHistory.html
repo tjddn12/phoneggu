@@ -42,7 +42,7 @@
             </thead>
             <tbody>
             <th:block th:each="order : ${orders}">
-                <tr th:each="item : ${order.items}">
+                <tr th:each="item : ${order.Items}">
                     <td><span th:text="${order.getOrderTime()}">0</span></td>
                     <td><img alt="상품이미지" class="" th:src="${item.getImgUrl()}" width="50"></td>
                     <td>
