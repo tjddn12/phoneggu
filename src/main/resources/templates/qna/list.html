@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>질문 목록</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <table class="table table-striped">
+            <thead>
+            <tr class="table-primary">
+                <th scope="col">번호</th>
+                <th scope="col">상품</th>
+                <!--                : 상품명 or 상품이미지 대체 예정 -->
+                <th scope="col">질문 내용</th>
+                <th scope="col">답변 수</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일자</th>
+<!--                : 작성자, 작성일자 추후 추가 예정.-->
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="article, loop : ${paging}">
+                    <!-- 모델에 등록된 데이터는 th:each를 통해서 가져옴 -->
+<!--                    <tr th:each="article : ${articleList}">-->
+                    <th th:text="${article.id}">ID</th>
+                    <td><a th:href="@{/qnas/{id}(id=${article.id})}" th:text="${article.title}">질문</a></td>
+                    <td th:text="${article.content}">내용</td>
+                    <td th:text="${article.commentCount}">답변 수</td>
+                    <td>작성자</td>
+                    <td><span th:text="${#temporals.format(article.regTime, 'yyyy-MM-dd HH:mm')}"></span></td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${!paging.isEmpty()}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                    <a th:href="@{|?page=${paging.number - 1}|}" class="page-link">
+                        <span>이전</span>
+                    </a>
+                </li>
+                <li th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}" th:if="${page >= paging.number - 5 and page <= paging.number + 5}"
+                    th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                    <a th:text="${page}" th:href="@{|?page=${page}|}" class="page-link"></a>
+                </li>
+                <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                    <a th:href="@{|?page=${paging.number + 1}|}" class="page-link">
+                        <span>다음</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+<!--        페이징 처리 끝-->
+        <a th:href="@{/qnas/new}" class="btn btn-primary">질문하기</a>
+    </div>
+</body>
+</html>

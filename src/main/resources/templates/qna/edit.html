@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>질문 수정</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div th:if="${article}">
+            <form th:action="@{/qnas/update}" class="container" method="post">
+                <input type="hidden" name="id" th:value="${article.id}">
+                <div class="mb-3">
+                    <label class="form-label">제목</label>
+                    <input type="text" class="form-control" name="title" th:value="${article.title}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">내용</label>
+                    <textarea class="form-control" rows="3" name="content" th:text="${article.content}"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">submit</button>
+                <a th:href="@{/qnas/{id}(id=${article.id})}">Back</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
