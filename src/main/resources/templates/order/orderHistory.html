@@ -48,21 +48,26 @@
                 <th>수량</th>
                 <th>상품구매금액</th>
                 <th>주문처리상태</th>
-                <th>취소/교환/반품</th>
                 <th>리뷰쓰기</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><span class="">0</span></td>
-                <td><img class="" alt="상품이미지" src="" width="50"></td>
-                <td><span class="">상품이름</span></td>
-                <td><span class="">0</span></td>
-                <td><span class="">0</span>원</td>
-                <td><span class="">배송완료</span></td>
-                <td><span class="">-</span></td>
-                <td><button type="button" class="btn btn-primary">리뷰쓰기</button></td>
-            </tr>
+            <th:block th:each="order : ${orders}">
+                <tr th:each="item : ${order.items}">
+                    <td><span th:text="${order.getOrderTime()}">0</span></td>
+                    <td><img alt="상품이미지" class="" th:src="${item.getImgUrl()}" width="50"></td>
+                    <td>
+                        <p><span class="" th:text="${item.getProductName()}">상품이름</span></p>
+                        <p><span class="" th:text="${item.getModelName()}">상품이름</span></p>
+                    </td>
+                    <td><span class="" th:text="${item.getCount()}">0</span></td>
+                    <td><span class="" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
+                    <td><span class="">주문완료</span></td>
+                    <td>
+                        <button class="btn btn-primary" type="button">리뷰쓰기</button>
+                    </td>
+                <tr>
+            </th:block>
             </tbody>
         </table>
 
@@ -70,10 +75,10 @@
         <div class="pagination_container">
             <button class="pagination_btn">&lt;</button>
             <button class="pagination_btn active">1</button>
-            <button class="pagination_btn">2</button>
-            <button class="pagination_btn">3</button>
-            <button class="pagination_btn">4</button>
-            <button class="pagination_btn">5</button>
+<!--            <button class="pagination_btn">2</button>-->
+<!--            <button class="pagination_btn">3</button>-->
+<!--            <button class="pagination_btn">4</button>-->
+<!--            <button class="pagination_btn">5</button>-->
             <button class="pagination_btn">&gt;</button>
         </div>
     </div>

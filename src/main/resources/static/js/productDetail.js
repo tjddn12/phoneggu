@@ -52,7 +52,7 @@ function updateSelectedProducts() {
 function updateQuantity(productId, prStock) {
     const product = selectedProducts.find(p => p.id === productId);
     const maxStock = parseInt(product.maxStock, 10);
-    prStock = Math.min(parseInt(prStock, 10), maxStock); // Ensure the quantity does not exceed max stock
+    prStock = Math.min(parseInt(prStock, 10), maxStock); //
     product.prStock = prStock;
     updateSelectedProducts();
     updateTotalPrice();
@@ -78,7 +78,10 @@ function submitForm(action) {
     if (action === 'cart') {
         form.action = `/cart/add?prId=${prId}`;
     } else if (action === 'buy') {
-        form.action = `/order/checkout?prId=${prId}`;
+        form.action = `/order/now?prId=${prId}`;
     }
     form.submit();
+
 }
+
+

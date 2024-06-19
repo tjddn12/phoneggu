@@ -60,6 +60,7 @@ public class CartController {
 
 
 
+
     // 카트 아이템 삭제 메소드
     @PostMapping("/remove")
     public String removeItemFromCart(@RequestParam Long cartItemId, Principal principal, Model model) {
