@@ -24,4 +24,24 @@ $(document).ready(function() {
     $('#load-more').on('click', function() {
         showNextProducts();
     });
+
+    // URL에서 category와 type을 가져오는 함수
+    function getParameterByName(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+    }
+
+    const category = getParameterByName('category');
+    const type = getParameterByName('type');
+
+    // 모든 이미지를 숨기고 해당하는 이미지를 표시
+    $('.top_img img').each(function() {
+        const imgCategory = $(this).data('category');
+        const imgType = $(this).data('type');
+        if (imgCategory === category && imgType === type) {
+            $(this).addClass('action');
+        } else {
+            $(this).removeClass('action');
+        }
+    });
 });
