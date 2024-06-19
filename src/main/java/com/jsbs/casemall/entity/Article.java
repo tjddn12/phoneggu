@@ -20,7 +20,7 @@ public class Article extends BaseEntity {
     @Column
     private String content;
     //유저 정보 추가 필요
-    
+    //private Users user;
     public void patch(Article article) {
 
         if(article.title != null) {
