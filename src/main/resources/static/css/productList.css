@@ -45,7 +45,7 @@ a { text-decoration: none;  color: #000; }
     bottom: 0;
     white-space: nowrap;
 }
-.top_left p {
+.top_left span {
     font-size: 3em;
 }
 .top_right {

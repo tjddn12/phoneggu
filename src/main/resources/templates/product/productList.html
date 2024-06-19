@@ -29,7 +29,8 @@
             </div>
             <div class="top_bot d-flex justify-content-between cf">
                 <div class="top_left" id="anchor">
-                    <p id="main-category" th:text="${mainCategory != null ? mainCategory.name() : ''}"></p>
+                    <span id="main-category" th:text="${mainCategory != null ? mainCategory.name() : ''}"></span>
+                    <span id="sub-category" th:text="${subCategory !=null ? '(' + subCategory.name() + ')' : ''}"></span>
                 </div>
                 <ul class="top_right d-flex">
                     <li><a href="#">신상품</a></li>
