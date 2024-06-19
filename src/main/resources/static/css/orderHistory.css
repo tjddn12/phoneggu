@@ -19,20 +19,6 @@ a {text-decoration: none;}
     text-align: center;
     margin-bottom: 50px;
 }
-.tab_menu {
-    display: flex;
-    border-bottom: 2px solid #ddd;
-}
-.tab_menu div {
-    padding: 10px 20px;
-    cursor: pointer;
-    flex-grow: 1;
-    text-align: center;
-}
-.tab_menu .active {
-    font-weight: bold;
-    border-bottom: 2px solid #000;
-}
 
 .search_bar {
     margin: 20px 0;
@@ -43,9 +29,7 @@ a {text-decoration: none;}
     border-radius: 10px;
     border: 1px solid #ddd;
 }
-.search_bar .dropdown, .search_bar .btn_group, .search_bar input, .search_bar button {
-    margin-right: 10px;
-}
+
 .search_bar input[type="date"] {
     width: 150px;
     padding: 5px;

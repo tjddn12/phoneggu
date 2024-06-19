@@ -88,9 +88,4 @@ public class Order {
         this.paymentMethod = paymentMethod; // 결제 수단을 업데이트
     }
 
-
-
-
-
-
 }
