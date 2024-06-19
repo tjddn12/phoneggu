@@ -27,7 +27,13 @@ a { text-decoration: none;  color: #000; }
     width: 100%;
     height: 500px;
     object-fit: cover;
+    display: none;
 }
+
+.top_img img.action{
+    display: block;
+}
+
 .top_bot {
     position: relative;
     width: 100%;
