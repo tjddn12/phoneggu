@@ -1,5 +1,6 @@
 package com.jsbs.casemall.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jsbs.casemall.constant.ProductCategory;
 import com.jsbs.casemall.constant.ProductSellStatus;
 import com.jsbs.casemall.constant.ProductType;

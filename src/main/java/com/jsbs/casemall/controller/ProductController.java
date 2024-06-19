@@ -160,40 +160,47 @@ public class ProductController {
         return "product/productDetail";
     }
 
-    @GetMapping("/products")
-    public String getProducts(@RequestParam(required = false) ProductCategory category,
-                              @RequestParam(required = false) ProductType type,
-                              Model model) {
-        List<Product> products;
+    @GetMapping("/listProducts")
+    public String getListProducts(@RequestParam(required = false) ProductCategory category,
+                                  @RequestParam(required = false) ProductType type,
+                                  Model model) {
+        List<Product> listProducts;
         if (type != null) {
-            products = productService.getProductsByType(type);
+            listProducts = productService.getListProductsByType(type);
         } else if (category != null) {
-            products = productService.getProductsByCategory(category);
+            listProducts = productService.getListProductsByCategory(category);
         } else {
-            products = productService.getAllProducts();
+            listProducts = productService.getAllListProducts();
         }
-        model.addAttribute("products", products);
+        model.addAttribute("listProducts", listProducts);
         model.addAttribute("mainCategory", category);
         model.addAttribute("subCategory", type);
 
         log.info("mainCategory: {}", category);
         log.info("subCategory: {}", type);
-        log.info("Number of products: {}", products.size());
+        log.info("Number of products: {}", listProducts.size());
 
         return "product/productList";
     }
 
-    @GetMapping("/products/{mainCategory}")
+    @GetMapping("/listProducts/{mainCategory}")
     public String showCategory(@PathVariable ProductCategory mainCategory, Model model) {
         model.addAttribute("mainCategory", mainCategory);
         model.addAttribute("subCategory", null);
         return "product/productList";
     }
 
-    @GetMapping("/products/{mainCategory}/{subCategory}")
+    @GetMapping("/listProducts/{mainCategory}/{subCategory}")
     public String showSubCategory(@PathVariable ProductCategory mainCategory, @PathVariable ProductType subCategory, Model model) {
         model.addAttribute("mainCategory", mainCategory);
         model.addAttribute("subCategory", subCategory);
         return "product/productList";
+    }
+
+    @GetMapping("/")
+    public String getAllProducts(Model model) {
+        List<Product> indexProducts = productService.getAllListProducts();
+        model.addAttribute("indexProducts", indexProducts);
+        return "index";
     }
 }

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
-<!--    <link rel="stylesheet" th:href="@{/css/index2.css}">-->
     <link rel="stylesheet" th:href="@{/css/index2.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer th:src="@{/js/index.js}"></script>
 </head>
 <body>
 
@@ -15,20 +16,29 @@
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="/images/main_banner1.png" class="d-block w-100" alt="main_banner1">
+                <img src="/images/mainImg/HARDCASE대표.png" class="d-block w-100" alt="main_banner">
             </div>
             <div class="carousel-item">
-                <img src="/images/main_banner2.png" class="d-block w-100" alt="main_banner2">
+                <img src="/images/mainImg/JELLYCASE대표.png" class="d-block w-100" alt="main_banner">
             </div>
             <div class="carousel-item">
-                <img src="/images/main_banner3.png" class="d-block w-100" alt="main_banner3">
+                <img src="/images/mainImg/CARDCASE대표.png" class="d-block w-100" alt="main_banner">
             </div>
             <div class="carousel-item">
-                <img src="/images/main_banner4.png" class="d-block w-100" alt="main_banner4">
+                <img src="/images/mainImg/메인페이지광고.png" class="d-block w-100" alt="main_banner">
+            </div>
+            <div class="carousel-item">
+                <img src="/images/mainImg/에어팟대표.png" class="d-block w-100" alt="main_banner">
+            </div>
+            <div class="carousel-item">
+                <img src="/images/mainImg/톡대표.png" class="d-block w-100" alt="main_banner">
+            </div>
+            <div class="carousel-item">
+                <img src="/images/mainImg/플립대표.png" class="d-block w-100" alt="main_banner">
             </div>
 
             <button class="carousel-control-prev but" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -42,43 +52,42 @@
         </div>
     </div>
 
-    <div class="container">
-        <h1 class="best_text">BEST ITEM</h1>
-        <div class="item_group">
-            <div class="item"><img src="/images/image1.png" alt="Item1"></div>
-            <div class="item"><img src="/images/image2.png" alt="Item2"></div>
-            <div class="item"><img src="/images/image3.png" alt="Item3"></div>
-            <div class="item"><img src="/images/image4.png" alt="Item4"></div>
-            <div class="item"><img src="/images/image5.png" alt="Item5"></div>
-            <div class="item"><img src="/images/image6.png" alt="Item6"></div>
-            <div class="item"><img src="/images/image7.png" alt="Item7"></div>
-            <div class="item"><img src="/images/image8.png" alt="Item8"></div>
-        </div>
+    <div class="index-container">
         <div class="circle_group cf">
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='HARD')}"><img src="images/hard_case.png" alt="Circle1"></a> </div> <!-- 할것 : 해당 하는 url 매핑 하기 -->
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='JELLY')}"><img src="images/card_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='CARD')}"><img src="images/jelly_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='TOK', type='ROUND')}"><img src="images/tok_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='PHONE_CASE', type='ZFLIP')}"><img src="images/flip_case.png" alt="Circle1"></a> </div>
-            <div class="circle-item" ><a th:href="@{/products(category='AIRPODS', type='AIRPODS_1_2')}"><img src="images/airpods_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/listProducts(category='PHONE_CASE', type='HARD')}"><img src="/images/mainImg/hard_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/listProducts(category='PHONE_CASE', type='JELLY')}"><img src="/images/mainImg/card_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/listProducts(category='PHONE_CASE', type='CARD')}"><img src="/images/mainImg/jelly_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/listProducts(category='TOK', type='ROUND')}"><img src="/images/mainImg/tok_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/listProducts(category='PHONE_CASE', type='ZFLIP')}"><img src="/images/mainImg/flip_case.png" alt="Circle1"></a> </div>
+            <div class="circle-item" ><a th:href="@{/listProducts(category='AIRPODS', type='AIRPODS_1_2')}"><img src="/images/mainImg/airpods_case.png" alt="Circle1"></a> </div>
         </div>
-    </div>
 
-    <div class="event">
-        <h1 class="event_text">EVENT</h1>
-        <div class="event_imgs">
-            <div class="event_sale1">
-                <a href="#"><img src="images/event_frame1.png" alt=""></a>
-                <img src="images/event_frame2.png" alt="">
-                <img src="images/event_frame3.png" alt="">
-                <img src="images/event_frame4.png" alt="">
+        <h1 class="item_text">전체 상품</h1>
+
+        <!-- 실제 DB에 저장된 상품 나열 -->
+        <div class="product-list cf" id="product-list" th:fragment="product-list">
+            <div class="product" th:each="product : ${indexProducts}">
+                <div class="product-item" style="display: none;">
+                    <div class="product-image">
+                        <a th:href="@{'/product/' + ${product.id}}">
+                            <img th:src="@{${product.productImgList[0].imgUrl}}" th:alt="${product.prName} + ' 이미지'">
+                        </a>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-name">
+                            <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
+                        </p>
+                        <div class="price-info">
+                            <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="event_sale2">
-                <img src="images/event_frame5.png" alt="">
-                <img src="images/event_frame6.png" alt="">
-                <img src="images/event_frame7.png" alt="">
-                <img src="images/event_frame8.png" alt="">
+        <div class="more text-center">
+            <div>
+                <h3 id="load-more">more</h3>
             </div>
         </div>
     </div>
