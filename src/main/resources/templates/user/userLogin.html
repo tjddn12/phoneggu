@@ -5,10 +5,9 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Login Page</title>
-    <link rel="stylesheet" th:href="@{/css/orderLogin.css}">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" th:href="@{/css/userLogin.css}">
+<!--    <script src="https://accounts.google.com/gsi/client" async defer></script>-->
     <script>
-
         function handleCredentialResponse(response) {
             console.log("Encoded JWT ID token: " + response.credential);
         }
@@ -36,29 +35,24 @@
         <div class="form-container">
             <div class="member-login">
                 <h2>회원 로그인</h2>
-                <form method="post">
+                <form method="post" th:action="@{/login}">
                     <input class="login-id" placeholder="아이디" type="text" name="userId">
-                    <button class="login-button" type="submit">로그인</button>
                     <input class="login-pw" placeholder="비밀번호" type="password" name="userPw">
-
+                    <button class="login-button" type="submit">로그인</button>
                 </form>
-                <!--                <button class="naver-login">네이버 로그인</button>-->
-                <button class="kakao-login">카카오 로그인</button>
-
-                <a href="/oauth2/authorization/google">구글 계정으로 로그인</a>
-                <a href="/oauth2/authorization/naver" class="social-btn naver">네이버로 로그인</a>
-
+                <a href="/oauth2/authorization/kakao" class="kakao-login">카카오 로그인</a>
+                <a href="/oauth2/authorization/google" class="google-login">구글 계정으로 로그인</a>
+                <a href="/oauth2/authorization/naver" class="social-btn naver naver-login">네이버로 로그인</a>
             </div>
-            <div class="g_id_signin" data-type="standard" data size="large"
+            <div id="buttonDiv" class="g_id_signin" data-type="standard" data-size="large"
                  data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
             </div>
-
         </div>
         <div class="links">
             <div class="line"></div>
             <a href="/findUser">아이디찾기</a> | <a href="/findPw">비밀번호찾기</a> | <a href="/join">회원가입</a>
         </div>
-    </div>
+
     <div class="login-bottom">
         <p class="big">아직도 회원이 아니세요?</p>
         <p>지금 회원 가입 하시고 더욱 다양한 이벤트에 참여해보세요.</p>

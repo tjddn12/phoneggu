@@ -1,13 +1,24 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 <head>
-    <title>Change Password</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" th:href="@{/css/EditPw.css}">
 </head>
 <body>
-<h1>Change Password</h1>
-<form action="/EditPw" method="post">
+<!-- 주문시 로그인 안되어있으면 오는 페이지 -->
+<th:block layout:fragment="content">
+    <div class="login-container">
+        <h1>비밀번호 찾기</h1>
+        <form action="/EditPw" method="post">
 
-    <button type="submit">Change Password</button>
-</form>
+                <h2>입력하신 이메일로 임시 비밀번호가 전송되었습니다. <br> 로그인 후 비밀번호를 변경해 주세요.</h2>
+
+            <a href="/login" class="loginLink">로그인 하러 가기</a>
+        </form>
+    </div>
+</th:block>
 </body>
 </html>

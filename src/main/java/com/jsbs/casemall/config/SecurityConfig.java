@@ -1,6 +1,5 @@
 package com.jsbs.casemall.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
 
     // 인증 인가 부여
     @Bean
@@ -29,17 +28,17 @@ public class SecurityConfig  {
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .loginPage("/login")
-                                .defaultSuccessUrl("/", true)
+                                .loginPage("/login")  // 로그인 페이지 설정
+                                .defaultSuccessUrl("/userEdit", true) // 성공 시 이동할 페이지 설정
                 )
                 .formLogin(login -> login
                         .usernameParameter("userId")
                         .passwordParameter("userPw")
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/"))
-
+                        .loginPage("/login") // 로그인 페이지 설정
+                        .defaultSuccessUrl("/") // 성공 시 이동할 페이지 설정
+                )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/") // 로그아웃 성공시 메인페이지로 갈수있게
+                        .logoutSuccessUrl("/") // 로그아웃 성공 시 메인페이지로 갈 수 있게
                         .invalidateHttpSession(true)) // 세션에 정보 삭제
 //                .sessionManagement(session -> session
 //                        .invalidSessionUrl("/login?invalid-session=true"))
@@ -55,6 +54,4 @@ public class SecurityConfig  {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }

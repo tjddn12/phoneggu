@@ -10,7 +10,8 @@ body {
     height: 1500px;
     background-color: #f5f5f5;
 }
-.tit{
+
+.tit {
     text-align: center;
     margin-bottom: 80px;
 }
@@ -52,66 +53,16 @@ form {
     flex-direction: column;
 }
 
-#userId{
-    width: 200px;
-}
-
-#userPw{
-    width: 350px;
-}
-#confirm-userPw{
-    width: 350px;
-}
-#name{
-    width: 200px;
-}
-#address{
-    width: 400px;
-}
-#phone1{
-    width:  100px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-#phone2{
-    width: 100px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-#phone3{
-    width:  100px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-#email{
-    width: 350px;
-}
-.input-group-text{
-    height: 45px;
-}
-
-.form-select{
-    height: 45px;
-}
-
-#checkDuplicate{
-    width: 100px;
-}
-
 form label {
     margin: 10px 0 5px;
 }
 
-strong{
+strong {
     margin: 10px 0 5px;
     color: red;
 }
 
-form input[type="text"], form input[type="password"], form input[type="email"] {
+form input[type="text"], form input[type="password"], form input[type="email"], form input[type="tel"] {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -128,9 +79,9 @@ form button {
     background-color: #000;
     color: #fff;
     cursor: pointer;
-
 }
-.btn{
+
+.btn {
     width: 120px;
     height: 50px;
     margin: 50px auto 0;
@@ -138,6 +89,7 @@ form button {
     color: #fff;
     background-color: #00274c;
 }
+
 .btn:hover {
     color: #fff;
     background-color: #00274c;
@@ -146,9 +98,11 @@ form button {
 .error {
     color: red;
 }
+
 .success {
     color: green;
 }
+
 .col-form-label {
     display: block;
     margin-bottom: 10px;
@@ -157,7 +111,6 @@ form button {
 
 .address-group {
     display: flex;
-
     margin-bottom: 10px;
 }
 
@@ -187,4 +140,31 @@ form button {
 
 .text-danger {
     color: red;
+}
+
+#userId {
+    width: 200px;
+}
+
+#userPw, #confirm-userPw, #email {
+    width: 350px;
+}
+
+#name {
+    width: 200px;
+}
+
+#phone {
+    width: 200px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.input-group-text, .form-select {
+    height: 45px;
+}
+
+#checkDuplicate {
+    width: 100px;
 }
