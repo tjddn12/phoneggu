@@ -34,7 +34,7 @@ body {
     border: 3px solid #ddd;
     padding: 70px 20px;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 150px;
 }
 .form-group {
     margin-bottom: 35px;
@@ -91,6 +91,7 @@ body {
     font-weight: bold;
     border-radius: 4px;
     text-align: center;
+    margin-top: 30px;
 }
 
 .btn:hover {

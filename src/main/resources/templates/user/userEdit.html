@@ -41,7 +41,7 @@
             <span id="guide" style="color:#999;display:none"></span>
 
             <label for="phone">휴대전화  <strong>*</strong></label>
-            <input type="text" id="phone" name="phone" th:value="${user.getPhone()}">
+            <input type="tel" id="phone" name="phone" th:value="${user.getPhone()}" maxlength="11" required oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value.length > 11) this.value = this.value.slice(0, 11);">
 
             <label for="email">이메일  <strong>*</strong></label>
             <input type="email" id="email" name="email" th:value="${user.getEmail()}">
@@ -70,6 +70,17 @@
                     }
                 }
 
+                // 비밀번호 유효성 검사 함수
+                function validatePassword() {
+                    const password = userPwInput.value;
+                    if (password.length < 6 || password.length > 16) {
+                        alert('비밀번호는 6자에서 16자 사이로 입력해야 합니다.');
+                        userPwInput.focus();
+                        return false;
+                    }
+                    return true;
+                }
+
                 // 비밀번호 입력 시 일치 여부를 확인
                 userPwInput.addEventListener('input', checkPasswordsMatch);
                 confirmUserPwInput.addEventListener('input', checkPasswordsMatch);
@@ -84,7 +95,12 @@
                     // 필수 입력 항목이 비어 있는 경우 제출 중단 및 경고 메시지 표시
                     if (pCode.trim() === '' || roadAddr.trim() === '' || lotAddr.trim() === '' || phone.trim() === '') {
                         event.preventDefault();
-                        alert('주소와 전화번호 입력은 필수입니다.');
+                        alert('내용 입력은 필수입니다.');
+                    } else if (!validatePassword()) {
+                        event.preventDefault();
+                    } else if (phone.length !== 11) {
+                        alert('전화번호를 확인해 주세요.');
+                        event.preventDefault();
                     }
                 });
             });
