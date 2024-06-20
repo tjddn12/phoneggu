@@ -7,36 +7,25 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>주문내역</title>
     <link rel="stylesheet" th:href="@{/css/orderHistory.css}">
+    <script defer th:src="@{/js/orderHistory.js}"></script>
 </head>
 <body>
 <th:block layout:fragment="content">
     <div class="orderHistory">
         <h1>주문내역조회</h1>
-        <div class="tab_menu">
-            <div class="active">주문내역조회 (0)</div>
-            <div>취소/반품/교환 내역 (0)</div>
-        </div>
 
         <div class="search_bar">
-            <div class="dropdown">
-                <select class="form-select">
-                    <option selected>전체 주문처리상태</option>
-                    <option value="1">옵션 1</option>
-                    <option value="2">옵션 2</option>
-                    <option value="3">옵션 3</option>
-                </select>
-            </div>
             <div aria-label="Date range" class="btn_group" role="group">
-                <button class="btn btn-outline-secondary" type="button">오늘</button>
-                <button class="btn btn-outline-secondary" type="button">1주일</button>
-                <button class="btn btn-outline-secondary" type="button">1개월</button>
-                <button class="btn btn-outline-secondary" type="button">3개월</button>
-                <button class="btn btn-outline-secondary" type="button">6개월</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('today')">오늘</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('week')">1주일</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('month')">1개월</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('three_months')">3개월</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('six_months')">6개월</button>
             </div>
-            <input class="form-control" placeholder="달력" type="date">
+            <input id="startDate" class="form-control" placeholder="달력" type="date">
             <span>~</span>
-            <input class="form-control" placeholder="달력" type="date">
-            <button class="btn btn-primary">조회</button>
+            <input id="endDate" class="form-control" placeholder="달력" type="date">
+            <button class="btn btn-primary" onclick="search()">조회</button>
         </div>
 
         <table class="table table-hover">
@@ -53,7 +42,7 @@
             </thead>
             <tbody>
             <th:block th:each="order : ${orders}">
-                <tr th:each="item : ${order.items}">
+                <tr th:each="item : ${order.Items}">
                     <td><span th:text="${order.getOrderTime()}">0</span></td>
                     <td><img alt="상품이미지" class="" th:src="${item.getImgUrl()}" width="50"></td>
                     <td>

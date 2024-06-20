@@ -6,6 +6,7 @@ import com.jsbs.casemall.entity.OrderDetail;
 import com.jsbs.casemall.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,4 +15,5 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     List<Order> findByUsersAndOrderStatus(Users user, OrderStatus orderStatus);//
     List<Order> findByOrderIdAndOrderStatus(String orderId, OrderStatus orderStatus);//
 
+    List<Order> findAllByOrderDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 }
