@@ -23,6 +23,8 @@ public class QUsers extends EntityPathBase<Users> {
 
     public final StringPath email = createString("email");
 
+    public final StringPath extraAddr = createString("extraAddr");
+
     public final StringPath loadAddr = createString("loadAddr");
 
     public final StringPath lotAddr = createString("lotAddr");

@@ -119,7 +119,11 @@ public class UserController {
     }
 
     @PostMapping("/userEdit")
-    public String updateUser(UserEditDto userEditDto, Model model) {
+    public String updateUser(@Valid @ModelAttribute("user") UserEditDto userEditDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "user/userEdit";
+        }
+
         boolean isUpdated = userService.updateUser(userEditDto);
         if (isUpdated) {
             model.addAttribute("message", "회원 정보가 성공적으로 수정되었습니다.");
@@ -128,6 +132,7 @@ public class UserController {
         }
         return "redirect:/myPage";
     }
+
 
     @PostMapping("/user")
     public String signup(@Valid AddUserRequest request, BindingResult bindingResult) {

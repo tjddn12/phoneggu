@@ -1,12 +1,12 @@
 package com.jsbs.casemall.dto;
 
 import com.jsbs.casemall.entity.Users;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -22,6 +22,7 @@ public class UserEditDto {
     private String loadAddr;
     private String lotAddr;
     private String detailAddr;
+    private String extraAddr; // 추가된 필드
     private String email;
 
     public UserEditDto(Users user) {
@@ -33,7 +34,7 @@ public class UserEditDto {
         this.loadAddr = user.getLoadAddr();
         this.lotAddr = user.getLotAddr();
         this.detailAddr = user.getDetailAddr();
+        this.extraAddr = user.getExtraAddr(); // 추가된 필드 초기화
         this.email = user.getEmail();
     }
-
 }

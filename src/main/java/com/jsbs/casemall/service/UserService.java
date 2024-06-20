@@ -93,16 +93,20 @@ public class UserService implements UserDetailsService {
             log.info("수정한값 : {} ", userEditDto);
             Users user = userRepository.findById(userEditDto.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            user.setUserPw(passwordEncoder.encode(userEditDto.getUserPw()));
+            if (userEditDto.getUserPw() != null && !userEditDto.getUserPw().isEmpty()) {
+                user.setUserPw(passwordEncoder.encode(userEditDto.getUserPw()));
+            }
             user.setPCode(userEditDto.getPCode());
             user.setLoadAddr(userEditDto.getLoadAddr());
             user.setLotAddr(userEditDto.getLotAddr());
             user.setDetailAddr(userEditDto.getDetailAddr());
+            user.setExtraAddr(userEditDto.getExtraAddr());
             user.setPhone(userEditDto.getPhone());
             user.setEmail(userEditDto.getEmail());
             userRepository.save(user);
             return true;
         } catch (Exception e) {
+            log.error("Error updating user: ", e);
             return false;
         }
     }
