@@ -10,6 +10,10 @@ import com.jsbs.casemall.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,7 +111,6 @@ public class OrderService {
         log.info("사이즈 확인 : {} " , orderDtos.size());
         return orderDtos;
     }
-
 
     // 기존에 있는 오더 있는지 확인
     @Transactional(readOnly = true)
@@ -452,4 +455,28 @@ public class OrderService {
         return orderDtos;
     }
 
+
+
+    @Transactional(readOnly = true)
+    public Page<OrderDto> orderPage(List<OrderDto> orderDtos, int page) {
+        Pageable pageable = PageRequest.of(page, 5); // 한 페이지에 표시할 항목 수 5로 고정
+
+        // OrderDto 리스트를 펼쳐서 개별 OrderItemDto로 변환
+        List<OrderDto> allItems = orderDtos.stream()
+                .flatMap(orderDto -> orderDto.getItems().stream().map(item -> {
+                    return OrderDto.builder()
+                            .orderNo(orderDto.getOrderNo())
+                            .orderTime(orderDto.getOrderTime())
+                            .orderId(orderDto.getOrderId())
+                            .items(List.of(item))
+                            .build();
+                }))
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allItems.size());
+
+        List<OrderDto> subList = allItems.subList(start, end);
+        return new PageImpl<>(subList, pageable, allItems.size());
+    }
 }

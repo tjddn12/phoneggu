@@ -169,7 +169,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, Pageable pageable) {
+    public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, int page) {
+        Pageable pageable = PageRequest.of(page, 5);
         log.info("관리 페이지에서 페이징된 상품 목록을 가져옵니다. 페이징 정보: {}", pageable);
         return productRepository.getAdminProductPage(productSearchDto, pageable);
     }
