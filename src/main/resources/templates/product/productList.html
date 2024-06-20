@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>제품 목록</title>
     <link rel="stylesheet" th:href="@{/css/productList.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script th:src="@{/js/productList.js}"></script>
 </head>
 <body>
@@ -32,41 +33,43 @@
         <!-- 내비게이션 -->
         <nav class="navigation">
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'PHONE_CASE'}">
-                <li><a th:href="@{/products?category=PHONE_CASE&type=HARD#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="HARD">하드</a></li>
-                <li><a th:href="@{/products?category=PHONE_CASE&type=JELLY#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="JELLY">젤리</a></li>
-                <li><a th:href="@{/products?category=PHONE_CASE&type=CARD#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="CARD">카드 수납</a></li>
-                <li><a th:href="@{/products?category=PHONE_CASE&type=ZFLIP#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="ZFLIP">Z플립</a></li>
+                <li><a th:href="@{/listProducts?category=PHONE_CASE&type=HARD#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="HARD">하드</a></li>
+                <li><a th:href="@{/listProducts?category=PHONE_CASE&type=JELLY#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="JELLY">젤리</a></li>
+                <li><a th:href="@{/listProducts?category=PHONE_CASE&type=CARD#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="CARD">카드 수납</a></li>
+                <li><a th:href="@{/listProducts?category=PHONE_CASE&type=ZFLIP#anchor}" class="nav-link" data-category="PHONE_CASE" data-type="ZFLIP">Z플립</a></li>
             </ul>
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'TOK'}">
-                <li><a th:href="@{/products?category=TOK&type=ROUND#anchor}" class="nav-link" data-category="TOK" data-type="ROUND">원형톡</a></li>
-                <li><a th:href="@{/products?category=TOK&type=HEART#anchor}" class="nav-link" data-category="TOK" data-type="HEART">하트톡</a></li>
-                <li><a th:href="@{/products?category=TOK&type=ACRYLIC#anchor}" class="nav-link" data-category="TOK" data-type="ACRYLIC">아크릴톡</a></li>
+                <li><a th:href="@{/listProducts?category=TOK&type=ROUND#anchor}" class="nav-link" data-category="TOK" data-type="ROUND">원형톡</a></li>
+                <li><a th:href="@{/listProducts?category=TOK&type=HEART#anchor}" class="nav-link" data-category="TOK" data-type="HEART">하트톡</a></li>
+                <li><a th:href="@{/listProducts?category=TOK&type=ACRYLIC#anchor}" class="nav-link" data-category="TOK" data-type="ACRYLIC">아크릴톡</a></li>
             </ul>
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'AIRPODS'}">
-                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_1_2#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_1_2">에어팟 1/2세대</a></li>
-                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_PRO#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_PRO">에어팟 PRO</a></li>
-                <li><a th:href="@{/products?category=AIRPODS&type=AIRPODS_3#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_3">에어팟 3세대</a></li>
-                <li><a th:href="@{/products?category=AIRPODS&type=BUDS#anchor}" class="nav-link" data-category="AIRPODS" data-type="BUDS">버즈</a></li>
+                <li><a th:href="@{/listProducts?category=AIRPODS&type=AIRPODS_1_2#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_1_2">에어팟 1/2세대</a></li>
+                <li><a th:href="@{/listProducts?category=AIRPODS&type=AIRPODS_PRO#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_PRO">에어팟 PRO</a></li>
+                <li><a th:href="@{/listProducts?category=AIRPODS&type=AIRPODS_3#anchor}" class="nav-link" data-category="AIRPODS" data-type="AIRPODS_3">에어팟 3세대</a></li>
+                <li><a th:href="@{/listProducts?category=AIRPODS&type=BUDS#anchor}" class="nav-link" data-category="AIRPODS" data-type="BUDS">버즈</a></li>
             </ul>
             <ul class="d-flex justify-content-center" th:if="${mainCategory != null and mainCategory.name() == 'DIGITAL'}">
-                <li><a th:href="@{/products?category=DIGITAL&type=APPLE_WATCH#anchor}" class="nav-link" data-category="DIGITAL" data-type="APPLE_WATCH">애플워치</a></li>
+                <li><a th:href="@{/listProducts?category=DIGITAL&type=APPLE_WATCH#anchor}" class="nav-link" data-category="DIGITAL" data-type="APPLE_WATCH">애플워치</a></li>
             </ul>
         </nav>
 
         <!-- 실제 DB에 저장된 상품 나열 -->
         <div class="product-list cf" id="product-list" th:fragment="product-list">
-            <div class="product" th:each="product : ${products}">
-                <div class="product-image">
-                    <a th:href="@{'/product/' + ${product.id}}">
-                        <img th:src="@{${product.productImgList[0].imgUrl}}" th:alt="${product.prName} + ' 이미지'">
-                    </a>
-                </div>
-                <div class="product-info">
-                    <p class="product-name">
-                        <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
-                    </p>
-                    <div class="price-info">
-                        <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
+            <div class="product" th:each="product : ${listProducts}">
+                <div class="product-item" style="display: none;">
+                    <div class="product-image">
+                        <a th:href="@{'/product/' + ${product.id}}">
+                            <img th:src="@{${product.productImgList[0].imgUrl}}" th:alt="${product.prName} + ' 이미지'">
+                        </a>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-name">
+                            <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
+                        </p>
+                        <div class="price-info">
+                            <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,7 +77,7 @@
 
         <div class="more text-center">
             <div>
-                <h3>더 보기</h3>
+                <h3 id="load-more">more</h3>
             </div>
         </div>
     </div>
