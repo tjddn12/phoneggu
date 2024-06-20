@@ -2,10 +2,7 @@ package com.jsbs.casemall.entity;
 
 import com.jsbs.casemall.constant.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,6 +47,9 @@ public class Order {
     private String orderId; // 주문 고유 ID
 
 
+
+
+
     // 주문 목록
     @OneToMany(mappedBy = "order" ,cascade=CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<OrderDetail> orderItems = new ArrayList<>();
@@ -84,10 +84,5 @@ public class Order {
         this.payInfo = payInfo; // 결제 방식 추가
         this.paymentMethod = paymentMethod; // 결제 수단을 업데이트
     }
-
-
-
-
-
 
 }

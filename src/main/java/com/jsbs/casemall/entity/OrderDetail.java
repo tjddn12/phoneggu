@@ -50,11 +50,4 @@ public class OrderDetail {
         return orderDetail;
     }
 
-
-
-
-
-
-
-
 }

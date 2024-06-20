@@ -114,10 +114,11 @@ public class ProductController {
 
     @GetMapping(value = {"/admin/product/management", "/admin/product/management/{page}"})
     public String productManage(ProductSearchDto productSearchDto,
-                                @PathVariable(name = "page", required = false) Integer page, Model model) {
-
-        Pageable pageable = PageRequest.of(page != null ? page : 0, 5);
-        Page<Product> management = productService.getAdminProductPage(productSearchDto, pageable);
+                                @RequestParam(name = "page", required = false) Integer page, Model model) {
+        if (page == null) {
+            page = 0; // 기본값 설정
+        }
+        Page<Product> management = productService.getAdminProductPage(productSearchDto, page);
 
         model.addAttribute("management", management);
         model.addAttribute("productSearchDto", productSearchDto);

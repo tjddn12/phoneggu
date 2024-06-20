@@ -19,20 +19,6 @@ a {text-decoration: none;}
     text-align: center;
     margin-bottom: 50px;
 }
-.tab_menu {
-    display: flex;
-    border-bottom: 2px solid #ddd;
-}
-.tab_menu div {
-    padding: 10px 20px;
-    cursor: pointer;
-    flex-grow: 1;
-    text-align: center;
-}
-.tab_menu .active {
-    font-weight: bold;
-    border-bottom: 2px solid #000;
-}
 
 .search_bar {
     margin: 20px 0;
@@ -43,9 +29,7 @@ a {text-decoration: none;}
     border-radius: 10px;
     border: 1px solid #ddd;
 }
-.search_bar .dropdown, .search_bar .btn_group, .search_bar input, .search_bar button {
-    margin-right: 10px;
-}
+
 .search_bar input[type="date"] {
     width: 150px;
     padding: 5px;
@@ -75,4 +59,55 @@ table{
     font-weight: bold;
     background-color: #007bff;
     color: #fff;
+}
+
+
+ .table-hover tbody tr:hover {
+     background-color: #e9f5ff;
+ }
+
+.table-hover tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table-hover td img {
+    max-width: 100px;
+    border-radius: 4px;
+}
+
+.table-hover td p {
+    margin: 5px 0;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    margin: 0 10px;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination form {
+    display: inline;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #f0f0f0;
 }

@@ -14,11 +14,23 @@
     <div class="wrap">
         <div class="top">
             <div class="top_img">
-                <img alt="메인 배너" src="/images/mainImg/main_banner2.png">
+                <img alt="메인 배너" src="/images/mainImg/HARDCASE대표.png" data-category="PHONE_CASE" data-type="HARD" class="action">
+                <img alt="메인 배너" src="/images/mainImg/JELLYCASE대표.png" data-category="PHONE_CASE" data-type="JELLY" class="">
+                <img alt="메인 배너" src="/images/mainImg/CARDCASE대표.png" data-category="PHONE_CASE" data-type="CARD" class="">
+                <img alt="메인 배너" src="/images/mainImg/플립대표.png" data-category="PHONE_CASE" data-type="ZFLIP" class="">
+                <img alt="메인 배너" src="/images/mainImg/톡대표.png" data-category="TOK" data-type="ROUND" class="">
+                <img alt="메인 배너" src="/images/mainImg/톡대표.png" data-category="TOK" data-type="HEART" class="">
+                <img alt="메인 배너" src="/images/mainImg/톡대표.png" data-category="TOK" data-type="ACRYLIC" class="">
+                <img alt="메인 배너" src="/images/mainImg/에어팟대표.png" data-category="AIRPODS" data-type="AIRPODS_1_2" class="">
+                <img alt="메인 배너" src="/images/mainImg/에어팟대표.png" data-category="AIRPODS" data-type="AIRPODS_PRO" class="">
+                <img alt="메인 배너" src="/images/mainImg/에어팟대표.png" data-category="AIRPODS" data-type="AIRPODS_3" class="">
+                <img alt="메인 배너" src="/images/mainImg/에어팟대표.png" data-category="AIRPODS" data-type="BUDS" class="">
+                <img alt="메인 배너" src="/images/mainImg/메인페이지광고.png" data-category="DIGITAL" data-type="APPLE_WATCH" class="">
             </div>
             <div class="top_bot d-flex justify-content-between cf">
                 <div class="top_left" id="anchor">
-                    <p id="main-category" th:text="${mainCategory != null ? mainCategory.name() : ''}"></p>
+                    <span id="main-category" th:text="${mainCategory != null ? mainCategory.name() : ''}"></span>
+                    <span id="sub-category" th:text="${subCategory !=null ? '(' + subCategory.name() + ')' : ''}"></span>
                 </div>
                 <ul class="top_right d-flex">
                     <li><a href="#">신상품</a></li>
