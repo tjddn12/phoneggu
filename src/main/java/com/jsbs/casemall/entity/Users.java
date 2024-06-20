@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 public class Users {
 
-
+    private String username;
 
     @Id
     @Column(name = "userId")
