@@ -4,10 +4,7 @@ import com.jsbs.casemall.dto.Criteria;
 import com.jsbs.casemall.dto.PageDto;
 import com.jsbs.casemall.dto.ReviewDto;
 import com.jsbs.casemall.dto.ReviewFormDto;
-import com.jsbs.casemall.entity.Product;
-import com.jsbs.casemall.entity.Review;
-import com.jsbs.casemall.entity.ReviewImg;
-import com.jsbs.casemall.entity.Users;
+import com.jsbs.casemall.entity.*;
 import com.jsbs.casemall.repository.ReviewImgRepository;
 import com.jsbs.casemall.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,8 +42,8 @@ public class ReviewService {
     public List<Review> getReviewsByUserId(Users userId){
         return reviewRepository.findReviewsByUserId(userId);
     }
-    public List<Review> getReviewsByPrName(Product prName){
-        return reviewRepository.findReviewsByPrName(prName);
+    public List<Review> getReviewsByOrder(Order order){
+        return reviewRepository.findReviewsByOrder(order);
     }
     public Long saveReview(ReviewFormDto reviewFormDto, List<MultipartFile> reviewImgFileList) throws Exception {
         //리뷰 등록

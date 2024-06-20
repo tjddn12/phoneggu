@@ -40,21 +40,15 @@ public class Review extends BaseEntity{
 //    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 //    @OrderBy("id asc")
 //    private List<ReviewImg> reviewImgs;
-//
-//    @Column(name = "revw_reg_date")
-//    private LocalDateTime revwRegDate; //: 리뷰 등록 날짜
-
     @Column(name = "revw_hits", nullable = false)
     private int revwHits; //: 조회수
 
     @Column(name = "revw_ratings", nullable = false)
     private int revwRatings; //: 평점
-    //    @ManyToOne
-//    @JoinColumn(name = "option_id")
-//    private OptionDto option; //: 추후 필요시 수정.
+
     @ManyToOne
-    @JoinColumn(name = "pr_name")
-    private Product prName; //: 제품 엔티티
+    @JoinColumn(name = "order_no")
+    private Order order; //: 주문 정보(상품명, 이미지) 추출
 
     public void update(ReviewFormDto reviewFormDto){
         this.reviewNo = reviewFormDto.getId();

@@ -152,18 +152,6 @@ public class ReviewController {
 //
 //        return "review/reviews";
 //    }
-    @GetMapping("/product/{prName}")
-    public String getReviewsByPrName(@PathVariable String prName, Model model){
-        Product product = new Product();
-
-        product.setPrName(prName);
-
-        List<Review> reviews = reviewRepository.findReviewsByPrName(product);
-
-        model.addAttribute("reviews", reviews);
-
-        return "review/reviews";
-    }
     @DeleteMapping("/{reviewNo}")
     public String deleteReview(@PathVariable Long reviewNo){
         reviewService.deleteReview(reviewNo);
