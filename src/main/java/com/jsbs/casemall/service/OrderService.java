@@ -455,8 +455,6 @@ public class OrderService {
         return orderDtos;
     }
 
-
-
     @Transactional(readOnly = true)
     public Page<OrderDto> orderPage(List<OrderDto> orderDtos, int page) {
         Pageable pageable = PageRequest.of(page, 5); // 한 페이지에 표시할 항목 수 5로 고정
