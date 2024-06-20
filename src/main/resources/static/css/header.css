@@ -1,3 +1,4 @@
+
 .header {
     position: relative;
     background-color: #bcdffd;
@@ -110,49 +111,10 @@
     background-color: transparent !important; /* 부트스트랩 기본 호버 배경색 제거 */
     color: inherit; /* 텍스트 색상 유지 */
 }
+.actionOn{display: none}
+.actionOff{display: block}
 
-@media (max-width: 1000px) {
-    .header-container .row {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .header-notices{
-        bottom: 30px;
-        left: 50%;
-        transform: translate(-50%);
-    }
-    .header-links {
-        bottom: 0;
-        left: 50%;
-        transform: translate(-50%);
-        white-space: nowrap;
-    }
-    .header .ggu-logo{
-        top: 30%;
-    }
-
-    .navbar-collapse {
-        position: absolute;
-        top: 0;
-        left: 20%;
-        background-color: white;
-        width: 200px;
-        border: 1px solid #ddd;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .navbar-nav {
-        flex-direction: column;
-        padding-left: 0;
-    }
-    .navbar-nav .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 100%;
-        width: auto;
-        flex-direction: row; 
-    }
-    .navbar-nav .nav-item.show .dropdown-menu {
-        display: flex;
-    }
+@media (max-width: 767px) {
+    .actionOn{display: block}
+    .actionOff{display: none}
 }
