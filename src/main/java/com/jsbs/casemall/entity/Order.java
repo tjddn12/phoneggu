@@ -50,6 +50,9 @@ public class Order {
     private String orderId; // 주문 고유 ID
 
 
+
+
+
     // 주문 목록
     @OneToMany(mappedBy = "order" ,cascade=CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<OrderDetail> orderItems = new ArrayList<>();

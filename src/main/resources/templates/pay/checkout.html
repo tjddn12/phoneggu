@@ -11,8 +11,8 @@
 <body>
 <div class="container">
     <h1>결제하기</h1>
-    <div id="payment-method" class="payment-methods"></div>
-    <div id="agreement" class="agreement"></div>
+    <div class="payment-methods" id="payment-method"></div>
+    <div class="agreement" id="agreement"></div>
     <button id="payButton">결제하기</button>
 </div>
 
@@ -28,7 +28,7 @@
     let isPaymentSuccess = false;
 
     const paymentWidget = PaymentWidget(clientKey, paymentKey); // 회원 결제
-    console.log("확인: ", orderId, amount, paymentKey)
+    console.log("확인: ", orderId, amount, paymentKey);
 
     // 결제 UI 렌더링
     const paymentMethodWidget = paymentWidget.renderPaymentMethods(
@@ -60,27 +60,27 @@
     });
 
     // 페이지 떠날 때 이벤트 처리
-    window.addEventListener('beforeunload', function (e) {
-        if (!isPaymentSuccess) { // 결제 한것이 아니면 cancel 로 이동
-            fetch('/cancel', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({orderId: order.orderId})
-            }).then(response => {
-                if (!response.ok) {
-                    console.error('Failed to cancel order');
-                }
-            }).catch(error => {
-                console.error('Error canceling order:', error);
-            });
-
-            // 사용자에게 경고 메시지 표시
-            e.preventDefault();
-            e.returnValue = '주문을 취소합니다.';
-        }
-    });
+    // window.addEventListener('beforeunload', function (e) {
+    //     if (!isPaymentSuccess) { // 결제 하지 않으면 cancel 로 이동
+    //         fetch('/cancel', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({orderId: order.orderId})
+    //         }).then(response => {
+    //             if (!response.ok) {
+    //                 console.error('Failed to cancel order');
+    //             }
+    //         }).catch(error => {
+    //             console.error('Error canceling order:', error);
+    //         });
+    //         // 사용자에게 경고 메시지 표시
+    //         e.preventDefault();
+    //         e.returnValue = '주문을 취소합니다.';
+    //     }
+    // });
 </script>
+
 </body>
 </html>

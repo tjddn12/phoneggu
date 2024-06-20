@@ -1,5 +1,6 @@
 package com.jsbs.casemall.controller;
 
+import com.jsbs.casemall.dto.CartDto;
 import com.jsbs.casemall.dto.OrderDto;
 import com.jsbs.casemall.service.OrderService;
 import jakarta.validation.Valid;
@@ -84,5 +85,27 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+
+
+    // 주문확인
+    @GetMapping("/history")
+    public String history(Model model, Principal principal) {
+        String userId = principal.getName();
+        List<OrderDto> order = orderService.history(userId);
+        model.addAttribute("orders", order);
+        return "order/orderHistory";
+    }
+
+
+    // 바로구매 처리
+    @PostMapping("/now")
+    public String orderNow(@RequestParam Long prId, CartDto dto , Principal principal,Model model) {
+        log.info("바로구매로 넘어온 값 : 상품아이디 : {} , dto {}",prId,dto.toString());
+        String id = principal.getName();
+
+        OrderDto order = orderService.createOrderByNow(dto,prId,id);
+        model.addAttribute("order", order);
+        return "redirect:/order";
+    }
 
 }

@@ -2,11 +2,15 @@ package com.jsbs.casemall.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Builder
+@ToString
 public class OrderDto {
 
 
@@ -28,8 +32,53 @@ public class OrderDto {
     private String userName; // 주문한 고객이름
 
     private String email; // 이메일
+    private String domain;
 
     private String phone; // 전화번호
+ // 우편번호 기본주소 나머지주소
+    private String pCode; // 우편번호
+    private String loadAddress; // 도로
+    private String lotAddress; //  지번
+    private String detailAddress; // 상세
+
+    private String tel1;
+    private String tel2;
+    private String tel3;
+
+    private LocalDate orderTime;
+
+    public void tranceOther(String phone, String email) {
+        if (phone != null && phone.length() >= 10) {
+            this.tel1 = phone.substring(0, 3); // 01036272884
+            if (phone.length() >= 7) {
+                this.tel2 = phone.substring(3, 7);
+                this.tel3 = phone.substring(7);
+            } else {
+                this.tel2 = phone.substring(3, phone.length());
+                this.tel3 = "";
+            }
+        } else {
+            this.tel1 = "";
+            this.tel2 = "";
+            this.tel3 = "";
+
+        }
+
+        if (email != null && email.contains("@")) {
+            String[] emailParts = email.split("@");
+            if (emailParts.length == 2) {
+                this.email = emailParts[0];
+                this.domain = emailParts[1];
+            } else {
+                this.email = "";
+                this.domain = "";
+            }
+        } else {
+            this.email = "";
+            this.domain = "";
+        }
+    }
+
 
 
 
