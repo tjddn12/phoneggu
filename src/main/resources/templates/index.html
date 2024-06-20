@@ -81,7 +81,7 @@
                             <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
                         </p>
                         <div class="price-info">
-                            <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
+                            <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${#numbers.formatDecimal(product.prPrice, 0, 'COMMA', 0, 'COMMA')}"></span>원</a></span>
                         </div>
                     </div>
                 </div>

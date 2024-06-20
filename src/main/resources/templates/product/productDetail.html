@@ -25,7 +25,7 @@
             <div class="product-details">
                 <h1> [ <span th:text="${product.productType}"></span> ] <span th:text="${product.prName}"></span></h1>
                 <div>브랜드: 자사브랜드</div>
-                <div class="price">판매가 : <span th:text="${product.prPrice}"></span> 원</div>
+                <div class="price">판매가 : <span th:text="${#numbers.formatDecimal(product.prPrice, 0, 'COMMA', 0, 'COMMA')}"></span> 원</div>
                 <div class="shipping">배송비: 0원 (무료!!)</div>
 
                 <div class="options">
