@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -22,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -168,4 +170,36 @@ public class UserController {
                 SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/login";
     }
+
+
+
+
+
+
+    // 소셜 로그인 성공시 정보수정한 사람과 아닌 사람 구분
+    @RequestMapping("/loginSuccess")
+    public String loginSuccess(Principal principal) throws IOException {
+        String userid = principal.getName();
+        boolean edit = userService.isProfileComplete(userid);
+
+        if(edit){
+            // true 반환시 메인 페이지로
+            return "redirect:/";
+        }else{
+            // false 회원수정 페이지로
+            return "user/userEdit";
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

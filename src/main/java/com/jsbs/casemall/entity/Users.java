@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 public class Users {
 
-    private String username;
+    private String username; // ?
 
 //    @Column(name = "id", updatable = false)
 //    private Long id;
@@ -40,6 +40,7 @@ public class Users {
 
     @Column(name = "p_code", nullable = false)
     private String pCode;
+
 
     @Column(name = "loadAddr", nullable = true)
     private String loadAddr;

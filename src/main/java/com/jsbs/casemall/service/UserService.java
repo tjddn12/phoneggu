@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,13 +38,14 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    @Transactional
     public void save(AddUserRequest dto) {
         userRepository.save(Users.builder()
                 .email(dto.getEmail())
                 .userPw(passwordEncoder.encode(dto.getPassword()))
                 .build());
     }
-
+    @Transactional
     public void JoinUser(UserDto userDTO) {
         Optional<Users> existingUser = userRepository.findById(userDTO.getUserId());
         if (existingUser.isPresent()) {
@@ -106,4 +109,27 @@ public class UserService implements UserDetailsService {
             return false;
         }
     }
+
+
+    // 소셜 로그인 시도시 회원정보가 비어있는지 없는지 체크
+    public boolean isProfileComplete(String userid) {
+        Users user = userRepository.findById(userid)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 검사 항목들
+        String pCode = user.getPCode();
+        String loadAddr = user.getLoadAddr();
+        String lotAddr = user.getLotAddr();
+        String detailAddr = user.getDetailAddr();
+
+        List<String> fieldCheckList = Arrays.asList(pCode, loadAddr, lotAddr, detailAddr);
+
+        return fieldCheckList.stream().allMatch(this::isFieldValid);
+    }
+    // 각 필드 검사
+    private boolean isFieldValid(String field) {
+        return field != null && !field.isEmpty();
+    }
+
+
 }
