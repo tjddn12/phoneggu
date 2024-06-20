@@ -111,6 +111,8 @@ public class OrderController {
         String userId = principal.getName();
         List<OrderDto> order = orderService.history(userId);
         Page<OrderDto> orderPage = orderService.orderPage(order, page);
+        log.info("orderPage = {}", orderPage);
+//        model.addAttribute("orders", order);
         model.addAttribute("orders", orderPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", orderPage.getTotalPages());

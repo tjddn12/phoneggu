@@ -13,7 +13,7 @@
 <th:block layout:fragment="content">
     <div class="orderHistory">
         <h1>주문내역조회</h1>
-        <form th:action="@{/order/history}" method="get">
+        <form th:action="@{/order/history}" method="get" class="Tform">
             <div class="search_bar">
                 <div aria-label="Date range" class="btn_group" role="group">
                     <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('today')">오늘</button>
@@ -42,7 +42,7 @@
                 </thead>
                 <tbody>
                 <th:block th:each="order : ${orders}">
-                    <tr th:each="item : ${order.Items}">
+                    <tr th:each="item : ${order.items}">
                         <td><span th:text="${order.getOrderTime()}">0</span></td>
                         <td><img alt="상품이미지" class="" th:src="${item.getImgUrl()}" width="50"></td>
                         <td>
@@ -53,7 +53,9 @@
                         <td><span class="" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
                         <td><span class="">주문완료</span></td>
                         <td>
-                            <button class="btn btn-primary" type="button">리뷰쓰기</button>
+                            <input type="hidden" id="orderNo_${item.orderNo}" value="${order.getOrderNo()}">
+                            <button class="btn btn-primary reviewButton" type="button"
+                                    th:onclick="'location.href=\'/reviews/reviewWrite?orderNo=' + ${order.getOrderNo()} + '\''">리뷰쓰기</button>
                         </td>
                     <tr>
                 </th:block>

@@ -10,6 +10,7 @@ import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.*;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,26 +27,29 @@ import java.util.stream.IntStream;
 @Slf4j
 @Controller
 @RequestMapping("/reviews")
+@RequiredArgsConstructor
 public class ReviewController {
+
     private final ReviewService reviewService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final ReviewImgService reviewImgService;
+    private final OrderService orderService;
 
-    //    private final ProductImgService productImgService; //: 이미지는 뷰에서 JS로 처리.
-    @Autowired
-    public ReviewController(ReviewService reviewService, UserRepository userRepository, ReviewRepository reviewRepository, ReviewImgService reviewImgService){
-        this.reviewService = reviewService;
-        this.userRepository = userRepository;
-        this.reviewRepository = reviewRepository;
-        this.reviewImgService = reviewImgService;
-    }
+
+    // 리뷰 쓰기
     @GetMapping(value = "/reviewWrite")
-    public String reviewForm(Model model){
+    public String reviewForm(@RequestParam long orderNo,Model model){
+        log.info("넘어온 주문 번호 : {} ",orderNo);
+
+
         model.addAttribute("reviewFormDto", new ReviewFormDto());
 
         return "review/reviewWrite";
     }
+
+
+
     @PostMapping("/reviewWrite")
     public String reviewNew(@Valid ReviewFormDto reviewFormDto, BindingResult bindingResult, Model model,
     @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList){
