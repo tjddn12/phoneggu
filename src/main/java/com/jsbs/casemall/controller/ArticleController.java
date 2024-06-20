@@ -64,6 +64,7 @@ public class ArticleController {
                     article.getId(),
                     article.getTitle(),
                     article.getContent(),
+                    article.getUser().toString(),
                     commentService.comments(article.getId()).size(),
                     article.getRegTime()
             );

@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QArticle extends EntityPathBase<Article> {
 
     private static final long serialVersionUID = 775460462L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QArticle article = new QArticle("article");
 
@@ -39,16 +42,27 @@ public class QArticle extends EntityPathBase<Article> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
+    public final QUsers user;
+
     public QArticle(String variable) {
-        super(Article.class, forVariable(variable));
+        this(Article.class, forVariable(variable), INITS);
     }
 
     public QArticle(Path<? extends Article> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QArticle(PathMetadata metadata) {
-        super(Article.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QArticle(PathMetadata metadata, PathInits inits) {
+        this(Article.class, metadata, inits);
+    }
+
+    public QArticle(Class<? extends Article> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.user = inits.isInitialized("user") ? new QUsers(forProperty("user")) : null;
     }
 
 }

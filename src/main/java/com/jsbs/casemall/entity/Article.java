@@ -20,7 +20,10 @@ public class Article extends BaseEntity {
     @Column
     private String content;
     //유저 정보 추가 필요
-    //private Users user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users user; //: 질문 작성 아이디
+
     public void patch(Article article) {
 
         if(article.title != null) {
