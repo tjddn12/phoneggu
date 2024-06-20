@@ -3,7 +3,7 @@ package com.jsbs.casemall.service;
 import com.jsbs.casemall.constant.Role;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.oauth.GoogleUserInfo;
-import com.jsbs.casemall.oauth.KakaoUserInfo;  // 카카오 사용자 정보 처리 클래스 추가
+import com.jsbs.casemall.oauth.KakaoUserInfo; // 카카오 사용자 정보 처리 클래스 추가
 import com.jsbs.casemall.oauth.NaverUserInfo;
 import com.jsbs.casemall.oauth.OAuth2UserInfo;
 import com.jsbs.casemall.repository.UserRepository;
@@ -39,7 +39,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         } else if ("naver".equals(provider)) {
             oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
-        } else if ("kakao".equals(provider)) {  // 카카오 추가
+        } else if ("kakao".equals(provider)) { // 카카오 추가
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         }
 
@@ -50,7 +50,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2UserInfo.getProviderId();
         String email = oAuth2UserInfo.getEmail();
         if (email == null || email.isEmpty()) {
-            email = provider + "_" + providerId + "@noemail.com";  // 이메일이 없을 경우 임시 이메일 생성
+            email = provider + "_" + providerId + "@noemail.com"; // 이메일이 없을 경우 임시 이메일 생성
         }
         String socialId = provider + "_" + providerId;
 
@@ -58,6 +58,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         Users users;
 
         if (optionalUsers.isEmpty()) {
+            // 새로운 사용자 생성
             users = Users.builder()
                     .userId(providerId)
                     .name(oAuth2UserInfo.getName() != null ? oAuth2UserInfo.getName() : "")
@@ -67,6 +68,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .loadAddr("") // 기본값 설정
                     .lotAddr("") // 기본값 설정
                     .detailAddr("") // 기본값 설정
+                    .extraAddr("") // 기본값 설정
                     .userPw("SOCIAL_LOGIN") // 소셜 로그인 사용자 비밀번호는 기본값 설정
                     .provider(provider)
                     .providerId(providerId)
@@ -75,7 +77,19 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .build();
             userRepository.save(users);
         } else {
+            // 기존 사용자 업데이트
             users = optionalUsers.get();
+            users.setName(oAuth2UserInfo.getName() != null ? oAuth2UserInfo.getName() : users.getName());
+            users.setProviderId(providerId);
+            users.setSocialId(socialId);
+            // 사용자가 직접 입력한 정보를 업데이트
+            if (oAuth2UserInfo.getPhone() != null) users.setPhone(oAuth2UserInfo.getPhone());
+            if (oAuth2UserInfo.getPCode() != null) users.setPCode(oAuth2UserInfo.getPCode());
+            if (oAuth2UserInfo.getLoadAddr() != null) users.setLoadAddr(oAuth2UserInfo.getLoadAddr());
+            if (oAuth2UserInfo.getLotAddr() != null) users.setLotAddr(oAuth2UserInfo.getLotAddr());
+            if (oAuth2UserInfo.getDetailAddr() != null) users.setDetailAddr(oAuth2UserInfo.getDetailAddr());
+            if (oAuth2UserInfo.getExtraAddr() != null) users.setExtraAddr(oAuth2UserInfo.getExtraAddr());
+            userRepository.save(users);
         }
 
         Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());

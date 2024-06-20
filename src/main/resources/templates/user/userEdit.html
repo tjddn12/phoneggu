@@ -11,40 +11,43 @@
 <div layout:fragment="content">
     <section class="signup">
         <h1 class="tit">회원 정보 수정</h1>
-        <form id="userEditForm" action="/userEdit" method="post">
+        <form id="userEditForm" action="/userEdit" method="post" th:object="${user}">
             <label for="userId">아이디 <strong>*</strong></label>
-            <input type="text" id="userId" name="userId" readonly="readonly" th:value="${user.getUserId()}" >
+            <input type="text" id="userId" name="userId" readonly="readonly" th:value="*{userId}" >
 
-            <label for="userPw">비밀번호  <strong>*</strong></label>
-            <input type="password" id="userPw" name="userPw">
+            <!-- 소셜 로그인 사용자는 비밀번호 필드를 숨김 -->
+            <div th:if="${!isSocialLogin}">
+                <label for="userPw">비밀번호  <strong>*</strong></label>
+                <input type="password" id="userPw" name="userPw">
 
-            <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
-            <input type="password" id="confirm-userPw" name="confirm-userPw">
-            <div id="passwordCheckResult"></div>
+                <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
+                <input type="password" id="confirm-userPw" name="confirm-userPw">
+                <div id="passwordCheckResult"></div>
+            </div>
 
             <label for="name">이름  <strong>*</strong></label>
-            <input type="text" id="name" name="name" readonly="readonly" th:value="${user.getName()}" >
+            <input type="text" id="name" name="name" readonly="readonly" th:value="*{name}" >
 
             <label class="col-sm-2 col-form-label">주소 <span class="text-danger">*</span></label>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_postcode" name="pCode" placeholder="우편번호">
+                <input type="text" class="address" id="sample4_postcode" name="pCode" placeholder="우편번호" th:value="*{pCode}">
                 <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소">
-                <input type="text" class="address" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소">
+                <input type="text" class="address" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" th:value="*{loadAddr}">
+                <input type="text" class="address" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" th:value="*{lotAddr}">
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소">
-                <input type="text" class="address" id="sample4_extraAddress" placeholder="참고항목">
+                <input type="text" class="address" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" th:value="*{detailAddr}">
+                <input type="text" class="address" id="sample4_extraAddress" name="extraAddr" placeholder="참고항목" th:value="*{extraAddr}">
             </div>
             <span id="guide" style="color:#999;display:none"></span>
 
             <label for="phone">휴대전화  <strong>*</strong></label>
-            <input type="tel" id="phone" name="phone" th:value="${user.getPhone()}" maxlength="11" required oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value.length > 11) this.value = this.value.slice(0, 11);">
+            <input type="tel" id="phone" name="phone" th:value="*{phone}" maxlength="11" required oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value.length > 11) this.value = this.value.slice(0, 11);">
 
             <label for="email">이메일  <strong>*</strong></label>
-            <input type="email" id="email" name="email" th:value="${user.getEmail()}">
+            <input type="email" id="email" name="email" th:value="*{email}">
 
             <div class="button-container">
                 <button type="submit" class="btn1">회원정보수정</button>

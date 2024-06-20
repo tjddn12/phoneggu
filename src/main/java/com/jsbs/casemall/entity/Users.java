@@ -3,12 +3,10 @@ package com.jsbs.casemall.entity;
 import com.jsbs.casemall.constant.Role;
 import com.jsbs.casemall.dto.UserDto;
 import jakarta.persistence.*;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
@@ -18,10 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 public class Users {
 
-    private String username; // ?
 
-//    @Column(name = "id", updatable = false)
-//    private Long id;
+
     @Id
     @Column(name = "userId")
     private String userId; // 유저 아이디
@@ -41,15 +37,17 @@ public class Users {
     @Column(name = "p_code", nullable = false)
     private String pCode;
 
-
-    @Column(name = "loadAddr", nullable = true)
+    @Column(name = "loadAddr", nullable = false)
     private String loadAddr;
 
-    @Column(name = "lotAddr", nullable = true)
+    @Column(name = "lotAddr", nullable = false)
     private String lotAddr;
 
-    @Column(name = "detailAddr", nullable = true)
+    @Column(name = "detailAddr", nullable = false)
     private String detailAddr;
+
+    @Column(name = "extraAddr", nullable = true)
+    private String extraAddr; // 추가된 필드
 
     @Column(name = "provider")
     private String provider;
@@ -65,7 +63,7 @@ public class Users {
 
     @Builder
     public Users(String userId, String name, String userPw, String email, String phone, String pCode,
-                 String loadAddr, String lotAddr, String detailAddr, String provider, String providerId, String socialId, Role role) {
+                 String loadAddr, String lotAddr, String detailAddr, String extraAddr, String provider, String providerId, String socialId, Role role) {
         this.userId = userId;
         this.name = name;
         this.userPw = userPw;
@@ -75,6 +73,7 @@ public class Users {
         this.loadAddr = loadAddr;
         this.lotAddr = lotAddr;
         this.detailAddr = detailAddr;
+        this.extraAddr = extraAddr;
         this.provider = provider;
         this.providerId = providerId;
         this.socialId = socialId;
@@ -92,6 +91,7 @@ public class Users {
                 .loadAddr(userDto.getLoadAddr())
                 .lotAddr(userDto.getLotAddr())
                 .detailAddr(userDto.getDetailAddr())
+                .extraAddr(userDto.getExtraAddr()) // 추가된 필드
                 .userPw(encodedPassword)
                 .role(Role.USER)
                 .build();
