@@ -93,7 +93,7 @@ public class Users {
                 .lotAddr(userDto.getLotAddr())
                 .detailAddr(userDto.getDetailAddr())
                 .userPw(encodedPassword)
-                .role(Role.ADMIN)
+                .role(Role.USER)
                 .build();
     }
 }
