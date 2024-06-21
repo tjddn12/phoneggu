@@ -33,16 +33,16 @@
 
             <label class="col-form-label">주소 <span class="text-danger">*</span></label>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_postcode" name="pCode" placeholder="우편번호" th:value="*{pCode}">
+                <input type="text" class="address form-control" id="sample4_postcode" name="pCode" placeholder="우편번호" th:value="*{pCode}">
                 <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" th:value="*{loadAddr}">
-                <input type="text" class="address" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" th:value="*{lotAddr}">
+                <input type="text" class="address form-control" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" th:value="*{loadAddr}">
+                <input type="text" class="address form-control" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" th:value="*{lotAddr}">
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" th:value="*{detailAddr}">
-                <input type="text" class="address" id="sample4_extraAddress" name="extraAddr" placeholder="참고항목" th:value="*{extraAddr}">
+                <input type="text" class="address form-control" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" th:value="*{detailAddr}">
+                <input type="text" class="address form-control" id="sample4_extraAddress" name="extraAddr" placeholder="참고항목" th:value="*{extraAddr}">
             </div>
             <span id="guide" style="color:#999;display:none"></span>
 

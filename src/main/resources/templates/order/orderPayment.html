@@ -14,7 +14,7 @@
 <div layout:fragment="content">
     <div class="container payment-container my-4">
         <h1 class="text-center my-4">ORDER</h1>
-        <table class="table actionOff">
+        <table class="table phone-actionOff">
             <thead>
             <tr>
                 <td></td>
@@ -56,38 +56,39 @@
             </tbody>
         </table>
 
-        <div class="actionOn">
-            <div th:each="item : ${order.items}" class="order-item">
-                <input type="hidden" name="orderId" th:value="${order.orderNo}" class="cart-item-checkbox">
-                <div class="row">
-                    <img alt="상품 이미지" class="img-fluid" th:src="@{${item.getImgUrl()}}">
-                    <div class="prInfo">
-                        <p class="prName" th:text="${item.productName}">상품 이름</p>
-                        <p class="prDetail" th:text="${item.modelName}">상품 기종</p>
+        <div class="phone-actionOn">
+            <div th:each="item : ${order.items}" class="phone-order-item">
+                <input type="hidden" name="orderId" th:value="${order.orderNo}" class="phone-cart-item-checkbox">
+                <div class="phone-row">
+                    <img alt="상품 이미지" class="phone-img-fluid" th:src="@{${item.getImgUrl()}}">
+                    <div class="phone-prInfo">
+                        <p class="phone-prName" th:text="${item.productName}">상품 이름</p>
+                        <p class="phone-prDetail" th:text="${item.modelName}">상품 기종</p>
                     </div>
                 </div>
-                <div class="price-details">
+                <div class="phone-price-details">
                     <span>가격:</span>
-                    <span class="prPrice" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'COMMA')}">0</span>원
+                    <span class="phone-prPrice" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'COMMA')}">0</span>원
                 </div>
-                <div class="price-details">
+                <div class="phone-price-details">
                     <span>수량:</span>
-                    <input class="form-control d-inline-block item-count" name="count" min="1" th:value="${item.count}" type="number" th:data-order-detail-id="${item.getOrderItemId()}">
+                    <input class="form-control d-inline-block phone-item-count" name="count" min="1" th:value="${item.count}" type="number" th:data-order-detail-id="${item.getOrderItemId()}">
                     <span>개 </span>
                 </div>
-                <div class="shipping-details">
+                <div class="phone-shipping-details">
                     <span>배송비:</span>
-                    <span class="shippingCost">0</span>원
+                    <span class="phone-shippingCost">0</span>원
                 </div>
-                <div class="total-details">
+                <div class="phone-total-details">
                     <span>합계:</span>
-                    <span class="totalPrice" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원
+                    <span class="phone-totalPrice" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원
                 </div>
-                <div class="select">
-                    <button class="btn btn-danger btn-sm remove-item" th:data-order-id="${order.orderNo}" th:data-order-detail-id="${item.getOrderItemId()}">삭제</button>
+                <div class="phone-select">
+                    <button class="btn btn-danger btn-sm phone-remove-item" th:data-order-id="${order.orderNo}" th:data-order-detail-id="${item.getOrderItemId()}">삭제</button>
                 </div>
             </div>
         </div>
+
 
         <table class="table tbBot">
             <th class="actionOff">[<span class="shipping">기본배송</span>]</th>
