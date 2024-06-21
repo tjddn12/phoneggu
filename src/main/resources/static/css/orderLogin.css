@@ -155,3 +155,10 @@ input[type="text"], input[type="password"] {
   margin-bottom: 20px;
 }
 
+.actionOff{display: block;}
+.actionOn{display: none;}
+
+@media (max-width: 767px) {
+  .actionOff{display: none;}
+  .actionOn{display: block;}
+}

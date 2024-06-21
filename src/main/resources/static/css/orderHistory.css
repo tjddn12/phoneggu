@@ -111,3 +111,76 @@ table{
 .pagination button:hover {
     background-color: #f0f0f0;
 }
+
+.actionOff{display: block;}
+.actionOn{display: none;}
+
+@media (max-width: 767px) {
+    .actionOff{display: none;}
+    .actionOn{display: block;}
+
+    .order-item {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .order-header span {
+        font-weight: bold;
+    }
+
+    .product-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .product-header img {
+        max-width: 30%;
+        margin-right: 15px;
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-info p {
+        margin: 0;
+    }
+
+    .product-info .prName {
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .product-info .prDetail {
+        font-size: 0.9em;
+        color: #666;
+    }
+
+    .order-details {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .order-details span {
+        font-weight: bold;
+    }
+
+    .review-button {
+        margin-top: 10px;
+    }
+
+    .btn-review {
+        width: 100%;
+    }
+}

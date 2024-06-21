@@ -115,3 +115,15 @@ a {
     display: none;
 }
 
+@media (max-width: 767px) {
+    .circle-item {
+        float: left;
+        width: 50%;
+        padding: 10px;
+    }
+    .product {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+}

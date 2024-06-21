@@ -73,6 +73,11 @@ function updateTotalPrice() {
 
 // 장바구니 와 바로구매 버튼 action 처리
 function submitForm(action) {
+    if (selectedProducts.length === 0) {
+        alert('옵션을 선택해 주세요.');
+        return;
+    }
+
     const form = document.getElementById('productForm');
     const prId = document.getElementById('prId').value;
     if (action === 'cart') {

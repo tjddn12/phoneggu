@@ -34,7 +34,7 @@
             <p><strong>결제수단 :</strong> <span class="paymentMethod" th:text="${order.getPayInfo()}"></span></p>
         </div>
 
-        <table class="table">
+        <table class="table actionOff">
             <thead>
             <tr>
                 <th>이미지</th>
@@ -67,8 +67,36 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="actionOn">
+            <div th:each="item : ${order.items}" class="small-order-item">
+                <div class="row mb-3 product-header">
+                    <div class="col-4">
+                        <img alt="상품 이미지" class="img-fluid" th:src="@{${item.getImgUrl()}}">
+                    </div>
+                    <div class="col-8">
+                        <p class="prName" th:text="${item.productName}">상품 이름</p>
+                        <p class="prDetail" th:text="${item.modelName}">상품 기종</p>
+                    </div>
+                </div>
+                <div class="row mb-3 product-info">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between">
+                            <p>가 격 : <span class="prPrice" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'COMMA')}">0</span>원</p>
+                            <p class="txtCount">수 량 : <input class="form-control d-inline-block item-count" name="count" min="1" th:value="${item.count}" type="number" readonly="readonly"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>배송 정보 : <span class="shipping">무료배송</span></p>
+                            <p>배 송 비 : <span class="shippingCost">0</span>원</p>
+                        </div>
+                        <p>총 가격: <span class="totalPrice" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <table class="table tbBot">
-            <th>[<span class="shipping">기본배송</span>]</th>
+            <th class="actionOff">[<span class="shipping">기본배송</span>]</th>
             <td>상품구매금액 <span class="sumPrice bb " th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
                     class="sumTotalPrice bb" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원
             </td>

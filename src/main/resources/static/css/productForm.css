@@ -34,28 +34,22 @@ h1 {
     font-size: 14px;
 }
 
-.img-div {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-}
-
 .select_category, .select_type {
-    width: 250px;
+    max-width: 250px;
 }
 
 .col-form-label {
-    background-color: #ffffff; /* 회색 배경 */
-    padding: 5px 10px; /* 패딩 추가 */
-    text-align: right; /* 텍스트 정렬 */
+    background-color: #ffffff;
+    padding: 5px 10px;
+    text-align: right;
 }
 
 .form-control, .form-select, textarea {
-    letter-spacing: 0.05em; /* 글자 간격 조정 */
+    letter-spacing: 0.05em;
 }
 
 .d-flex.align-items-center .form-select {
-    margin-left: 10px; /* 선택창 간격 조정 */
+    margin-left: 10px;
 }
 
 .row.mb-3 .col-sm-2 {
@@ -72,16 +66,16 @@ h1 {
 .model-item, .stock-item {
     display: flex;
     align-items: center;
-    margin-right: 20px; /* 모델 아이템 간의 간격 조정 */
-    margin-bottom: 10px; /* 모델 아이템의 아래쪽 간격 조정 */
+    margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 .model-item label {
-    margin-right: 10px; /* 체크박스와 텍스트 간의 간격 조정 */
+    margin-right: 10px;
 }
 
 .stock-input {
-    width: 100px; /* 수량 입력란의 너비 조정 */
+    width: 100px;
 }
 
 .preview-img {
@@ -106,4 +100,12 @@ h1 {
     border-radius: 50%;
     cursor: pointer;
     padding: 5px;
+}
+
+@media (max-width: 767px) {
+    .row.mb-3 .col-sm-2 {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
 }
