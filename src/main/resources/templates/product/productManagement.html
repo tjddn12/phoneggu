@@ -23,23 +23,23 @@
             <a th:href="@{/admin/product/new}" class="btn btn-primary">상품 추가</a>
         </div>
 <!--        <form th:action="@{'/admin/product/management/' }" role="form" method="get" th:object="${management}">-->
-            <div class="table-container">
+            <div class="table-container actionOff">
                 <table class="table table-striped table-bordered">
                     <thead class="table-dark">
                     <tr>
-                        <th scope="col" class="hidden-on-small">#</th>
+                        <th scope="col">#</th>
                         <th scope="col">이미지</th>
                         <th scope="col">판매 상태</th>
                         <th scope="col">상품명</th>
                         <th scope="col">카테고리</th>
                         <th scope="col">종류</th>
-                        <th scope="col" class="hidden-on-small">등록일</th>
-                        <th scope="col" class="on-small">관리</th>
+                        <th scope="col">등록일</th>
+                        <th scope="col">관리</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="product : ${management.content}">
-                        <td th:text="${product.id}" class="hidden-on-small"></td>
+                        <td th:text="${product.id}"></td>
                         <td>
                             <img th:if="${product.productImgList.size() > 0}" th:src="@{${product.productImgList[0].imgUrl}}" alt="Product Image" width="100" height="100">
                         </td>
@@ -49,7 +49,7 @@
                         </td>
                         <td th:text="${product.productCategory}"></td>
                         <td th:text="${product.productType}"></td>
-                        <td th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd')}" class="hidden-on-small"></td>
+                        <td th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd')}"></td>
                         <td>
                             <form th:action="@{'/admin/product/delete/' + ${product.id}}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
                                 <button type="submit" class="deleteBtn btn btn-danger">삭제</button>
@@ -60,6 +60,31 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="actionOn">
+                <div th:each="product : ${management.content}" class="product-item">
+                    <div class="product-header">
+                        <img th:if="${product.productImgList.size() > 0}" th:src="@{${product.productImgList[0].imgUrl}}" alt="Product Image">
+                        <div class="product-info">
+                            <p th:text="'#' + ${product.id}"></p>
+                            <p th:text="'판매 상태: ' + (${product.productSellStatus.name() == 'SELL' ? '판매중' : '품절'})"></p>
+                            <p>
+                                <a th:href="@{'/product/' + ${product.id}}" th:text="${product.prName}"></a>
+                            </p>
+                            <p th:text="'카테고리: ' + ${product.productCategory}"></p>
+                            <p th:text="'종류: ' + ${product.productType}"></p>
+                            <p th:text="'등록일: ' + ${#temporals.format(product.regTime, 'yyyy-MM-dd')}"></p>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <form th:action="@{'/admin/product/delete/' + ${product.id}}" method="post" onsubmit="return confirmDelete();">
+                            <button type="submit" class="deleteBtn btn btn-danger">삭제</button>
+                        </form>
+                        <a th:href="@{'/admin/product/' + ${product.id}}" class="btn btn-primary">수정</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- 페이지네이션 -->
             <div th:with="start=${T(java.lang.Math).floor(management.number / maxPage) * maxPage + 1},
                             end=${(management.totalPages == 0) ? 1

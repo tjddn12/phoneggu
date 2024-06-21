@@ -28,7 +28,7 @@
                 <button class="btn btn-primary" type="submit">조회</button>
             </div>
 
-            <table class="table table-hover">
+            <table class="table table-hover actionOff">
                 <thead>
                 <tr>
                     <th>주문일자<br>[주문번호]</th>
@@ -60,7 +60,30 @@
                 </tbody>
             </table>
 
-
+            <div class="actionOn">
+                <div th:each="order : ${orders}">
+                    <div th:each="item : ${order.Items}" class="order-item">
+                        <div class="order-header">
+                            <span th:text="${order.getOrderTime()}">2023-01-01 12:00</span>
+                            <span>주문완료</span>
+                        </div>
+                        <div class="product-header">
+                            <img alt="상품 이미지" class="img-fluid" th:src="${item.getImgUrl()}">
+                            <div class="product-info">
+                                <p class="prName" th:text="${item.getProductName()}">상품 이름</p>
+                                <p class="prDetail" th:text="${item.getModelName()}">상품 기종</p>
+                            </div>
+                        </div>
+                        <div class="order-details">
+                            <span>수량: <span th:text="${item.getCount()}">1</span></span>
+                            <span>총 가격: <span th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</span>
+                        </div>
+                        <div class="review-button">
+                            <button class="btn btn-primary btn-sm btn-review" type="button">리뷰쓰기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <!-- 페이지네이션 -->

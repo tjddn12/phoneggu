@@ -114,11 +114,12 @@
     background-color: transparent !important; /* 부트스트랩 기본 호버 배경색 제거 */
     color: inherit; /* 텍스트 색상 유지 */
 }
-.actionOn{display: none}
-.actionOff{display: block}
 .backgroundOff{background-color: transparent}
 
+.actionOn{display: none;}
+.actionOff{display: block;}
+
 @media (max-width: 767px) {
-    .actionOn{display: block}
-    .actionOff{display: none}
+    .actionOn{display: block;}
+    .actionOff{display: none;}
 }
