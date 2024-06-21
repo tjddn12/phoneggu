@@ -112,75 +112,75 @@ table{
     background-color: #f0f0f0;
 }
 
-.actionOff{display: block;}
-.actionOn{display: none;}
+.phone-actionOn{display: none;}
 
 @media (max-width: 767px) {
-    .actionOff{display: none;}
-    .actionOn{display: block;}
+    .phone-actionOff{display: none;}
+    .phone-actionOn{display: block;}
 
-    .order-item {
+    .phone-order-item {
         border: 1px solid #ddd;
         border-radius: 5px;
         padding: 15px;
         margin-bottom: 15px;
     }
 
-    .order-header {
+    .phone-order-header {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
     }
 
-    .order-header span {
+    .phone-order-header span {
         font-weight: bold;
     }
 
-    .product-header {
+    .phone-product-header {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
     }
 
-    .product-header img {
+    .phone-product-header img {
         max-width: 30%;
         margin-right: 15px;
     }
 
-    .product-info {
+    .phone-product-info {
         display: flex;
         flex-direction: column;
     }
 
-    .product-info p {
+    .phone-product-info p {
         margin: 0;
     }
 
-    .product-info .prName {
+    .phone-product-info .phone-prName {
         font-size: 1.1em;
         font-weight: bold;
     }
 
-    .product-info .prDetail {
+    .phone-product-info .phone-prDetail {
         font-size: 0.9em;
         color: #666;
     }
 
-    .order-details {
+    .phone-order-details {
         display: flex;
         justify-content: space-between;
         margin-top: 10px;
     }
 
-    .order-details span {
+    .phone-order-details span {
         font-weight: bold;
     }
 
-    .review-button {
+    .phone-review-button {
         margin-top: 10px;
     }
 
-    .btn-review {
+    .phone-btn-review {
         width: 100%;
     }
+
 }

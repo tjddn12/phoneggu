@@ -67,15 +67,18 @@ a {text-decoration: none;}
     text-align: center;
     vertical-align: middle;
 }
-
+.table-group-divider td:nth-child(1){
+    padding: 5px;
+    width: 15%;
+    max-height: 100px;
+}
 .table-group-divider td:nth-child(1) img{
     padding: 5px;
-    width: 100px;
-    height: 100px;
+    width: 100%;
 }
 
 .table-group-divider td:nth-child(2) {
-    width: 500px; 
+    width: 30%;
 }
 
 .table-group-divider td:nth-child(2) .prName {
@@ -88,13 +91,13 @@ a {text-decoration: none;}
     margin: 0;
 }
 .table-group-divider td:nth-child(3),
+.table-group-divider td:nth-child(4),
 .table-group-divider td:nth-child(5),
 .table-group-divider td:nth-child(6),
 .table-group-divider td:nth-child(7){
-    width: 130px;
+    width: 10%;
     font-weight: bold;
 }
-.table-group-divider td:nth-child(4){width: 150px;}
 
 .tbBot th{text-align: left;}
 .tbBot td{text-align: end;}
@@ -153,7 +156,6 @@ a {text-decoration: none;}
     margin-bottom: 5px;
 }
 
-.actionOff{display: block;}
 .actionOn{display: none;}
 
 @media (max-width: 767px) {

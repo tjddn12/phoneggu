@@ -22,13 +22,13 @@
                     <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('three_months')">3개월</button>
                     <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('six_months')">6개월</button>
                 </div>
-                <input id="startDate" class="form-control actionOff" placeholder="달력" type="date" name="startDate">
+                <input id="startDate" class="form-control phone-actionOff" placeholder="달력" type="date" name="startDate">
                 <span class="actionOff">~</span>
-                <input id="endDate" class="form-control actionOff" placeholder="달력" type="date" name="endDate">
+                <input id="endDate" class="form-control phone-actionOff" placeholder="달력" type="date" name="endDate">
                 <button class="btn btn-primary" type="submit">조회</button>
             </div>
 
-            <table class="table table-hover actionOff">
+            <table class="table table-hover phone-actionOff">
                 <thead>
                 <tr>
                     <th>주문일자<br>[주문번호]</th>
@@ -60,31 +60,30 @@
                 </tbody>
             </table>
 
-            <div class="actionOn">
+            <div class="phone-actionOn">
                 <div th:each="order : ${orders}">
-                    <div th:each="item : ${order.Items}" class="order-item">
-                        <div class="order-header">
+                    <div th:each="item : ${order.Items}" class="phone-order-item">
+                        <div class="phone-order-header">
                             <span th:text="${order.getOrderTime()}">2023-01-01 12:00</span>
                             <span>주문완료</span>
                         </div>
-                        <div class="product-header">
-                            <img alt="상품 이미지" class="img-fluid" th:src="${item.getImgUrl()}">
-                            <div class="product-info">
-                                <p class="prName" th:text="${item.getProductName()}">상품 이름</p>
-                                <p class="prDetail" th:text="${item.getModelName()}">상품 기종</p>
+                        <div class="phone-product-header">
+                            <img alt="상품 이미지" class="phone-img-fluid" th:src="${item.getImgUrl()}">
+                            <div class="phone-product-info">
+                                <p class="phone-prName" th:text="${item.getProductName()}">상품 이름</p>
+                                <p class="phone-prDetail" th:text="${item.getModelName()}">상품 기종</p>
                             </div>
                         </div>
-                        <div class="order-details">
+                        <div class="phone-order-details">
                             <span>수량: <span th:text="${item.getCount()}">1</span></span>
                             <span>총 가격: <span th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</span>
                         </div>
-                        <div class="review-button">
-                            <button class="btn btn-primary btn-sm btn-review" type="button">리뷰쓰기</button>
+                        <div class="phone-review-button">
+                            <button class="btn btn-primary btn-sm phone-btn-review" type="button">리뷰쓰기</button>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <!-- 페이지네이션 -->
             <div th:with="maxPage=5,
