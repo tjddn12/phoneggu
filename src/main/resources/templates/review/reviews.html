@@ -13,15 +13,15 @@
         <div class="container">
             <div class="grid-container">
                 <!-- 총 30개의 리뷰 게시글을 동일한 구조로 추가 -->
-                <div class="grid-item" th:each="review : ${reviews}">
-                    <a th:href="@{/reviews/{id}(id=${review.reviewNo})}">
-                        <img th:src="${reviewImages[review.reviewNo]}" alt="Product Image">
+                <div class="grid-item" th:each="review, loop : ${paging}">
+                    <a th:href="@{/reviews/{id}(id=${review.id})}">
+                        <img th:src="${review.imgUrl}" alt="Review Image">
 <!--                        작성자&상품명 추가-->
                         <h3 th:text="${review.revwTitle}"></h3>
                         <p th:text="${review.revwContent}"></p>
-                        <p>상품명: <span th:text="${review.productName }"></span></p>
+                        <p>상품명: <span th:text="${review.productName}"></span></p>
 <!--                        :주문에서 같이 받아올 것-->
-                        <p>작성자: <span th:text="${review.getUserid()}"></span></p>
+                        <p>작성자: <span th:text="${review.userId}"></span></p>
                         <span class="rating">
                             <th:block th:each="i : ${#numbers.sequence(1, 5)}">
                                 <span th:class="${i <= review.revwRatings} ? 'active' : ''">★</span>
@@ -31,25 +31,29 @@
                 </div>
             </div>
         </div>
-<!--        페이징 처리 보완 필요.-->
-        <nav aria-label="Page navigation">
+        <!-- 페이징 처리 시작 -->
+        <div th:if="${!paging.isEmpty()}">
             <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${pageDto.page == 1 ? 'disabled' : ''}">
-                    <a th:href="@{/reviews(page=${pageDto.page - 1})}" class="page-link" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
+                <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{|?page=${paging.number - 1}|}">
+                        <span>이전</span>
                     </a>
                 </li>
-                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
-                th:classappend="${pageDto.page == pageNumber ? 'active' : ''}">
-                    <a th:href="@{/reviews(page=${pageNumber - 1})}" th:text="${pageNumber}" class="page-link"></a>
+                <li th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}"
+                    th:if="${page >= paging.number - 5 and page <= paging.number + 5}"
+                    th:classappend="${page == paging.number} ? 'active'"
+                    class="page-item">
+                    <a th:text="${page + 1}" class="page-link" th:href="@{|?page=${page}|}"></a>
                 </li>
-                <li class="page-item" th:classappend="${pageDto.page == pageDto.pageSize ? 'disabled' : ''}">
-                    <a th:href="@{/reviews(page=${pageDto.page + 1})}" aria-label="Next" class="page-link">
-                        <span aria-hidden="true">&raquo;</span>
+                <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                    <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                        <span>다음</span>
                     </a>
                 </li>
             </ul>
-        </nav>
+        </div>
+        <!-- 페이징처리 끝 -->
     </div>
 </body>
 </html>

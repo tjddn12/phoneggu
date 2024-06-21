@@ -1,10 +1,9 @@
 package com.jsbs.casemall.controller;
 
-import com.jsbs.casemall.dto.Criteria;
-import com.jsbs.casemall.dto.PageDto;
 import com.jsbs.casemall.dto.ReviewFormDto;
 import com.jsbs.casemall.dto.ReviewsDto;
 import com.jsbs.casemall.entity.Review;
+import com.jsbs.casemall.repository.ReviewImgRepository;
 import com.jsbs.casemall.repository.ReviewRepository;
 import com.jsbs.casemall.repository.UserRepository;
 import com.jsbs.casemall.service.OrderService;
@@ -13,6 +12,7 @@ import com.jsbs.casemall.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,6 +37,7 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewImgRepository reviewImgRepository;
     private final ReviewImgService reviewImgService;
     private final OrderService orderService;
 
@@ -110,27 +111,43 @@ public class ReviewController {
 
     //리뷰 게시판 페이징 처리 및 매개변수 전달
     @GetMapping
-    public String getReviews(Criteria criteria, Model model) {
-        List<ReviewsDto> reviews = reviewService.getAllReviews();
-        Map<Long, String> reviewImages = new HashMap<>();
-        PageDto<Review> pageDto = reviewService.getReviewList(criteria);
-        List<Integer> pageNumbers = IntStream.rangeClosed(1, pageDto.getTotalRecordCount())
-                .boxed()
-                .collect(Collectors.toList());
-        //페이징 처리
-        List<ReviewsDto> dto = new ArrayList<>();
-        model.addAttribute("pageDto", pageDto);
-        model.addAttribute("pageNumbers", pageNumbers);
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Review> paging = this.reviewService.getReviewList(page);
+        Page<ReviewFormDto> reviewFormDtos = paging.map(review -> {
+            return new ReviewFormDto(
+                    review.getReviewNo(),
+                    reviewImgRepository.findByReview(review).getImgUrl(),
+                    review.getRevwTitle(),
+                    review.getRevwContent(),
+                    review.getPrId().getPrName(),
+                    review.getUserId().getName(),
+                    review.getRevwRatings()
+            );
+        });
+//        Map<Long, String> reviewImages = new HashMap<>();
+//
+//        for (ReviewFormDto review : reviewFormDtos) {
+////            String imageUrl = reviewService.getImgUrlByReviewNo(review.getReviewNo());
+//            reviewImages.put(review.getId(), review.getImgUrl());
+////        }
 
-        for (ReviewsDto review : reviews) {
-            String imageUrl = reviewService.getImgUrlByReviewNo(review.getReviewNo());
-            reviewImages.put(review.getReviewNo(), imageUrl);
-        }
-
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("reviewImages", reviewImages);
+            model.addAttribute("paging", reviewFormDtos);
+//            model.addAttribute("reviewImages", reviewImages);
 
         return "review/reviews";
+//        List<ReviewsDto> reviews = reviewService.getAllReviews();
+//        PageDto<Review> pageDto = reviewService.getReviewList(criteria);
+//        List<Integer> pageNumbers = IntStream.rangeClosed(1, pageDto.getTotalRecordCount())
+//                .boxed()
+//                .collect(Collectors.toList());
+//        //페이징 처리
+//        List<ReviewsDto> dto = new ArrayList<>();
+//        model.addAttribute("pageDto", pageDto);
+//        model.addAttribute("pageNumbers", pageNumbers);
+//
+//
+//
+//        model.addAttribute("reviews", reviews);
     }
 
     //    @PostMapping

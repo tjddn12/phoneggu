@@ -3,37 +3,27 @@ body {
     margin: 0;
     padding: 0;
 }
-
 .container {
-    max-width: 1200px;
+    max-width: 800px; /* 원하는 최대 너비 설정 */
     margin: 0 auto;
-    padding: 20px;
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    grid-gap: 20px;
-}
-
-.grid-item {
-    background-color: #f2f2f2;
-    padding: 20px;
     text-align: center;
 }
-
-.grid-item a {
-    text-decoration: none;
-    color: inherit;
+#big{
+    font-size: 2em;
 }
 
-.grid-item img {
-    max-width: 100%;
+.review-images {
+    text-align: center; /* 이미지 요소들을 중앙 정렬 */
+}
+
+.review-images img {
+    max-width: 100%; /* 이미지 크기 조절 */
     height: auto;
 }
 
 .rating {
+    display: inline-block;
+    text-align: left; /* 평점 별은 왼쪽 정렬 */
     font-size: 1.2rem;
     margin-top: 10px;
     white-space: nowrap;

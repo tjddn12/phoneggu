@@ -7,33 +7,22 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>질문 상세</title>
     <script defer th:src="@{/js/comment.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/show.css}">
 </head>
 <body>
     <div layout:fragment="content">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">번호</th>
-                <th scope="col">질문</th>
-                <th scope="col">내용</th>
-            </tr>
-<!--            테이블 형태 아닌 게시글 형태로 수정 예정-->
-            </thead>
-            <tbody>
-            <!-- 모델에 등록된 데이터는 th:if를 통해서 가져옴 -->
-            <tr th:if="${article}">
-                <th th:text="${article.id}">번호</th>
-                <td th:text="${article.title}">질문</td>
-                <td th:text="${article.content}">내용</td>
-            </tr>
-            </tbody>
-        </table>
+        <!-- 모델에 등록된 데이터는 th:if를 통해서 가져옴 -->
+        <div class="container my-5">
+            <h1 th:if="${article}"></h1>
+            <p th:text="${article.title}">질문</p>
+            <p th:text="${article.user.getName()}">작성자</p>
+            <p id="big" th:text="${article.content}">내용</p>
+        </div>
         <!-- 작성자  본인 일때 보이게 -->
         <th:block th:if="${writer}">
             <a th:href="@{/qnas/{id}/edit(id=${article.id})}" class="btn btn-primary">수정</a>
             <a th:href="@{/qnas/{id}/delete(id=${article.id})}" class="btn btn-danger">삭제</a>
         </th:block>
-
         <a th:href="@{/qnas}">질문 목록으로</a>
         <!--------------- 답변 --------------->
         <div id="comments-list" >

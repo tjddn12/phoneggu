@@ -1,8 +1,6 @@
 package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.dto.ArticleForm;
-import com.jsbs.casemall.dto.Criteria;
-import com.jsbs.casemall.dto.PageDto;
 import com.jsbs.casemall.entity.Article;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.ArticleRepository;
@@ -10,7 +8,6 @@ import com.jsbs.casemall.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
