@@ -1,6 +1,5 @@
 package com.jsbs.casemall.dto;
 
-
 import com.jsbs.casemall.entity.Users;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -14,7 +13,6 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @ToString
 public class UserDto {
-
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     private String userId;
@@ -45,6 +43,7 @@ public class UserDto {
     @NotBlank(message = "주소는 필수 입력 값입니다.")
     private String detailAddr;
 
+    private String extraAddr; // 추가된 필드
 
     public UserDto(Users user) {
         this.userId = user.getUserId();
@@ -55,11 +54,7 @@ public class UserDto {
         this.loadAddr = user.getLoadAddr();
         this.lotAddr = user.getLotAddr();
         this.detailAddr = user.getDetailAddr();
+        this.extraAddr = user.getExtraAddr(); // 추가된 필드 초기화
         this.email = user.getEmail();
     }
-
 }
-
-
-
-

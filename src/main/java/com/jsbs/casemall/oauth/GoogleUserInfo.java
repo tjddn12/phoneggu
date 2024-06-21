@@ -2,11 +2,10 @@ package com.jsbs.casemall.oauth;
 
 import java.util.Map;
 
-public class GoogleUserInfo implements OAuth2UserInfo {
-    private final Map<String, Object> attributes;
+public class GoogleUserInfo extends OAuth2UserInfo {
 
     public GoogleUserInfo(Map<String, Object> attributes) {
-        this.attributes = attributes;
+        super(attributes);
     }
 
     @Override
@@ -29,8 +28,34 @@ public class GoogleUserInfo implements OAuth2UserInfo {
         return (String) attributes.get("name");
     }
 
+    // 구글 OAuth2에 해당하는 데이터가 있는 경우 제공
     @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
+    public String getPhone() {
+        return (String) attributes.get("phone");
+    }
+
+    @Override
+    public String getPCode() {
+        return (String) attributes.get("p_code");
+    }
+
+    @Override
+    public String getLoadAddr() {
+        return (String) attributes.get("loadAddr");
+    }
+
+    @Override
+    public String getLotAddr() {
+        return (String) attributes.get("lotAddr");
+    }
+
+    @Override
+    public String getDetailAddr() {
+        return (String) attributes.get("detailAddr");
+    }
+
+    @Override
+    public String getExtraAddr() {
+        return (String) attributes.get("extraAddr");
     }
 }

@@ -14,7 +14,6 @@
     <section class="signup">
         <h2 class="tit">회원가입</h2>
         <p class="back-login">이미 계정이 있으신가요? <a class="bk-link" href="/login">로그인 하러 가기</a></p>
-        <button class="kakao-login">카카오 로그인</button>
 
         <form action="/join" method="post" onsubmit="return validateForm();">
             <label for="userId">아이디 <strong>*</strong></label>
@@ -36,9 +35,9 @@
             <label for="phone">휴대전화 <strong>*</strong></label>
             <label for="phone">
                 <input id="phone" name="phone" type="hidden" value="">
-                <input id="phone1" name="phone1" maxlength="3" size="3" type="tel" required> -
-                <input id="phone2" name="phone2" maxlength="4" size="4" type="tel" required> -
-                <input id="phone3" name="phone3" maxlength="4" size="4" type="tel" required>
+                <input id="phone1" name="phone1" maxlength="3" size="3" type="tel" required pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');"> -
+                <input id="phone2" name="phone2" maxlength="4" size="4" type="tel" required pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');"> -
+                <input id="phone3" name="phone3" maxlength="4" size="4" type="tel" required pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
             </label>
             <br><br>
 
@@ -153,9 +152,9 @@
                 return true;
             }
 
-            document.getElementById("phone1").addEventListener("change", updatePhoneValue);
-            document.getElementById("phone2").addEventListener("change", updatePhoneValue);
-            document.getElementById("phone3").addEventListener("change", updatePhoneValue);
+            document.getElementById("phone1").addEventListener("input", updatePhoneValue);
+            document.getElementById("phone2").addEventListener("input", updatePhoneValue);
+            document.getElementById("phone3").addEventListener("input", updatePhoneValue);
 
             // 이메일 도메인 선택 시 값 업데이트 함수
             function updateEmailValue() {
@@ -183,17 +182,6 @@
 
             document.getElementById("email").addEventListener("input", emailHiddenInput);
             document.getElementById("email-domain").addEventListener("input", emailHiddenInput);
-
-            document.querySelector('.kakao-login').addEventListener('click', function () {
-                var width = 500;
-                var height = 600;
-                var left = (screen.width / 2) - (width / 2);
-                var top = (screen.height / 2) - (height / 2);
-
-                var popupUrl = 'http://localhost/join'; // 여기에 팝업으로 띄울 URL을 입력하세요
-
-                window.open(popupUrl, '로그인 팝업', 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
-            });
 
             // 아이디 중복 확인 함수
             document.addEventListener('DOMContentLoaded', function () {

@@ -2,35 +2,47 @@ package com.jsbs.casemall.oauth;
 
 import java.util.Map;
 
-public class NaverUserInfo extends OAuth2UserInfo {
+public class KakaoUserInfo extends OAuth2UserInfo {
 
-    public NaverUserInfo(Map<String, Object> attributes) {
+    public KakaoUserInfo(Map<String, Object> attributes) {
         super(attributes);
     }
 
     @Override
     public String getProviderId() {
-        return (String) attributes.get("id");
+        return String.valueOf(attributes.get("id"));
     }
 
     @Override
     public String getProvider() {
-        return "naver";
+        return "kakao";
     }
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("email");
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        if (kakaoAccount == null) {
+            return null;
+        }
+        return (String) kakaoAccount.get("email");
     }
 
     @Override
     public String getName() {
-        return (String) attributes.get("name");
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+        if (properties == null) {
+            return null;
+        }
+        return (String) properties.get("nickname");
     }
 
     @Override
     public String getPhone() {
-        return (String) attributes.get("phone");
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        if (kakaoAccount == null) {
+            return null;
+        }
+        return (String) kakaoAccount.get("phone");
     }
 
     @Override
