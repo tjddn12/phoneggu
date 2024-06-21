@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -51,7 +52,7 @@ public class ReviewController {
 
 
     @PostMapping("/reviewWrite")
-    public String reviewNew(@Valid ReviewFormDto reviewFormDto, BindingResult bindingResult, Model model,
+    public String reviewNew(@Valid ReviewFormDto reviewFormDto, BindingResult bindingResult, Model model, Principal principal,
     @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList){
         if(bindingResult.hasErrors()){
             return "review/reviewWrite";
