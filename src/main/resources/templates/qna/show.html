@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>질문 상세</title>
+    <script defer th:src="@{/js/comment.js}"></script>
+</head>
+<body>
+    <div layout:fragment="content">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">질문</th>
+                <th scope="col">내용</th>
+            </tr>
+<!--            테이블 형태 아닌 게시글 형태로 수정 예정-->
+            </thead>
+            <tbody>
+            <!-- 모델에 등록된 데이터는 th:if를 통해서 가져옴 -->
+            <tr th:if="${article}">
+                <th th:text="${article.id}">번호</th>
+                <td th:text="${article.title}">질문</td>
+                <td th:text="${article.content}">내용</td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- 작성자  본인 일때 보이게 -->
+        <th:block th:if="${writer}">
+            <a th:href="@{/qnas/{id}/edit(id=${article.id})}" class="btn btn-primary">수정</a>
+            <a th:href="@{/qnas/{id}/delete(id=${article.id})}" class="btn btn-danger">삭제</a>
+        </th:block>
+
+        <a th:href="@{/qnas}">질문 목록으로</a>
+        <!--------------- 답변 --------------->
+        <div id="comments-list" >
+            <div th:each="comment : ${comments}">
+                <div class="card" th:id="'comments-' + ${comment.id}">
+                    <div class="card-header">
+                        <span th:text="${comment.nickname}"></span>
+                        <!-- Button trigger modal -->
+                        <button type="button"
+                                class="btn btn-sm btn-outline-success m-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#comment-edit-modal"
+                                th:attr="data-bs-id=${comment.id},
+                                         data-bs-nickname=${comment.nickname},
+                                         data-bs-body=${comment.body},
+                                         data-bs-article-id=${comment.articleId}">
+                            수정
+                        </button>
+                        <!-- 수정버튼 옆에 삭제 버튼 추가 -->
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger m-2 comment-delete-btn"
+                                th:attr="data-comment-id=${comment.id}">
+                            삭제
+                        </button>
+                    </div>
+                    <div class="card-body" >
+                        <span th:text="${comment.body}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="comment-edit-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">답변 수정</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 답변 수정 폼-->
+                        <form>
+                            <!-- 닉네임 입력 -->
+                            <div class="mb-3">
+                                <label class="form-label">닉네임</label>
+                                <input type="text" class="form-control form-control-sm" id="edit-comment-nickname">
+                            </div>
+
+                            <!-- 답변 본문 입력 -->
+                            <div class="mb-3">
+                                <label class="form-label"> 내용</label>
+                                <textarea type="text" class="form-control form-control-sm" rows="3" id="edit-comment-body"></textarea>
+                            </div>
+                            <!-- 히든 인풋 -->
+                            <input type="hidden" id="edit-comment-id">
+                            <input type="hidden" id="edit-comment-article-id">
+                            <!-- 전송 버튼 -->
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-outline-primary btn-m" id="comment-update-btn">답변 수정 완료</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--관리자만 댓글 생성 -->
+        <div class="card m-2" id="comments-new" sec:authorize="hasRole('ADMIN')">
+            <div class="card-body">
+                <!-- 답변 작성폼 -->
+                <form>
+                    <!-- 닉네임입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">관리자</label>
+                        <input type="hidden" class="form-control form-control-sm"
+                               id="new-comment-nickname">
+                    </div>
+                    <!-- 답변 본문 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">답변 내용</label>
+                        <textarea type="text" class="form-control form-control-sm"
+                                  id="new-comment-body" rows="3"></textarea>
+                    </div>
+                    <!-- 히든 인풋 -->
+                    <!-- 답변은 게시글에 포함되어야 하니까 article_id의 값을 hidden으로 가지고 있어야 한다. -->
+                    <input type="hidden" id="new-comment-article-id" th:value="${article.id}">
+                    <!-- 전송버튼 -->
+                    <button type="button" class="btn btn-outline-primary btn-m"
+                            id="comment-create-btn">답변 작성</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

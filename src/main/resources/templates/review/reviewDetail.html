@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>리뷰쓰기 | 폰꾸</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--    JAVAScript: JQuery 라이브러리가 먼저 로드되고 바로 JS 코드가 로드되어야 작동함.-->
+    <!--    CSS-->
+    <link rel="stylesheet" th:href="@{/css/reviewDetail.css}">
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container my-5">
+            <h1 th:text="${review.revwTitle}"></h1>
+            <p th:text="${review.revwContent}"></p>
+            <p>상품명: <span th:text="${review.productName}"></span></p>
+            <p>작성자: <span th:text="${review.userid}"></span></p>
+            <p>작성일: <span th:text="${#temporals.format(review.regTime, 'yyyy-MM-dd HH:mm')}"></span></p>
+            <!--            이미지 출력-->
+            <div class="review-images">
+                <img th:src="${reviewImages[review.reviewNo]}" alt="Review Image">
+            </div>
+<!--            평점 출력-->
+            <div class="rating">
+                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span th:class="${i <= review.revwRatings} ? 'active' : ''">★</span>
+                </th:block>
+            </div>
+            <a th:href="@{/reviews}" class="btn btn-primary">목록으로 돌아가기</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

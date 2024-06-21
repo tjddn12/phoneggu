@@ -22,27 +22,27 @@ public class QComment extends EntityPathBase<Comment> {
 
     public static final QComment comment = new QComment("comment");
 
-    public final DateTimePath<java.time.LocalDateTime> commentChgDate = createDateTime("commentChgDate", java.time.LocalDateTime.class);
+    public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final StringPath commentContent = createString("commentContent");
+    public final QArticle article;
 
-    public final DateTimePath<java.time.LocalDateTime> commentDelDate = createDateTime("commentDelDate", java.time.LocalDateTime.class);
+    public final StringPath body = createString("body");
 
-    public final NumberPath<Integer> commentNestedTo = createNumber("commentNestedTo", Integer.class);
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
 
-    public final NumberPath<Integer> commentNestLevel = createNumber("commentNestLevel", Integer.class);
+    public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> commentNo = createNumber("commentNo", Long.class);
+    //inherited
+    public final StringPath modifiedBy = _super.modifiedBy;
 
-    public final DateTimePath<java.time.LocalDateTime> commentRegDate = createDateTime("commentRegDate", java.time.LocalDateTime.class);
+    public final StringPath nickname = createString("nickname");
 
-    public final StringPath memberId = createString("memberId");
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
-    public final StringPath refBoard = createString("refBoard");
-
-    public final NumberPath<Integer> refPostNo = createNumber("refPostNo", Integer.class);
-
-    public final QUsers userId;
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
     public QComment(String variable) {
         this(Comment.class, forVariable(variable), INITS);
@@ -62,7 +62,7 @@ public class QComment extends EntityPathBase<Comment> {
 
     public QComment(Class<? extends Comment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.userId = inits.isInitialized("userId") ? new QUsers(forProperty("userId")) : null;
+        this.article = inits.isInitialized("article") ? new QArticle(forProperty("article"), inits.get("article")) : null;
     }
 
 }

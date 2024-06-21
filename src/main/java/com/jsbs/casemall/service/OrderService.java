@@ -456,6 +456,7 @@ public class OrderService {
                             .orderTime(orderDto.getOrderTime())
                             .orderId(orderDto.getOrderId())
                             .items(List.of(item))
+
                             .build();
                 }))
                 .collect(Collectors.toList());

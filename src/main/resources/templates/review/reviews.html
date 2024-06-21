@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <!--    CSS-->
+    <link rel="stylesheet" th:href="@{/css/reviews.css}">
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container">
+            <div class="grid-container">
+                <!-- 총 30개의 리뷰 게시글을 동일한 구조로 추가 -->
+                <div class="grid-item" th:each="review : ${reviews}">
+                    <a th:href="@{/reviews/{id}(id=${review.reviewNo})}">
+                        <img th:src="${reviewImages[review.reviewNo]}" alt="Product Image">
+<!--                        작성자&상품명 추가-->
+                        <h3 th:text="${review.revwTitle}"></h3>
+                        <p th:text="${review.revwContent}"></p>
+                        <p>상품명: <span th:text="${review.productName }"></span></p>
+<!--                        :주문에서 같이 받아올 것-->
+                        <p>작성자: <span th:text="${review.getUserid()}"></span></p>
+                        <span class="rating">
+                            <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                <span th:class="${i <= review.revwRatings} ? 'active' : ''">★</span>
+                            </th:block>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+<!--        페이징 처리 보완 필요.-->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${pageDto.page == 1 ? 'disabled' : ''}">
+                    <a th:href="@{/reviews(page=${pageDto.page - 1})}" class="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                th:classappend="${pageDto.page == pageNumber ? 'active' : ''}">
+                    <a th:href="@{/reviews(page=${pageNumber - 1})}" th:text="${pageNumber}" class="page-link"></a>
+                </li>
+                <li class="page-item" th:classappend="${pageDto.page == pageDto.pageSize ? 'disabled' : ''}">
+                    <a th:href="@{/reviews(page=${pageDto.page + 1})}" aria-label="Next" class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
