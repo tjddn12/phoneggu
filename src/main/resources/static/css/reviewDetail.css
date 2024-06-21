@@ -8,6 +8,9 @@ body {
     margin: 0 auto;
     text-align: center;
 }
+#big{
+    font-size: 2em;
+}
 
 .review-images {
     text-align: center; /* 이미지 요소들을 중앙 정렬 */

@@ -14,7 +14,6 @@
     <div layout:fragment="content">
         <div class="container my-5">
             <h1 th:text="${review.revwTitle}"></h1>
-            <p th:text="${review.revwContent}"></p>
             <p>상품명: <span th:text="${review.productName}"></span></p>
             <p>작성자: <span th:text="${review.userid}"></span></p>
             <!--            평점 출력-->
@@ -24,6 +23,7 @@
                 </th:block>
             </div>
             <p>작성일: <span th:text="${#temporals.format(review.regTime, 'yyyy-MM-dd HH:mm')}"></span></p>
+            <p id="big" th:text="${review.revwContent}"></p>
             <!--            이미지 출력-->
             <div class="review-images">
                 <img th:src="${reviewImages[review.reviewNo]}" alt="Review Image">
