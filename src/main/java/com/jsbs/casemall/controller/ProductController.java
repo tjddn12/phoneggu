@@ -114,7 +114,7 @@ public class ProductController {
 
     @GetMapping(value = {"/admin/product/management", "/admin/product/management/{page}"})
     public String productManage(ProductSearchDto productSearchDto,
-                                @RequestParam(name = "page", required = false) Integer page, Model model) {
+                                @PathVariable(name = "page", required = false) Integer page, Model model) {
         if (page == null) {
             page = 0; // 기본값 설정
         }
@@ -127,7 +127,7 @@ public class ProductController {
         return "product/productManagement";
     }
 
-    @PostMapping("/admin/product/delete/{prId}")
+    @PostMapping(value = "/admin/product/delete/{prId}")
     public String deleteProduct(@PathVariable("prId") Long prId, Model model) {
         log.info("상품 삭제 요청 받음, 상품 ID: {}", prId);
         try {
@@ -137,7 +137,7 @@ public class ProductController {
         } catch (Exception e) {
             log.error("상품 삭제 중 오류 발생, 상품 ID: {}", prId, e);
             model.addAttribute("errorMessage", "상품 삭제 중 오류가 발생했습니다.");
-            return "admin/product/management";
+            return "/admin/product/management";
         }
     }
 
