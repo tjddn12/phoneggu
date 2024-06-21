@@ -13,7 +13,7 @@ body {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     grid-gap: 20px;
 }
 
@@ -33,7 +33,7 @@ body {
     height: auto;
     display: block;
 /*     : 이미지가 블록 요소로 표시되도록 설정 */
-    border: 1px solid red;
+/*    border: 1px solid red;*/
 /*   : 임시 테두리 추가 */
   background-color: lightgray;
 /*   : 임시 배경색 추가 */

@@ -20,6 +20,8 @@ public class ReviewFormDto {
 
     private String productName;
 
+    private String userId;
+
     private Long id;
 
     private Long productId;
@@ -38,6 +40,20 @@ public class ReviewFormDto {
     private List<Long> reviewImgIds =  new ArrayList<>();
 
     private static ModelMapper modelMapper = new ModelMapper();
+
+    public ReviewFormDto() {}
+
+    public ReviewFormDto(Long id, String ImgUrl, String revwTitle, String revwContent,
+                         String productName, String userId, Integer revwRatings) {
+        this.id = id;
+        this.imgUrl = ImgUrl;
+        this.revwTitle = revwTitle;
+        this.revwContent = revwContent;
+        this.productName = productName;
+        this.userId = userId;
+        this.revwRatings = revwRatings;
+
+    }
 
     public Review createReview(){
         return modelMapper.map(this, Review.class);

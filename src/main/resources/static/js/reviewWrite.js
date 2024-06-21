@@ -10,7 +10,6 @@ $(document).ready(function() {
         var index = $labels.index($this.next('label'));
         $labels.slice(0, index + 1).css('color', '#fc0');
     });
-
     window.handleFiles = function(files) {
         const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/bmp', 'image/png', 'image/gif'];
         const preview = document.getElementById('preview-images');

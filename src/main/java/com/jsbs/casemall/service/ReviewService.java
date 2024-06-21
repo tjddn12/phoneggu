@@ -114,20 +114,14 @@ public class ReviewService {
         //DB에 저장
         reviewRepository.save(review);
     }
-    public PageDto<Review> getReviewList(Criteria criteria){
-        if(criteria == null){
-            criteria = new Criteria();
-        }
-        Pageable pageable = PageRequest.of(criteria.getCurrentPageNo() - 1,
-                criteria.getRecordsPerPage(), Sort.by("reviewNo").descending());
-        Page<Review> reviewPage = reviewRepository.findAll(pageable);
+    public Page<Review> getReviewList(int page){
+        List<Sort.Order> sorts = new ArrayList<>();
 
-        return new PageDto<>(
-                reviewPage.getContent(),
-                (int) reviewPage.getTotalElements(),
-                criteria.getCurrentPageNo(),
-                criteria.getRecordsPerPage()
-        );
+        sorts.add(Sort.Order.desc("regTime"));
+
+        Pageable pageable = PageRequest.of(page, 10);
+
+        return this.reviewRepository.findAll(pageable);
     }
     public void saveReviewAndImage(Review review, ReviewImg reviewImg) {
         reviewRepository.save(review);
@@ -149,7 +143,7 @@ public class ReviewService {
 
         if(optionalReview.isPresent()){
             Review review = optionalReview.get();
-            log.info("리뷰겍체,{} , {}  {}  ",reviewNo,review,optionalReview.get()) ;
+            log.info("리뷰 객체,{} , {}  {}  ",reviewNo,review,optionalReview.get()) ;
             ReviewImg reviewImg = reviewImgRepository.findByReview(review);
 
             return reviewImg.getImgUrl();
@@ -169,7 +163,14 @@ public class ReviewService {
         return reviewFormDto;
     }
 
+    public Review creation(String title, String content){
+        Review review = new Review();
 
+        review.setRevwTitle(title);
+        review.setRevwContent(content);
 
+        this.reviewRepository.save(review);
 
+        return review;
+    }
 }

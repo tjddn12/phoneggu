@@ -2,15 +2,12 @@ package com.jsbs.casemall.controller;
 
 import com.jsbs.casemall.dto.ArticleForm;
 import com.jsbs.casemall.dto.CommentDto;
-import com.jsbs.casemall.dto.Criteria;
-import com.jsbs.casemall.dto.PageDto;
 import com.jsbs.casemall.entity.Article;
 import com.jsbs.casemall.repository.ArticleRepository;
 import com.jsbs.casemall.service.ArticleService;
 import com.jsbs.casemall.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @Slf4j
