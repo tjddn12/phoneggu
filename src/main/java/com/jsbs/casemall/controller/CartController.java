@@ -75,18 +75,18 @@ public class CartController {
         }
     }
 
-    @PostMapping("/clear")
-    public String clearCart(Principal principal, Model model) {
-        String userId = principal.getName();
-        try {
-            cartService.clearCart(userId);
-            return "redirect:/cart"; // 장바구니 페이지로 리다이렉션
-        } catch (Exception e) {
-            log.error("Error clearing cart", e);
-            model.addAttribute("error", "Failed to clear cart");
-            return "error";
-        }
-    }
+//    @PostMapping("/clear")
+//    public String clearCart(Principal principal, Model model) {
+//        String userId = principal.getName();
+//        try {
+//            cartService.clearCart(userId);
+//            return "redirect:/cart"; // 장바구니 페이지로 리다이렉션
+//        } catch (Exception e) {
+//            log.error("Error clearing cart", e);
+//            model.addAttribute("error", "Failed to clear cart");
+//            return "error";
+//        }
+//    }
 
 
     // 업데이트

@@ -1,7 +1,11 @@
 package com.jsbs.casemall.service;
 
+import com.jsbs.casemall.constant.OrderStatus;
 import com.jsbs.casemall.dto.*;
+import com.jsbs.casemall.entity.Order;
+import com.jsbs.casemall.entity.OrderDetail;
 import com.jsbs.casemall.entity.Users;
+import com.jsbs.casemall.repository.OrderRepository;
 import com.jsbs.casemall.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final SendService sendService;
     private final PasswordEncoder passwordEncoder;
+    private final OrderRepository orderRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -134,6 +139,33 @@ public class UserService implements UserDetailsService {
     private boolean isFieldValid(String field) {
         return field != null && !field.isEmpty();
     }
+
+
+    @Transactional(readOnly = true)
+    public MypageDto myPageCompleteCount(String userId) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("찾는 유저가 없습니다"));
+        List<Order> orders = orderRepository.findByUsersAndOrderStatus(user, OrderStatus.ORDER);
+        MypageDto result = new MypageDto();
+        int count = 0;
+        int total = 0;
+        // 주문 완료된 주문들을 순회 하면서
+        // 각각 아이템들의 가격을 더해서 dto 로 반환
+        for (Order order : orders) {
+            for(OrderDetail orderDetail : order.getOrderItems()){
+                total += orderDetail.getTotalPrice(); // 각각 아이템의 총 금액
+
+            }
+            count++; // order 순회 횟수  =  주문횟수
+        }
+
+
+//        주문횟수   count
+//        토탈 금액  totalPay
+
+        return result;
+    }
+
+
 
 
 }

@@ -1,9 +1,6 @@
 package com.jsbs.casemall.controller;
 
-import com.jsbs.casemall.dto.AddUserRequest;
-import com.jsbs.casemall.dto.UserDto;
-import com.jsbs.casemall.dto.UserEditDto;
-import com.jsbs.casemall.dto.UserPwRequestDto;
+import com.jsbs.casemall.dto.*;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -100,7 +97,11 @@ public class UserController {
 
     // 마이페이지
     @GetMapping("/myPage")
-    public String myPage() {
+    public String myPage(Principal principal, Model model) {
+        String userId = principal.getName();
+        MypageDto dto = userService.myPageCompleteCount(userId);
+        model.addAttribute("count", dto);
+
         return "user/myPage";
     }
 
