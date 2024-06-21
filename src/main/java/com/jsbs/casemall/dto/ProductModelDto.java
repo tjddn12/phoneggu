@@ -14,5 +14,5 @@ public class ProductModelDto {
     private ProductModelSelect productModelSelect;
 
     @Positive(message = "재고는 양수이어야 합니다.")
-    private Integer prStock;
+    private Integer prStock=0;
 }

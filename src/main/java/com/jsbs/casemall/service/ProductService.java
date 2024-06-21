@@ -1,6 +1,7 @@
 package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.constant.ProductCategory;
+import com.jsbs.casemall.constant.ProductSellStatus;
 import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.*;
 import com.jsbs.casemall.entity.Product;
@@ -79,6 +80,10 @@ public class ProductService {
         productModelRepository.deleteByPrIdIsNull();
 
         log.info("pr_id가 null인 모델 삭제 완료");
+
+        // 재고 상태를 기반으로 판매 상태 업데이트
+        updateProductSellStatus(product);
+        productRepository.save(product); // 상태 업데이트 후 저장
 
         return product.getId();
     }
@@ -166,11 +171,15 @@ public class ProductService {
 
         productRepository.save(product);
         log.info("상품 정보가 성공적으로 업데이트되었습니다. 상품 ID: {}", product.getId());
+
+        // 재고 상태를 기반으로 판매 상태 업데이트
+        updateProductSellStatus(product);
+        productRepository.save(product); // 상태 업데이트 후 저장
     }
 
     @Transactional(readOnly = true)
     public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, int page) {
-        Pageable pageable = PageRequest.of(page, 1);
+        Pageable pageable = PageRequest.of(page, 5);
         log.info("관리 페이지에서 페이징된 상품 목록을 가져옵니다. 페이징 정보: {}", pageable);
         return productRepository.getAdminProductPage(productSearchDto, pageable);
     }
@@ -240,5 +249,23 @@ public class ProductService {
         productModelDto.setProductModelSelect(productModel.getProductModelSelect());
         productModelDto.setPrStock(productModel.getPrStock());
         return productModelDto;
+    }
+
+    // 재고 상태에 따른 판매 상태 업데이트 로직
+    private void updateProductSellStatus(Product product) {
+        boolean allStocksZero = product.getProductModelList().stream()
+                .allMatch(model -> {
+                    Integer stock = model.getPrStock();
+                    log.info("ProductModel ID: {}, prStock: {}", model.getId(), stock);
+                    return stock == null || stock == 0;
+                });
+
+        if (allStocksZero) {
+            product.setProductSellStatus(ProductSellStatus.SOLD_OUT);
+        } else {
+            product.setProductSellStatus(ProductSellStatus.SELL);
+        }
+        log.info("Product ID: {}, ProductSellStatus: {}", product.getId(), product.getProductSellStatus());
+        productRepository.save(product); // 상태 업데이트 후 저장
     }
 }

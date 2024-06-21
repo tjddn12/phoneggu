@@ -78,7 +78,7 @@
                 <div class="col-sm-10 stock-container">
                     <div th:each="model, iterStat : ${T(com.jsbs.casemall.constant.ProductModelSelect).values()}" class="stock-item">
                         <span th:text="${model.displayName}"></span>
-                        <input type="number" th:field="*{productModelDtoList[__${iterStat.index}__].prStock}" class="form-control stock-input" placeholder="수량">
+                        <input type="number" th:field="*{productModelDtoList[__${iterStat.index}__].prStock}" class="form-control stock-input" placeholder="수량" min="0">
                     </div>
                 </div>
             </div>
