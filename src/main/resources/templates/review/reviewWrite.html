@@ -27,9 +27,15 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><img th:src="@{http://via.placeholder.com/100x100}" alt="" style="width: 80px; height: 80px"></td>
+                    <td><img th:src="${product.getImgUrl()}" alt="" style="width: 80px; height: 80px" >
+                        <input type="hidden" th:value="${product.getImgUrl()}" name="imgUrl">
+                    </td>
+                    <input type="hidden" th:value="${product.getProductId()}" name="productId">
+
                     <!-- 이미지 삽입 코드는 추후 추가 -->
-                    <!--                <td class="option-area" th:text="*{prName}"></td>-->
+                    <td class="option-area" th:value="${product.getProductName()}" th:text="${product.getProductName()}">
+
+                    </td>
                 </tr>
                 <!-- 주문 내역에서 리뷰 작성시, 상품 이름&상품 사진을 받아오는 로직 구현 필요 -->
                 </tbody>
@@ -86,9 +92,9 @@
             <div class="form-group row mb-3">
                 <div class="col-sm-10">
                     <div class="d-flex mb-2">
-                        <button type="button" class="btn btn-primary me-2" onclick="document.getElementById('productImgFile').click()">이미지 추가</button>
+                        <button type="button" class="btn btn-primary me-2" onclick="document.getElementById('reviewImgFile').click()">이미지 추가</button>
                     </div>
-                    <input type="file" id="productImgFile" class="form-control d-none" name="productImgFile" multiple onchange="handleFiles(this.files)">
+                    <input type="file" id="reviewImgFile" class="form-control d-none" name="reviewImgFile" multiple onchange="handleFiles(this.files)">
                 </div>
             </div>
 

@@ -34,7 +34,7 @@ public class QReview extends EntityPathBase<Review> {
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
 
-    public final QOrder order;
+    public final QProduct prId;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
@@ -72,7 +72,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.order = inits.isInitialized("order") ? new QOrder(forProperty("order"), inits.get("order")) : null;
+        this.prId = inits.isInitialized("prId") ? new QProduct(forProperty("prId")) : null;
         this.userId = inits.isInitialized("userId") ? new QUsers(forProperty("userId")) : null;
     }
 

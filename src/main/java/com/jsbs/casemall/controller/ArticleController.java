@@ -8,6 +8,7 @@ import com.jsbs.casemall.entity.Article;
 import com.jsbs.casemall.repository.ArticleRepository;
 import com.jsbs.casemall.service.ArticleService;
 import com.jsbs.casemall.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -23,33 +25,39 @@ import java.util.stream.IntStream;
 @Controller
 @Slf4j
 @RequestMapping("/qnas")
+@RequiredArgsConstructor
 public class ArticleController {
-    @Autowired
-    private ArticleRepository articleRepository;
-    @Autowired
-    private CommentService commentService;
-    @Autowired
-    private ArticleService articleService;
+
+    private final ArticleRepository articleRepository;
+    private final CommentService commentService;
+    private final ArticleService articleService;
 
     @GetMapping("/new")
     public String newArticleForm(){
         return "qna/new";
     }
-    @PostMapping("/create")
-    public String createArticle(ArticleForm form){
-        //dto -> entity 변환
-        Article article = form.toEntity();
-        //Repository에게 entity를 db 안에 저장하게 함
-        Article saved = articleRepository.save(article);
 
-        return "redirect:/qnas/" + saved.getId();
+    @PostMapping("/create")
+    public String createArticle(ArticleForm form, Principal principal){
+        String userId= principal.getName();
+
+        long id = articleService.createQnaFromForm(userId,form);
+
+        return "redirect:/qnas/" + id;
     }
     @GetMapping("/{id}")
-    public String show(@PathVariable Long id, Model model){
-        Article articleEntity = articleRepository.findById(id).orElse(null);
+    public String show(@PathVariable Long id, Model model, Principal principal) {
+        Article articleEntity = articleRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재 하지 않는 게시글입니다"));
         List<CommentDto> commentsDtos = commentService.comments(id);
+        // 해당글을의 작성자 확인
+        boolean writer = false;
+        if (principal != null) {
+            writer = articleEntity.getUser().getUserId().equals(principal.getName());
+        }
+
 
         model.addAttribute("article", articleEntity);
+        model.addAttribute("writer",writer);
         model.addAttribute("comments", commentsDtos);
 
 //        log.info(commentsDtos.toString());
@@ -64,7 +72,7 @@ public class ArticleController {
                     article.getId(),
                     article.getTitle(),
                     article.getContent(),
-                    article.getUser().toString(),
+                    article.getUser().getUserId(),
                     commentService.comments(article.getId()).size(),
                     article.getRegTime()
             );
@@ -101,17 +109,12 @@ public class ArticleController {
         return "qna/edit";
     }
     @PostMapping("/update")
-    public String update(ArticleForm form){
+    public String update(ArticleForm form,Principal principal){
+        String userId= principal.getName();
         //dto -> entity
-        Article articleEntity = form.toEntity();
-        //entity DB 저장
-        Article target = articleRepository.findById(articleEntity.getId()).orElse(null);
-        //기존 데이터가 있으면 값 갱신
-        if(target != null){
-            articleRepository.save(articleEntity);
-        }
-        //수정 결과 페이지 리다이렉트
-        return "redirect:/qnas/" + articleEntity.getId();
+
+
+        return "redirect:/qnas/" + articleService.updateQnaFromForm(userId,form);
     }
     @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr){

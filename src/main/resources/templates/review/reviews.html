@@ -19,9 +19,9 @@
 <!--                        작성자&상품명 추가-->
                         <h3 th:text="${review.revwTitle}"></h3>
                         <p th:text="${review.revwContent}"></p>
-                        <p>상품명: <span th:text="${review.prName}"></span></p>
+                        <p>상품명: <span th:text="${review.productName }"></span></p>
 <!--                        :주문에서 같이 받아올 것-->
-                        <p>작성자: <span th:tex="${review.userId}"></span></p>
+                        <p>작성자: <span th:text="${review.getUserid()}"></span></p>
                         <span class="rating">
                             <th:block th:each="i : ${#numbers.sequence(1, 5)}">
                                 <span th:class="${i <= review.revwRatings} ? 'active' : ''">★</span>

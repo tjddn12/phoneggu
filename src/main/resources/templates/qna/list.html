@@ -12,7 +12,7 @@
             <thead>
             <tr class="table-primary">
                 <th scope="col">번호</th>
-                <th scope="col">상품</th>
+                <th scope="col">제목</th>
                 <!--                : 상품명 or 상품이미지 대체 예정 -->
                 <th scope="col">질문 내용</th>
                 <th scope="col">답변 수</th>
@@ -29,8 +29,7 @@
                     <td><a th:href="@{/qnas/{id}(id=${article.id})}" th:text="${article.title}">질문</a></td>
                     <td th:text="${article.content}">내용</td>
                     <td th:text="${article.commentCount}">답변 수</td>
-                    <td th:text="${article.userId}">답변 수</td>
-                    <td>작성자</td>
+                    <td th:text="${article.userId}">작성자</td>
                     <td><span th:text="${#temporals.format(article.regTime, 'yyyy-MM-dd HH:mm')}"></span></td>
                 </tr>
             </tbody>

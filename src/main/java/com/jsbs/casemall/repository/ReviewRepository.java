@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
     List<Review> findReviewsByUserId(Users userId);
-    List<Review> findReviewsByOrder(Order order);
+    List<Review> findReviewsByPrId(Product product);
     Page<Review> findAll(Pageable pageable);
     Review getReviewDetails(Long reviewNo);
     int updateAReview(ReviewFormDto reviewFormDto);

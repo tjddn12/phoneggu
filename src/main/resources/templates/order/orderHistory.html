@@ -55,7 +55,7 @@
                         <td>
                             <input type="hidden" id="orderNo_${item.orderNo}" value="${order.getOrderNo()}">
                             <button class="btn btn-primary reviewButton" type="button"
-                                    th:onclick="'location.href=\'/reviews/reviewWrite?orderNo=' + ${order.getOrderNo()} + '\''">리뷰쓰기</button>
+                                    th:onclick="'location.href=\'/reviews/reviewWrite?prId=' + ${item.getProductId()} + '\''">리뷰쓰기</button>
                         </td>
                     <tr>
                 </th:block>

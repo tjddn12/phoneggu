@@ -4,8 +4,12 @@ import com.jsbs.casemall.dto.ArticleForm;
 import com.jsbs.casemall.dto.Criteria;
 import com.jsbs.casemall.dto.PageDto;
 import com.jsbs.casemall.entity.Article;
+import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.repository.ArticleRepository;
+import com.jsbs.casemall.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +22,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class ArticleService {
-    @Autowired
-    private ArticleRepository articleRepository;
+
+    private final ArticleRepository articleRepository;
+    private final UserRepository userRepository;
+
 
     public List<Article> index(){
         return articleRepository.findAll();
@@ -38,6 +46,40 @@ public class ArticleService {
 
         return articleRepository.save(article);
     }
+
+    // 질문생성
+    public Long createQnaFromForm(String userId,ArticleForm form){
+        Users users = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("유저가 없습니다"));
+        Article article = form.toEntity(users);
+
+        log.info("article : {} ",article);
+        Article saved = articleRepository.save(article);
+
+        return saved.getId();
+    }
+    public Long updateQnaFromForm(String userId,ArticleForm form){
+        Users users = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("유저가 없습니다"));
+
+        Article target = articleRepository.findById(form.getId()).orElseThrow(()->new IllegalArgumentException("게시글이 없습니다"));
+
+
+        target.setContent(form.getContent());
+        target.setTitle(form.getTitle());
+        Article saved = articleRepository.save(target);
+
+
+        return saved.getId();
+    }
+
+
+
+
+
+
+
+
+
+
     @Transactional
     public Article update(Long id, ArticleForm dto){
         //dto를 entity로 변경

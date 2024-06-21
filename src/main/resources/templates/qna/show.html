@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -27,11 +28,15 @@
             </tr>
             </tbody>
         </table>
-        <a th:href="@{/qnas/{id}/edit(id=${article.id})}" class="btn btn-primary">수정</a>
-        <a th:href="@{/qnas/{id}/delete(id=${article.id})}" class="btn btn-danger">삭제</a>
+        <!-- 작성자  본인 일때 보이게 -->
+        <th:block th:if="${writer}">
+            <a th:href="@{/qnas/{id}/edit(id=${article.id})}" class="btn btn-primary">수정</a>
+            <a th:href="@{/qnas/{id}/delete(id=${article.id})}" class="btn btn-danger">삭제</a>
+        </th:block>
+
         <a th:href="@{/qnas}">질문 목록으로</a>
         <!--------------- 답변 --------------->
-        <div id="comments-list">
+        <div id="comments-list" >
             <div th:each="comment : ${comments}">
                 <div class="card" th:id="'comments-' + ${comment.id}">
                     <div class="card-header">
@@ -54,7 +59,7 @@
                             삭제
                         </button>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" >
                         <span th:text="${comment.body}"></span>
                     </div>
                 </div>
@@ -94,7 +99,8 @@
                 </div>
             </div>
         </div>
-        <div class="card m-2" id="comments-new">
+        <!--관리자만 댓글 생성 -->
+        <div class="card m-2" id="comments-new" sec:authorize="hasRole('ADMIN')">
             <div class="card-body">
                 <!-- 답변 작성폼 -->
                 <form>

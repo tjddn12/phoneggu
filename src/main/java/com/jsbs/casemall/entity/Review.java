@@ -47,8 +47,8 @@ public class Review extends BaseEntity{
     private int revwRatings; //: 평점
 
     @ManyToOne
-    @JoinColumn(name = "order_no")
-    private Order order; //: 주문 정보(상품명, 이미지) 추출
+    @JoinColumn(name = "pr_id")
+    private Product prId; //: 주문 정보(상품명, 이미지) 추출
 
     public void update(ReviewFormDto reviewFormDto){
         this.reviewNo = reviewFormDto.getId();

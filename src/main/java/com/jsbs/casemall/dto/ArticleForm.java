@@ -41,4 +41,10 @@ public class ArticleForm {
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 아이디입니다."));
         return new Article(id, title, content, user);
     }
+
+    public Article toEntity(Users users) {
+        return new Article(id, title, content, users);
+    }
+
+
 }
