@@ -12,7 +12,6 @@ body {
     width: 90%;
     max-width: 1500px;
     min-height: 1000px;
-
 }
 
 .table th, .table td {
@@ -32,7 +31,7 @@ body {
 }
 
 .table-group-divider td:nth-child(3) {
-    width: 450px;
+    max-width: 450px;
 }
 
 .table-group-divider td:nth-child(3) .prName {
@@ -48,22 +47,23 @@ body {
 .table-group-divider td:nth-child(6),
 .table-group-divider td:nth-child(7),
 .table-group-divider td:nth-child(8){
-    width: 130px;
+    max-width: 130px;
     font-weight: bold;    
 }
 .table-group-divider td:nth-child(5){width: 150px;}
 .prCount input[type="number"] {
-    width: 80px;
+    max-width: 80px;
 }
 
 .table-group-divider td:nth-child(9){width: 90px;}
 .select button {
     font-size: 11px;
-    width: 90px;
+    max-width: 90px;
 }
 .tbBot th{text-align: left;}
 .tbBot td{text-align: end;}
 .tbBot .bb{font-weight: bold;}
+
 .summary .table th, .summary .table td {
     font-size: 1.2em;
     font-weight: bold;
@@ -73,4 +73,56 @@ body {
     margin-left: 10px;
     padding: 10px 20px;
 }
+.actionOff{display: block}
+.actionOn{display: none}
 
+@media (max-width: 767px) {
+    .actionOff{display: none}
+    .actionOn{display: block}
+    .cart-container {
+        padding: 0;
+        border-radius: 0;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        max-width: 1500px;
+    }
+    .cart-item {
+        border: 1px solid #dee2e6;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .product-header {
+        display: flex;
+        align-items: center;
+    }
+    .product-header .prName {
+        margin: 0;
+        flex: 1;
+    }
+    .product-header .select {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .prInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .prInfo p {
+        padding: 5px;
+    }
+    .txtCount{
+        vertical-align: center;
+        text-align: center;
+    }
+    .item-count {
+        width: 150px;
+        text-align: center;
+    }
+    .img-fluid {
+        display: block;
+        margin: 0 auto;
+    }
+    .cart-item p {
+        margin: 0;
+    }
+}

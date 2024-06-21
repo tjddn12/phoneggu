@@ -37,3 +37,10 @@ a{text-decoration:none;}
 .pagination .page-item .page-link {
     cursor: pointer;
 }
+
+@media (max-width: 767px) {
+    .hidden-on-small{display: none}
+    .on-small{
+        width: 80px;
+    }
+}

@@ -13,7 +13,7 @@ a {text-decoration: none;}
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 1500px;
+    max-width: 1500px;
     text-align: center;
 }
 .orderComplete h1 {
@@ -151,4 +151,12 @@ a {text-decoration: none;}
 }
 .usage-info ul li {
     margin-bottom: 5px;
+}
+
+.actionOff{display: block}
+.actionOn{display: none}
+
+@media (max-width: 767px) {
+    .actionOff{display: none}
+    .actionOn{display: block}
 }

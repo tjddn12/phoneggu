@@ -22,9 +22,9 @@
                     <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('three_months')">3개월</button>
                     <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('six_months')">6개월</button>
                 </div>
-                <input id="startDate" class="form-control" placeholder="달력" type="date" name="startDate">
-                <span>~</span>
-                <input id="endDate" class="form-control" placeholder="달력" type="date" name="endDate">
+                <input id="startDate" class="form-control actionOff" placeholder="달력" type="date" name="startDate">
+                <span class="actionOff">~</span>
+                <input id="endDate" class="form-control actionOff" placeholder="달력" type="date" name="endDate">
                 <button class="btn btn-primary" type="submit">조회</button>
             </div>
 
@@ -59,6 +59,8 @@
                 </th:block>
                 </tbody>
             </table>
+
+
 
 
             <!-- 페이지네이션 -->

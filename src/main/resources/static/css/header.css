@@ -17,6 +17,9 @@
     top: 50%;
     transform: translate(-50%, -50%);
     white-space: nowrap;
+}
+.header .ggu-logo a{
+    color: #007bff;
     font-size: 40px;
 }
 .header-container a{
@@ -55,8 +58,8 @@
     background-color: #bcdffd;
 }
 
-.header-notices a:hover, .header-links a:hover {
-    color: #fff;
+.header .ggu-logo a:hover, .header-notices a:hover, .header-links a:hover {
+    color: #ff9900;
     font-weight: bold;
 }
 .header_bottom img {
@@ -113,6 +116,7 @@
 }
 .actionOn{display: none}
 .actionOff{display: block}
+.backgroundOff{background-color: transparent}
 
 @media (max-width: 767px) {
     .actionOn{display: block}

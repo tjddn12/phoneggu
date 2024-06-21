@@ -111,3 +111,13 @@ table{
 .pagination button:hover {
     background-color: #f0f0f0;
 }
+
+.actionOff{display: block}
+.actionOn{display: none}
+
+@media (max-width: 767px) {
+    .actionOff{display: none}
+    .actionOn{display: block}
+
+
+}

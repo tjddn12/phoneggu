@@ -7,68 +7,29 @@
 </head>
 <body>
 <div th:fragment="header">
-    <div class="select-bar">
-        <header class="header">
-            <div class="header-container">
-                <div class="row align-items-center">
-                    <div class="col-md-4 d-flex justify-content-start">
-                        <div class="header-notices actionOff">
-                            <a class="me-3" href="#">NOTICE</a>
-                            <a class="me-3" href="#">Q & A</a>
-                            <a class="" href="#">REVIEW</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-center">
-                        <div class="ggu-logo mochiy-pop-one-regular">
-                            <a th:href="@{/}">PHONE GGU</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex justify-content-end">
-                        <div class="header-links actionOff">
-                            <!-- ADMIN 드롭다운 메뉴 -->
-                            <div class="dropdown" sec:authorize="hasRole('ADMIN')" style="display: inline-block;">
-                                <a class="me-3 dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ADMIN
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="adminDropdown" style="margin-top: 10px;">
-                                    <li><a class="dropdown-item" th:href="@{/admin/product/new}">상품 등록</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/admin/product/management}">상품 관리</a></li>
-                                </ul>
-                            </div>
-                            <a class="me-3" th:href="@{/login}" sec:authorize="!isAuthenticated()">LOGIN</a>
-                            <a class="me-3" th:href="@{/join}" sec:authorize="!isAuthenticated()">JOIN US</a>
-                            <a class="me-3" th:href="@{/logout}" sec:authorize="isAuthenticated()">LOG OUT</a>
-                            <a class="me-3" th:href="@{/cart}">CART</a>
-                            <a class="me-3" th:href="@{/order}">ORDER</a>
-                            <a class="" th:href="@{/myPage}">MY PAGE</a>
-                        </div>
+    <header class="header">
+        <div class="header-container">
+            <div class="row align-items-center">
+                <div class="col-md-4 d-flex justify-content-start">
+                    <div class="header-notices actionOff">
+                        <a class="me-3" href="#">NOTICE</a>
+                        <a class="me-3" href="#">Q & A</a>
+                        <a class="" href="#">REVIEW</a>
                     </div>
                 </div>
-
-                <div class="header-notices actionOn">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle me-3" type="button" id="menuDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Menu
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="menuDropdown">
-                            <a class="dropdown-item" href="#">NOTICE</a>
-                            <a class="dropdown-item" href="#">Q & A</a>
-                            <a class="dropdown-item" href="#">REVIEW</a>
-                            <a class="dropdown-item" th:href="@{/cart}">CART</a>
-                            <a class="dropdown-item" th:href="@{/order}">ORDER</a>
-                            <a class="dropdown-item" th:href="@{/myPage}">MY PAGE</a>
-                        </div>
+                <div class="col-md-4 text-center">
+                    <div class="ggu-logo mochiy-pop-one-regular">
+                        <a th:href="@{/}">PHONE GGU</a>
                     </div>
                 </div>
-
-                <div class="col-md-4 d-flex justify-content-end actionOn">
-                    <div class="header-links">
+                <div class="col-md-4 d-flex justify-content-end">
+                    <div class="header-links actionOff">
                         <!-- ADMIN 드롭다운 메뉴 -->
                         <div class="dropdown" sec:authorize="hasRole('ADMIN')" style="display: inline-block;">
-                            <a class="me-3 dropdown-toggle" href="#" role="button" id="adminDropdown2" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="me-3 dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 ADMIN
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="adminDropdown2" style="margin-top: 10px;">
+                            <ul class="dropdown-menu" aria-labelledby="adminDropdown" style="margin-top: 10px;">
                                 <li><a class="dropdown-item" th:href="@{/admin/product/new}">상품 등록</a></li>
                                 <li><a class="dropdown-item" th:href="@{/admin/product/management}">상품 관리</a></li>
                             </ul>
@@ -76,64 +37,101 @@
                         <a class="me-3" th:href="@{/login}" sec:authorize="!isAuthenticated()">LOGIN</a>
                         <a class="me-3" th:href="@{/join}" sec:authorize="!isAuthenticated()">JOIN US</a>
                         <a class="me-3" th:href="@{/logout}" sec:authorize="isAuthenticated()">LOG OUT</a>
+                        <a class="me-3" th:href="@{/cart}">CART</a>
+                        <a class="me-3" th:href="@{/order}">ORDER</a>
+                        <a class="" th:href="@{/myPage}">MY PAGE</a>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <div class="header_bottom py-2 actionOff">
-            <div class="container text-center">
-                <img alt="ggu" src="/images/mainImg/ggu.png">
+            <div class="header-notices actionOn">
+                <div class="dropdown">
+                    <a class="me-3 dropdown-toggle" href="#" role="button" id="dropdown-menu" data-bs-toggle="dropdown" aria-expanded="false">
+                        MENU
+                    </a>
+                    <div class="dropdown-menu backgroundOff" aria-labelledby="menuDropdown">
+                        <a class="dropdown-item" href="#">NOTICE</a>
+                        <a class="dropdown-item" href="#">Q & A</a>
+                        <a class="dropdown-item" href="#">REVIEW</a>
+                        <a class="dropdown-item" th:href="@{/cart}">CART</a>
+                        <a class="dropdown-item" th:href="@{/order}">ORDER</a>
+                        <a class="dropdown-item" th:href="@{/myPage}">MY PAGE</a>
+                    </div>
+                </div>
             </div>
-            <nav class="navbar navbar-expand-lg navbar-light bg-white">
-                <div class="container">
-                    <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
-                            class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav mx-auto">
-                            <li class="nav-item dropdown">
-                                <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
-                                   id="navPhoneCase" role="button">폰 케이스</a>
-                                <ul aria-labelledby="navPhoneCase" class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='HARD')}" id="navHard">하드</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='JELLY')}" id="navJelly">젤리</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='CARD')}" id="navCard">카드수납</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='ZFLIP')}" id="navZFlip">Z플립</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
-                                   id="navTok" role="button">톡</a>
-                                <ul aria-labelledby="navTok" class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='TOK', type='ROUND')}" id="navRound">원형톡</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='TOK', type='HEART')}" id="navHeart">하트톡</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='TOK', type='ACRYLIC')}" id="navAcrylic">아크릴톡</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
-                                   id="navAirPodsBuds" role="button">에어팟/버즈</a>
-                                <ul aria-labelledby="navAirPodsBuds" class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='AIRPODS_1_2')}" id="navAirPods1">에어팟1/2세대</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='AIRPODS_PRO')}" id="navAirPodsPro">에어팟PRO</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='AIRPODS_3')}" id="navAirPods3">에어팟3세대</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='BUDS')}" id="navBuds">버즈</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
-                                   id="navDigital" role="button">디지털</a>
-                                <ul aria-labelledby="navDigital" class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{/listProducts(category='DIGITAL', type='APPLE_WATCH')}" id="navAppleWatch">애플워치</a></li>
-                                </ul>
-                            </li>
+
+            <div class="col-md-4 d-flex justify-content-end actionOn">
+                <div class="header-links">
+                    <!-- ADMIN 드롭다운 메뉴 -->
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')" style="display: inline-block;">
+                        <a class="me-3 dropdown-toggle" href="#" role="button" id="adminDropdown2" data-bs-toggle="dropdown" aria-expanded="false">
+                            ADMIN
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown2" style="margin-top: 10px;">
+                            <li><a class="dropdown-item" th:href="@{/admin/product/new}">상품 등록</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/product/management}">상품 관리</a></li>
                         </ul>
                     </div>
+                    <a class="me-3" th:href="@{/login}" sec:authorize="!isAuthenticated()">LOGIN</a>
+                    <a class="me-3" th:href="@{/join}" sec:authorize="!isAuthenticated()">JOIN US</a>
+                    <a class="me-3" th:href="@{/logout}" sec:authorize="isAuthenticated()">LOG OUT</a>
                 </div>
-            </nav>
+            </div>
         </div>
+    </header>
+
+    <div class="header_bottom py-2 actionOff">
+        <div class="container text-center">
+            <img alt="ggu" src="/images/mainImg/ggu.png">
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container">
+                <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                        class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item dropdown">
+                            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                               id="navPhoneCase" role="button">폰 케이스</a>
+                            <ul aria-labelledby="navPhoneCase" class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='HARD')}" id="navHard">하드</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='JELLY')}" id="navJelly">젤리</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='CARD')}" id="navCard">카드수납</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='PHONE_CASE', type='ZFLIP')}" id="navZFlip">Z플립</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                               id="navTok" role="button">톡</a>
+                            <ul aria-labelledby="navTok" class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='TOK', type='ROUND')}" id="navRound">원형톡</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='TOK', type='HEART')}" id="navHeart">하트톡</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='TOK', type='ACRYLIC')}" id="navAcrylic">아크릴톡</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                               id="navAirPodsBuds" role="button">에어팟/버즈</a>
+                            <ul aria-labelledby="navAirPodsBuds" class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='AIRPODS_1_2')}" id="navAirPods1">에어팟1/2세대</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='AIRPODS_PRO')}" id="navAirPodsPro">에어팟PRO</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='AIRPODS_3')}" id="navAirPods3">에어팟3세대</a></li>
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='AIRPODS', type='BUDS')}" id="navBuds">버즈</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                               id="navDigital" role="button">디지털</a>
+                            <ul aria-labelledby="navDigital" class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/listProducts(category='DIGITAL', type='APPLE_WATCH')}" id="navAppleWatch">애플워치</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
 </div>
 </body>
