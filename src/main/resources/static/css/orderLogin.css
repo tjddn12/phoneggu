@@ -5,16 +5,15 @@
   font-family: 'Arial', sans-serif;
 }
 
-body {
-  height: 100vh;
-  background-color: #f5f5f5;
-}
+/*body {*/
+/*  max-height: 100vh;*/
+/*  background-color: #f5f5f5;*/
+/*}*/
 
 .login-container {
   width: 100%;
   max-width: 600px;
   height: 100%;
-  max-height: 1500px;
   background: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -136,7 +135,6 @@ input[type="text"], input[type="password"] {
   text-align: center;
   padding: 20px;
   margin-top: 70px;
-  float: left;
 }
 
 .login-bottom p {
@@ -158,4 +156,14 @@ input[type="text"], input[type="password"] {
 @media (max-width: 767px) {
   .actionOff{display: none;}
   .actionOn{display: block;}
+
+  form {
+    width: 400px;
+    height: 150px;
+    /* align-items: center; */
+    margin-bottom: 20px;
+  }
+  input[type="text"], input[type="password"] {
+    width: 200px;
+  }
 }

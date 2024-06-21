@@ -44,22 +44,22 @@
 
             <label class="col-sm-2 col-form-label">주소 <span class="text-danger">*</span></label>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_postcode" name="p_code" placeholder="우편번호" required>
-                <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
+                <input type="text" class="address form-control" id="sample4_postcode" name="p_code" placeholder="우편번호" required>
+                <input type="button" class="address btn-secondary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" required>
-                <input type="text" class="address" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" required>
+                <input type="text" class="address form-control" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" required>
+                <input type="text" class="address form-control" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" required>
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" required>
-                <input type="text" class="address" id="sample4_extraAddress" placeholder="참고항목">
+                <input type="text" class="address form-control" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" required>
+                <input type="text" class="address form-control" id="sample4_extraAddress" placeholder="참고항목">
             </div>
             <span id="guide" style="color:#999;display:none"></span>
 
             <label for="email">이메일 <strong>*</strong></label>
             <div class="input-group">
-                <input class="form-control" id="email" placeholder="이메일" style="max-width: 150px;" type="text" required>
+                <input class="form-control" id="email" placeholder="이메일" type="text" required>
                 <span class="input-group-text">@</span>
                 <input class="form-control" id="email-domain" placeholder="직접입력" type="text" required>
                 <select class="form-select" style="max-width: 120px;" id="domain-select" onchange="updateEmailValue()">
@@ -74,18 +74,22 @@
 
             <div>
                 <label>이메일 수신여부 <strong>*</strong></label>
-                <input id="receive-email" name="email-opt" type="radio" value="receive">
-                <label for="receive-email">수신함</label>
-                <input checked id="no-receive-email" name="email-opt" type="radio" value="no-receive">
-                <label for="no-receive-email">수신안함</label>
+                <div>
+                    <input id="receive-email" name="email-opt" type="radio" value="receive">
+                    <label for="receive-email">수신함</label>
+                    <input checked id="no-receive-email" name="email-opt" type="radio" value="no-receive">
+                    <label for="no-receive-email">수신안함</label>
+                </div>
             </div>
 
             <div>
                 <label>SMS 수신여부 <strong>*</strong></label>
-                <input id="receive-sms" name="sms-opt" type="radio" value="receive">
-                <label for="receive-sms">수신함</label>
-                <input checked id="no-receive-sms" name="sms-opt" type="radio" value="no-receive">
-                <label for="no-receive-sms">수신안함</label>
+                <div>
+                    <input id="receive-sms" name="sms-opt" type="radio" value="receive">
+                    <label for="receive-sms">수신함</label>
+                    <input checked id="no-receive-sms" name="sms-opt" type="radio" value="no-receive">
+                    <label for="no-receive-sms">수신안함</label>
+                </div>
             </div>
 
             <div>

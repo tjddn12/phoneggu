@@ -6,7 +6,6 @@
 
 body {
     width: 100%;
-    height: auto;
     background-color: #f5f5f5;
 }
 
@@ -24,12 +23,12 @@ body {
 }
 
 .signup {
+    max-width: 1100px;
     font-family: Arial, sans-serif;
     border: 3px solid #aaa;
     background-color: #fff;
     padding: 20px;
     margin: 20px auto;
-    width: 60%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .signup > .back-login {
@@ -93,7 +92,7 @@ form {
     border: 1px solid #ccc;
 }
 #email{
-    width: 350px;
+    max-width: 150px;
 }
 .input-group-text{
     height: 45px;
@@ -152,13 +151,12 @@ form button {
     background-color: #00274c;
 }
 
-
-     .error {
-         color: red;
-     }
-     .success {
-         color: green;
-     }
+.error {
+ color: red;
+}
+.success {
+ color: green;
+}
 
 .col-form-label {
     display: block;
@@ -206,4 +204,16 @@ form button {
 @media (max-width: 767px) {
     .actionOff{display: none;}
     .actionOn{display: block;}
+
+    #email{
+        min-width: 150px;
+        max-width: 200px;
+    }
+
+    .address-group input[type="text"],
+    .address-group input[type="button"] {
+        flex: 1 1 100%;
+        margin-right: 0;
+    }
+
 }
