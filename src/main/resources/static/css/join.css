@@ -35,7 +35,6 @@ body {
     float: right;
     margin-top: 30px;
     font-size: 13px;
-
 }
 .signup h2 {
     margin-bottom: 20px;
@@ -166,7 +165,6 @@ form button {
 
 .address-group {
     display: flex;
-
     margin-bottom: 10px;
 }
 
@@ -216,4 +214,9 @@ form button {
         margin-right: 0;
     }
 
+    .signup > .back-login {
+        float: none;
+        margin-top: 30px;
+        font-size: 13px;
+    }
 }
