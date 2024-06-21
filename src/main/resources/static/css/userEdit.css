@@ -16,14 +16,33 @@ body {
     margin-bottom: 80px;
 }
 
-.category-nav {
-    margin: 20px 0;
+.pwpw {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
 }
 
-.category-nav a {
-    margin: 0 10px;
-    text-decoration: none;
-    color: #000;
+.ppww {
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#userId, #name, #phone {
+    width: 200px;
+}
+
+#email, #userPw, #confirm-userPw {
+    width: 400px;
 }
 
 .signup {
@@ -33,19 +52,6 @@ body {
     margin: 20px auto;
     width: 60%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.signup h2 {
-    margin-bottom: 20px;
-}
-
-.kakao-login {
-    background-color: #ffeb00;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1em;
-    margin-bottom: 20px;
-    cursor: pointer;
 }
 
 form {
@@ -62,17 +68,6 @@ strong {
     color: red;
 }
 
-form input[type="text"], form input[type="password"], form input[type="email"], form input[type="tel"] {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-form div {
-    margin: 10px 0;
-}
-
 form button {
     padding: 10px;
     border: none;
@@ -81,18 +76,23 @@ form button {
     cursor: pointer;
 }
 
-.btn {
+.btn1 {
     width: 120px;
     height: 50px;
-    margin: 50px auto 0;
-    display: block;
-    color: #fff;
-    background-color: #00274c;
+    margin: 20px 0;
 }
 
-.btn:hover {
-    color: #fff;
-    background-color: #00274c;
+.btn2 {
+    width: 120px;
+    height: 50px;
+    margin: 20px 0;
+    background-color: #ccc;
+    color: #000;
+}
+
+.btn1:hover,
+.btn2:hover {
+    opacity: 0.8;
 }
 
 .error {
@@ -106,7 +106,6 @@ form button {
 .col-form-label {
     display: block;
     margin-bottom: 10px;
-    font-weight: bold;
 }
 
 .address-group {
@@ -142,29 +141,7 @@ form button {
     color: red;
 }
 
-#userId {
-    width: 200px;
-}
-
-#userPw, #confirm-userPw, #email {
-    width: 350px;
-}
-
-#name {
-    width: 200px;
-}
-
-#phone {
-    width: 200px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.input-group-text, .form-select {
-    height: 45px;
-}
-
-#checkDuplicate {
-    width: 100px;
+#guide {
+    color: #999;
+    display: none;
 }

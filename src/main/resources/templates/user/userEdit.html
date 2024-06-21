@@ -17,18 +17,21 @@
 
             <!-- 소셜 로그인 사용자는 비밀번호 필드를 숨김 -->
             <div th:if="${!isSocialLogin}">
-                <label for="userPw">비밀번호  <strong>*</strong></label>
-                <input type="password" id="userPw" name="userPw">
-
-                <label for="confirm-userPw">비밀번호 확인  <strong>*</strong></label>
-                <input type="password" id="confirm-userPw" name="confirm-userPw">
+                <div class="pwpw">
+                    <label class="ppww" for="userPw">비밀번호 <strong>*</strong></label>
+                    <input  type="password" id="userPw" name="userPw">
+                </div>
+                <div class="pwpw">
+                    <label class="ppww" for="confirm-userPw">비밀번호 확인 <strong>*</strong></label>
+                    <input type="password" id="confirm-userPw" name="confirm-userPw">
+                </div>
                 <div id="passwordCheckResult"></div>
             </div>
 
             <label for="name">이름  <strong>*</strong></label>
             <input type="text" id="name" name="name" readonly="readonly" th:value="*{name}" >
 
-            <label class="col-sm-2 col-form-label">주소 <span class="text-danger">*</span></label>
+            <label class="col-form-label">주소 <span class="text-danger">*</span></label>
             <div class="address-group">
                 <input type="text" class="address" id="sample4_postcode" name="pCode" placeholder="우편번호" th:value="*{pCode}">
                 <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
