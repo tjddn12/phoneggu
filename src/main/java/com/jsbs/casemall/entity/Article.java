@@ -3,6 +3,9 @@ package com.jsbs.casemall.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //QnA 게시판 질문
 @AllArgsConstructor
 @ToString
@@ -23,6 +26,9 @@ public class Article extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user; //: 질문 작성 아이디
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public void patch(Article article) {
 

@@ -122,6 +122,6 @@ public class ArticleController {
             rttr.addFlashAttribute("msg", "삭제가 완료되었습니다.");
         }
         //결과 페이지로 리다이렉트
-        return "redirect:/qnas/";
+        return "redirect:/qnas";
     }
 }
