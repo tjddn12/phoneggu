@@ -153,7 +153,6 @@ public class UserService implements UserDetailsService {
         for (Order order : orders) {
             for(OrderDetail orderDetail : order.getOrderItems()){
                 total += orderDetail.getTotalPrice(); // 각각 아이템의 총 금액
-
             }
             count++; // order 순회 횟수  =  주문횟수
         }
