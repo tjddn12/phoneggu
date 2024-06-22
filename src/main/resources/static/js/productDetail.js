@@ -5,9 +5,15 @@ let totalPrice = 0;
 
 function addProduct(selectElement) {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
-    const prStock = selectedOption.getAttribute('data-stock');
+    const prStock = parseInt(selectedOption.getAttribute('data-stock'), 10);
 
     if (!selectedOption.value) return;
+
+    if (prStock === 0) {
+        alert('해당 옵션은 재고가 없습니다.');
+        selectElement.selectedIndex = 0; // 선택을 취소
+        return;
+    }
 
     const productId = selectedOption.value;
     const productText = selectedOption.text;
@@ -76,6 +82,14 @@ function submitForm(action) {
     if (selectedProducts.length === 0) {
         alert('옵션을 선택해 주세요.');
         return;
+    }
+
+    // 재고 상태 확인
+    for (let product of selectedProducts) {
+        if (parseInt(product.maxStock, 10) <= 0) {
+            alert('재고가 없어 품절된 상품입니다.');
+            return;
+        }
     }
 
     const form = document.getElementById('productForm');
