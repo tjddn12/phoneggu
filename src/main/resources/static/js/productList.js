@@ -44,4 +44,21 @@ $(document).ready(function() {
             $(this).removeClass('action');
         }
     });
+
+    $('.sort-link').click(function(e) {
+        e.preventDefault();
+        let sortBy = $(this).data('sort-by');
+        let direction = $(this).data('direction');
+        let category = $('#main-category').text();
+        let type = $('#sub-category').text().replace(/[()]/g, '');
+
+        window.location.href = `/listProducts?sortBy=${sortBy}&direction=${direction}&category=${category}&type=${type}#anchor`;
+
+
+        // 부드럽게 스크롤하기
+        $('html, body').animate({
+            scrollTop: $('#product-list').offset().top
+        }, 800);
+    });
+
 });

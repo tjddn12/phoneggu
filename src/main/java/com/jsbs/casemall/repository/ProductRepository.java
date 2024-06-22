@@ -18,4 +18,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
     List<Product> findByProductCategory(ProductCategory productCategory);
     List<Product> findByProductType(ProductType productType);
     List<Product> findAll(Sort sort);
+
+    List<Product> findByProductCategoryAndProductType(ProductCategory category, ProductType type, Sort sort);
+
+    List<Product> findByProductCategory(ProductCategory category, Sort sort);
+
+    List<Product> findByProductType(ProductType type, Sort sort);
 }

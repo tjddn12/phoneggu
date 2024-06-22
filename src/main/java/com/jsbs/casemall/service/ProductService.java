@@ -278,4 +278,17 @@ public class ProductService {
         log.info("Products found: {}", list.size());
         return list;
     }
+
+    // ver2
+    public List<Product> findAllByCategoryAndType(ProductCategory category, ProductType type, Sort sort) {
+        if (category != null && type != null) {
+            return productRepository.findByProductCategoryAndProductType(category, type, sort);
+        } else if (category != null) {
+            return productRepository.findByProductCategory(category, sort);
+        } else if (type != null) {
+            return productRepository.findByProductType(type, sort);
+        } else {
+            return productRepository.findAll(sort);
+        }
+    }
 }
