@@ -37,6 +37,7 @@
                         <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
                         <option th:each="model : ${product.productModelDtoList}"
                                 th:if="${model.productModelSelect != null}"
+                                th:unless="${model.productModelSelect.name() == 'DEFAULT_MODEL'}"
                                 th:value="${model.id}"
                                 th:attr="data-stock=${model.prStock}"
                                 th:disabled="${model.prStock == 0}">
