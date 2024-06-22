@@ -14,8 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -203,5 +202,19 @@ public class ProductController {
         List<Product> indexProducts = productService.getAllListProducts();
         model.addAttribute("indexProducts", indexProducts);
         return "index";
+    }
+
+    @GetMapping("/list")
+    public String listProducts(@RequestParam(required = false, defaultValue = "createdBy") String sortBy,
+                               @RequestParam(required = false, defaultValue = "asc") String direction, Model model) {
+        Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        List<Product> list = productService.findAll(sort);
+
+        log.info("Sort By: {}", sortBy);
+        log.info("Direction: {}", direction);
+        log.info("Number of list: {}", list.size());
+
+        model.addAttribute("list", list);
+        return "product/productList";
     }
 }

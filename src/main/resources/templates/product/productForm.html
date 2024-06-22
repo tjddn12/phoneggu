@@ -64,9 +64,12 @@
             <div class="form-group row mb-3">
                 <label for="productModelDtoList" class="col-form-label col-sm-2">기종</label>
                 <div class="col-sm-10 model-container">
-                    <div th:each="model, iterStat : ${T(com.jsbs.casemall.constant.ProductModelSelect).values()}" class="model-item">
+                    <div th:each="model, iterStat : ${T(com.jsbs.casemall.constant.ProductModelSelect).values()}"
+                         th:if="${model.name() != 'DEFAULT_MODEL'}"
+                         class="model-item">
                         <label>
-                            <input type="checkbox" th:field="*{productModelDtoList[__${iterStat.index}__].productModelSelect}" th:value="${model.name()}" th:id="${model.name()}" class="model-checkbox">
+                            <input type="checkbox" th:field="*{productModelDtoList[__${iterStat.index}__].productModelSelect}"
+                                   th:value="${model.name()}" th:id="${model.name()}" class="model-checkbox">
                             <span th:text="${model.displayName}"></span>
                         </label>
                     </div>
@@ -76,9 +79,12 @@
             <div class="form-group row mb-3">
                 <label class="col-form-label col-sm-2">재고 수량</label>
                 <div class="col-sm-10 stock-container">
-                    <div th:each="model, iterStat : ${T(com.jsbs.casemall.constant.ProductModelSelect).values()}" class="stock-item">
+                    <div th:each="model, iterStat : ${T(com.jsbs.casemall.constant.ProductModelSelect).values()}"
+                         th:if="${model.name() != 'DEFAULT_MODEL'}"
+                         class="stock-item">
                         <span th:text="${model.displayName}"></span>
-                        <input type="number" th:field="*{productModelDtoList[__${iterStat.index}__].prStock}" class="form-control stock-input" placeholder="수량" min="0">
+                        <input type="number" th:field="*{productModelDtoList[__${iterStat.index}__].prStock}"
+                               class="form-control stock-input" placeholder="수량" min="0">
                     </div>
                 </div>
             </div>

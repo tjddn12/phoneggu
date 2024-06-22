@@ -1,6 +1,7 @@
 package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.constant.ProductCategory;
+import com.jsbs.casemall.constant.ProductModelSelect;
 import com.jsbs.casemall.constant.ProductSellStatus;
 import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.*;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,8 +53,9 @@ public class ProductService {
         for (ProductModelDto productModelDto : productModelDtoList) {
             //기종이 선택되지 않았어도 저장
             ProductModel productModel = new ProductModel();
-            productModel.setProductModelSelect(productModelDto.getProductModelSelect());
-            productModel.setPrStock(productModelDto.getPrStock());
+            productModel.setProductModelSelect(
+                    productModelDto.getProductModelSelect() != null ? productModelDto.getProductModelSelect() : ProductModelSelect.DEFAULT_MODEL);
+            productModel.setPrStock(productModelDto.getPrStock() != null ? productModelDto.getPrStock() : 0);
             productModel.setProduct(product);
             product.addProductModel(productModel);
             log.info("유효한 상품 모델 추가 완료: {}", productModel);
@@ -134,8 +137,9 @@ public class ProductService {
         for (ProductModelDto productModelDto : productModelDtoList) {
             //기종이 선택되지 않았어도 저장
             ProductModel productModel = new ProductModel();
-            productModel.setProductModelSelect(productModelDto.getProductModelSelect());
-            productModel.setPrStock(productModelDto.getPrStock());
+            productModel.setProductModelSelect(
+                    productModelDto.getProductModelSelect() != null ? productModelDto.getProductModelSelect() : ProductModelSelect.DEFAULT_MODEL);
+            productModel.setPrStock(productModelDto.getPrStock() != null ? productModelDto.getPrStock() : 0);
             productModel.setProduct(product);
             product.addProductModel(productModel);
             log.info("유효한 상품 모델 추가 완료: {}", productModel);
@@ -267,5 +271,11 @@ public class ProductService {
         }
         log.info("Product ID: {}, ProductSellStatus: {}", product.getId(), product.getProductSellStatus());
         productRepository.save(product); // 상태 업데이트 후 저장
+    }
+
+    public List<Product> findAll(Sort sort) {
+        List<Product> list = productRepository.findAll(sort);
+        log.info("Products found: {}", list.size());
+        return list;
     }
 }

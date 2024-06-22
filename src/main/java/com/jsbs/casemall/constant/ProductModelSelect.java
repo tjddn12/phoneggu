@@ -1,6 +1,7 @@
 package com.jsbs.casemall.constant;
 
 public enum ProductModelSelect {
+    DEFAULT_MODEL("기본 모델"),
     IPHONE15("아이폰15"),
     IPHONE15PLUS("아이폰15플러스"),
     IPHONE15PRO("아이폰15PRO"),
