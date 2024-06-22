@@ -55,10 +55,6 @@ $(document).ready(function() {
         window.location.href = `/listProducts?sortBy=${sortBy}&direction=${direction}&category=${category}&type=${type}#anchor`;
 
 
-        // 부드럽게 스크롤하기
-        $('html, body').animate({
-            scrollTop: $('#product-list').offset().top
-        }, 800);
     });
 
 });
