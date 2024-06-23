@@ -31,6 +31,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public final StringPath filepath = createString("filepath");
 
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
 
@@ -39,7 +41,7 @@ public class QReview extends EntityPathBase<Review> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
-    public final NumberPath<Long> reviewNo = createNumber("reviewNo", Long.class);
+    public final ListPath<ReviewImg, QReviewImg> reviewImgs = this.<ReviewImg, QReviewImg>createList("reviewImgs", ReviewImg.class, QReviewImg.class, PathInits.DIRECT2);
 
     public final StringPath revwContent = createString("revwContent");
 

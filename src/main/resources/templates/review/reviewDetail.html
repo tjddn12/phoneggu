@@ -28,7 +28,11 @@
             <div class="review-images">
                 <img th:src="${reviewImages[review.reviewNo]}" alt="Review Image">
             </div>
-
+            <!-- 작성자  본인 일때 보이게 -->
+            <th:block th:if="${writer}">
+                <a th:href="@{/reviews/{id}/edit(id=${review.reviewNo})}" class="btn btn-primary">수정</a>
+                <a th:href="@{/reviews/{id}/delete(id=${review.reviewNo})}" class="btn btn-danger">삭제</a>
+            </th:block>
             <a th:href="@{/reviews}" class="btn btn-primary">목록으로 돌아가기</a>
         </div>
     </div>

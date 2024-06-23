@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,6 +32,7 @@ public class ReviewService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
 
 
@@ -38,7 +41,8 @@ public class ReviewService {
         List<Review> reviews =  reviewRepository.findAll();
         for (Review review : reviews) {
             ReviewsDto dto = new ReviewsDto();
-            dto.setReviewNo(review.getReviewNo());
+
+            dto.setReviewNo(review.getId());
             dto.setUserid(review.getUserId().getUserId());
             dto.setRevwTitle(review.getRevwTitle());
             dto.setRevwContent(review.getRevwContent());
@@ -81,7 +85,10 @@ public class ReviewService {
             reviewImgService.saveReviewImg(reviewImg, reviewImgFileList.get(i));
         }
     }
+    @Transactional
     public void deleteReview(Long reviewNo){
+        //리뷰에 해당하는 이미지 삭제
+        reviewImgRepository.deleteByReviewId(reviewNo);
         reviewRepository.deleteById(reviewNo);
     }
     //    public boolean updateReview(ReviewFormDto reviewFormDto){
@@ -104,7 +111,7 @@ public class ReviewService {
             reviewImgService.updateReviewImg(reviewImgIds.get(i), reviewImgFileList.get(i));
         }
 
-        return review.getReviewNo();
+        return review.getId();
     }
     public void saveRating(ReviewDto reviewDto) {
         //새로운 Review 엔티티를 생성하고 평점 설정
@@ -172,5 +179,69 @@ public class ReviewService {
         this.reviewRepository.save(review);
 
         return review;
+    }
+
+//    public Long updateReviewFromForm(String userId, ReviewFormDto form) {
+//        Users users = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저가 없습니다"));
+//
+//        Review target = reviewRepository.findById(form.getId()).orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다."));
+//
+//        target.setRevwContent(form.getRevwContent());
+//        target.setRevwTitle(form.getRevwTitle());
+//        target.setRevwRatings(form.getRevwRatings());
+//        //이미지 업데이트 로직 추후 구현.
+//        List<ReviewImg> reviewImgList = form.getReviewImgDtoList().stream()
+//                        .map(dto -> {
+//                            ReviewImg img = new ReviewImg();
+//
+//                            img.setOriImgName(dto.getRevwOriImgName());
+//                            img.setImgName(dto.getRevwImgName());
+//                            img.setImgUrl(dto.getImgUrl());
+//                            img.setReview(target); //: Review 엔티티와 연결
+//
+//                            return img;
+//                        })
+//                .collect(Collectors.toList());
+//        //기존의 리뷰 이미지들을 모두 삭제하고, 새로운 리뷰 이미지들을 설정
+//        target.getReviewImgs().clear();
+//        target.getReviewImgs().addAll(reviewImgList);
+//
+//        Review saved = reviewRepository.save(target);
+//
+//        return saved.getId();
+//    }
+    @Transactional
+    public void updateReview(ReviewFormDto reviewFormDto, List<MultipartFile> reviewImgFileList, String userId) throws IOException {
+        // 1. 리뷰 정보 업데이트
+        Review review = reviewRepository.findById(reviewFormDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다. ID: " + reviewFormDto.getId()));
+
+        review.setRevwTitle(reviewFormDto.getRevwTitle());
+        review.setRevwContent(reviewFormDto.getRevwContent());
+        review.setRevwRatings(reviewFormDto.getRevwRatings());
+
+        // 2. 리뷰 이미지 업데이트
+        if (reviewImgFileList != null && !reviewImgFileList.isEmpty()) {
+            // 기존 이미지 삭제
+            List<ReviewImg> existingImages = review.getReviewImgs();
+            for (ReviewImg img : existingImages) {
+                reviewImgRepository.deleteByReviewId(img.getReview().getId());
+            }
+            existingImages.clear();
+
+            // 새로 업로드한 이미지 추가
+            for (MultipartFile file : reviewImgFileList) {
+                ReviewImg reviewImg = new ReviewImg();
+                try{
+                    reviewImgService.saveReviewImg(reviewImg, file);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                existingImages.add(reviewImg);
+            }
+        }
+
+        reviewRepository.save(review);
     }
 }
