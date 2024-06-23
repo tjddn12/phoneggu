@@ -97,30 +97,30 @@ public class ReviewService {
 //        return updatedRows > 0;
 //    }
 //    수정------------------
-    public Long updateAReview(ReviewFormDto reviewFormDto, List<MultipartFile> reviewImgFileList) throws Exception {
-        //상품 수정
-        Review review = reviewRepository.findById(reviewFormDto.getId())
-                .orElseThrow(EntityNotFoundException::new);
-
-        review.update(reviewFormDto);
-
-        List<Long> reviewImgIds = reviewFormDto.getReviewImgIds();
-        //: 이미지 번호
-        //이미지 수정
-        for(int i = 0; i < reviewImgFileList.size(); i++){
-            reviewImgService.updateReviewImg(reviewImgIds.get(i), reviewImgFileList.get(i));
-        }
-
-        return review.getId();
-    }
-    public void saveRating(ReviewDto reviewDto) {
-        //새로운 Review 엔티티를 생성하고 평점 설정
-        Review review = new Review();
-
-        review.setRevwRatings(reviewDto.getRevwRatings());
-        //DB에 저장
-        reviewRepository.save(review);
-    }
+//    public Long updateAReview(ReviewFormDto reviewFormDto, List<MultipartFile> reviewImgFileList) throws Exception {
+//        //상품 수정
+//        Review review = reviewRepository.findById(reviewFormDto.getId())
+//                .orElseThrow(EntityNotFoundException::new);
+//
+//        review.update(reviewFormDto);
+//
+//        List<Long> reviewImgIds = reviewFormDto.getReviewImgIds();
+//        //: 이미지 번호
+//        //이미지 수정
+//        for(int i = 0; i < reviewImgFileList.size(); i++){
+//            reviewImgService.updateReviewImg(reviewImgIds.get(i), reviewImgFileList.get(i));
+//        }
+//
+//        return review.getId();
+//    }
+//    public void saveRating(ReviewDto reviewDto) {
+//        //새로운 Review 엔티티를 생성하고 평점 설정
+//        Review review = new Review();
+//
+//        review.setRevwRatings(reviewDto.getRevwRatings());
+//        //DB에 저장
+//        reviewRepository.save(review);
+//    }
     public Page<Review> getReviewList(int page){
         List<Sort.Order> sorts = new ArrayList<>();
 
@@ -210,38 +210,45 @@ public class ReviewService {
 //
 //        return saved.getId();
 //    }
-    @Transactional
-    public void updateReview(ReviewFormDto reviewFormDto, List<MultipartFile> reviewImgFileList, String userId) throws IOException {
-        // 1. 리뷰 정보 업데이트
-        Review review = reviewRepository.findById(reviewFormDto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다. ID: " + reviewFormDto.getId()));
+//    @Transactional
+//    public void updateReview(ReviewFormDto reviewFormDto, List<MultipartFile> reviewImgFileList, String userId) throws IOException {
+//        // 1. 리뷰 정보 업데이트
+//        Review review = reviewRepository.findById(reviewFormDto.getId())
+//                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다. ID: " + reviewFormDto.getId()));
+//
+//        review.setRevwTitle(reviewFormDto.getRevwTitle());
+//        review.setRevwContent(reviewFormDto.getRevwContent());
+//        review.setRevwRatings(reviewFormDto.getRevwRatings());
+//
+//        // 2. 리뷰 이미지 업데이트
+//        if (reviewImgFileList != null && !reviewImgFileList.isEmpty()) {
+//            // 기존 이미지 삭제
+//            List<ReviewImg> existingImages = review.getReviewImgs();
+//            for (ReviewImg img : existingImages) {
+//                reviewImgRepository.deleteByReviewId(img.getReview().getId());
+//            }
+//            existingImages.clear();
+//
+//            // 새로 업로드한 이미지 추가
+//            for (MultipartFile file : reviewImgFileList) {
+//                ReviewImg reviewImg = new ReviewImg();
+//                try{
+//                    reviewImgService.saveReviewImg(reviewImg, file);
+//                }catch(Exception e){
+//                    e.printStackTrace();
+//                }
+//
+//                existingImages.add(reviewImg);
+//            }
+//        }
+//
+//        reviewRepository.save(review);
+//    }
 
-        review.setRevwTitle(reviewFormDto.getRevwTitle());
-        review.setRevwContent(reviewFormDto.getRevwContent());
-        review.setRevwRatings(reviewFormDto.getRevwRatings());
+    public ReviewsDto getReviewById(Long reviewNo) {
+        Review review = reviewRepository.findById(reviewNo).orElseThrow(() ->
+                new IllegalArgumentException("리뷰를 찾을 수 없습니다: " + reviewNo));
 
-        // 2. 리뷰 이미지 업데이트
-        if (reviewImgFileList != null && !reviewImgFileList.isEmpty()) {
-            // 기존 이미지 삭제
-            List<ReviewImg> existingImages = review.getReviewImgs();
-            for (ReviewImg img : existingImages) {
-                reviewImgRepository.deleteByReviewId(img.getReview().getId());
-            }
-            existingImages.clear();
-
-            // 새로 업로드한 이미지 추가
-            for (MultipartFile file : reviewImgFileList) {
-                ReviewImg reviewImg = new ReviewImg();
-                try{
-                    reviewImgService.saveReviewImg(reviewImg, file);
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-
-                existingImages.add(reviewImg);
-            }
-        }
-
-        reviewRepository.save(review);
+        return new ReviewsDto(review);
     }
 }

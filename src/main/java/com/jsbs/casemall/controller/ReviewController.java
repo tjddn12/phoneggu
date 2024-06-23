@@ -87,29 +87,29 @@ public class ReviewController {
         return "redirect:/reviews";
     }
 
-    @PostMapping(value = "/{reviewNo}")
-    public String reviewUpdate(@Valid ReviewFormDto reviewFormDto, BindingResult bindingResult,
-                               Model model, @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList) {
-        if (bindingResult.hasErrors()) {
-
-            return "review/reviewWrite";
-        }
-        if (reviewImgFileList.get(0).isEmpty() && reviewFormDto.getId() == null) {
-            model.addAttribute("errorMessage", "리뷰 이미지는 필수 입력값입니다.");
-
-            return "review/reviewWrite";
-        }
-
-        try {
-            reviewService.updateAReview(reviewFormDto, reviewImgFileList);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "리뷰 수정 중 에러가 발생하였습니다.");
-
-            return "review/reviewWrite";
-        }
-
-        return "redirect:/reviews";
-    }
+//    @PostMapping(value = "/{reviewNo}")
+//    public String reviewUpdate(@Valid ReviewFormDto reviewFormDto, BindingResult bindingResult,
+//                               Model model, @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList) {
+//        if (bindingResult.hasErrors()) {
+//
+//            return "review/reviewWrite";
+//        }
+//        if (reviewImgFileList.get(0).isEmpty() && reviewFormDto.getId() == null) {
+//            model.addAttribute("errorMessage", "리뷰 이미지는 필수 입력값입니다.");
+//
+//            return "review/reviewWrite";
+//        }
+//
+//        try {
+//            reviewService.updateAReview(reviewFormDto, reviewImgFileList);
+//        } catch (Exception e) {
+//            model.addAttribute("errorMessage", "리뷰 수정 중 에러가 발생하였습니다.");
+//
+//            return "review/reviewWrite";
+//        }
+//
+//        return "redirect:/reviews";
+//    }
 
     //리뷰 게시판 페이징 처리 및 매개변수 전달
     @GetMapping
@@ -179,15 +179,21 @@ public class ReviewController {
     @GetMapping("/{reviewNo}")
     public String show(@PathVariable Long reviewNo, Model model, Principal principal) {
         List<ReviewsDto> reviews = reviewService.getAllReviews();
-        ReviewsDto review = reviews.get(0);
+        log.info("dto리스트: {}", reviews.toString());
+        ReviewsDto review = reviews.stream()
+                .filter(r -> r.getReviewNo().equals(reviewNo))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid reviewNo: " + reviewNo));
+//        ReviewsDto review = reviewService.getReviewById(reviewNo);
 
         log.info("ReviewsDto: {}", review.toString());
 
-        Map<Long, String> reviewImages = new HashMap<>();
-        for (ReviewsDto revw : reviews) {
-            String imageUrl = reviewService.getImgUrlByReviewNo(revw.getReviewNo());
-            reviewImages.put(review.getReviewNo(), imageUrl);
-        }
+//        Map<Long, String> reviewImages = new HashMap<>();
+        String imageUrl = reviewService.getImgUrlByReviewNo(reviewNo);
+
+//            reviewImages.put(review.getReviewNo(), imageUrl);
+//            log.info("url: {}", imageUrl);
+
         //해당 글의 작성자 확인: 일치하면 reviewDetail의 수정 버튼이 보여짐.
         boolean writer = false;
 
@@ -197,7 +203,7 @@ public class ReviewController {
 //        log.info("아이디 이름 테스트: {} {}", review.getUserid(), principal.getName());
         model.addAttribute("review", review);
 //        log.info("시간 확인 :  {} " , review.getRegTime());
-        model.addAttribute("reviewImages", reviewImages);
+//        model.addAttribute("reviewImages", reviewImages);
         model.addAttribute("writer", writer);
 
         return "review/reviewDetail";
@@ -224,60 +230,60 @@ public class ReviewController {
 //
 //        return "redirect:/reviews";
 //    }
-    // 리뷰 수정 폼을 보여주는 GET 요청 처리 메서드
-    @GetMapping("/{id}/edit")
-    public String editReviewForm(@PathVariable("id") Long id, Model model, Principal principal) {
-        Review review = reviewRepository.findById(id).orElse(null); // 리뷰 ID를 통해 리뷰 정보 조회
-
-        // 리뷰가 존재하지 않는 경우 처리
-        if (review == null) {
-            throw new IllegalArgumentException("해당 리뷰가 존재하지 않습니다. ID: " + id);
-        }
-
-        //해당 글의 작성자 확인
-        boolean writer = false;
-
-        if(principal != null){
-            writer = review.getUserId().equals(principal.getName());
-        }
-
-        // 이미지 정보 가져오기
-        List<ReviewImg> reviewImgs = review.getReviewImgs();
-
-        // 리뷰 수정을 위한 폼 데이터 설정
-        ReviewFormDto reviewFormDto = new ReviewFormDto();
-        reviewFormDto.setId(review.getId());
-        reviewFormDto.setRevwTitle(review.getRevwTitle());
-        reviewFormDto.setRevwContent(review.getRevwContent());
-        reviewFormDto.setRevwRatings(review.getRevwRatings());
-
-        model.addAttribute("reviewFormDto", reviewFormDto);
-        model.addAttribute("reviewImgs", reviewImgs);
-
-        return "review/reviewEdit";
-    }
-    // 리뷰 수정 처리 POST 요청 메서드
-    @PostMapping("/{id}/edit")
-    public String editReview(@PathVariable("id") Long id, @Valid ReviewFormDto reviewFormDto, BindingResult bindingResult,
-                             Model model, Principal principal, @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList) {
-        String userId = principal.getName(); // 현재 사용자의 ID
-
-        // 폼 데이터 유효성 검사
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errorMessage", "입력값을 확인해주세요.");
-            return "review/reviewEdit";
-        }
-
-        try {
-            // 리뷰 수정 서비스 호출
-            reviewService.updateReview(reviewFormDto, reviewImgFileList, userId);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "리뷰 수정 중 오류가 발생하였습니다.");
-            return "review/reviewEdit";
-        }
-
-        return "redirect:/reviews/" + id;
-    }
+//    // 리뷰 수정 폼을 보여주는 GET 요청 처리 메서드
+//    @GetMapping("/{id}/edit")
+//    public String editReviewForm(@PathVariable("id") Long id, Model model, Principal principal) {
+//        Review review = reviewRepository.findById(id).orElse(null); // 리뷰 ID를 통해 리뷰 정보 조회
+//
+//        // 리뷰가 존재하지 않는 경우 처리
+//        if (review == null) {
+//            throw new IllegalArgumentException("해당 리뷰가 존재하지 않습니다. ID: " + id);
+//        }
+//
+//        //해당 글의 작성자 확인
+//        boolean writer = false;
+//
+//        if(principal != null){
+//            writer = review.getUserId().equals(principal.getName());
+//        }
+//
+//        // 이미지 정보 가져오기
+//        List<ReviewImg> reviewImgs = review.getReviewImgs();
+//
+//        // 리뷰 수정을 위한 폼 데이터 설정
+//        ReviewFormDto reviewFormDto = new ReviewFormDto();
+//        reviewFormDto.setId(review.getId());
+//        reviewFormDto.setRevwTitle(review.getRevwTitle());
+//        reviewFormDto.setRevwContent(review.getRevwContent());
+//        reviewFormDto.setRevwRatings(review.getRevwRatings());
+//
+//        model.addAttribute("reviewFormDto", reviewFormDto);
+//        model.addAttribute("reviewImgs", reviewImgs);
+//
+//        return "review/reviewEdit";
+//    }
+//    // 리뷰 수정 처리 POST 요청 메서드
+//    @PostMapping("/{id}/edit")
+//    public String editReview(@PathVariable("id") Long id, @Valid ReviewFormDto reviewFormDto, BindingResult bindingResult,
+//                             Model model, Principal principal, @RequestParam("reviewImgFile") List<MultipartFile> reviewImgFileList) {
+//        String userId = principal.getName(); // 현재 사용자의 ID
+//
+//        // 폼 데이터 유효성 검사
+//        if (bindingResult.hasErrors()) {
+//            model.addAttribute("errorMessage", "입력값을 확인해주세요.");
+//            return "review/reviewEdit";
+//        }
+//
+//        try {
+//            // 리뷰 수정 서비스 호출
+//            reviewService.updateReview(reviewFormDto, reviewImgFileList, userId);
+//        } catch (Exception e) {
+//            model.addAttribute("errorMessage", "리뷰 수정 중 오류가 발생하였습니다.");
+//            return "review/reviewEdit";
+//        }
+//
+//        return "redirect:/reviews/" + id;
+//    }
     //삭제 메서드
     @GetMapping("/{reviewNo}/delete")
     public String delete(@PathVariable Long reviewNo, RedirectAttributes rttr) {

@@ -25,12 +25,12 @@
             <p>작성일: <span th:text="${#temporals.format(review.regTime, 'yyyy-MM-dd HH:mm')}"></span></p>
             <p id="big" th:text="${review.revwContent}"></p>
             <!--            이미지 출력-->
-            <div class="review-images">
-                <img th:src="${reviewImages[review.reviewNo]}" alt="Review Image">
-            </div>
+<!--            <div class="review-images">-->
+<!--                <img th:src="${reviewImages[review.reviewNo]}" alt="Review Image">-->
+<!--            </div> : 이미지 배열 오류 나서 주석 처리-->
             <!-- 작성자  본인 일때 보이게 -->
             <th:block th:if="${writer}">
-                <a th:href="@{/reviews/{id}/edit(id=${review.reviewNo})}" class="btn btn-primary">수정</a>
+            <!--    <a th:href="@{/reviews/{id}/edit(id=${review.reviewNo})}" class="btn btn-primary">수정</a> -->
                 <a th:href="@{/reviews/{id}/delete(id=${review.reviewNo})}" class="btn btn-danger">삭제</a>
             </th:block>
             <a th:href="@{/reviews}" class="btn btn-primary">목록으로 돌아가기</a>
