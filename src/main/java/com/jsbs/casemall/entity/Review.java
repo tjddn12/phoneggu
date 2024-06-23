@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,7 +52,7 @@ public class Review extends BaseEntity{
     private Product prId; //: 주문 정보(상품명, 이미지) 추출
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<ReviewImg> reviewImgs;
+    private List<ReviewImg> reviewImgs = new ArrayList<>();
 
     public void update(ReviewFormDto reviewFormDto){
         this.id = reviewFormDto.getId();

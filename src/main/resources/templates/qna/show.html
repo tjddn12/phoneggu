@@ -25,7 +25,7 @@
         </th:block>
         <a th:href="@{/qnas}">질문 목록으로</a>
         <!--------------- 답변 --------------->
-        <div id="comments-list" >
+        <div id="comments-list"  sec:authorize="hasRole('ADMIN')">
             <div th:each="comment : ${comments}">
                 <div class="card" th:id="'comments-' + ${comment.id}">
                     <div class="card-header">

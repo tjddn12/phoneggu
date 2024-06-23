@@ -116,9 +116,11 @@ public class ReviewController {
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
         Page<Review> paging = this.reviewService.getReviewList(page);
         Page<ReviewFormDto> reviewFormDtos = paging.map(review -> {
+            ReviewImg reviewImg = reviewImgRepository.findByReview(review);
+            String imgUrl = (reviewImg != null) ? reviewImg.getImgUrl() : "https://via.placeholder.com/100"; // null인 경우 기본이미지를 넣어서 null 처리
             return new ReviewFormDto(
                     review.getId(),
-                    reviewImgRepository.findByReview(review).getImgUrl(),
+                    imgUrl,
                     review.getRevwTitle(),
                     review.getRevwContent(),
                     review.getPrId().getPrName(),

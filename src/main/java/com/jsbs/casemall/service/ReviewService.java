@@ -153,12 +153,15 @@ public class ReviewService {
             log.info("리뷰 객체,{} , {}  {}  ",reviewNo,review,optionalReview.get()) ;
             ReviewImg reviewImg = reviewImgRepository.findByReview(review);
 
-            return reviewImg.getImgUrl();
-        }else{
-            return "https://via.placeholder.com/100"; //: 리뷰가 존재하지 않을 경우 기본 이미지 URL 반환
+            if (reviewImg != null) {
+                return reviewImg.getImgUrl();
+            } else {
+                return "https://via.placeholder.com/100"; // 리뷰 이미지가 존재하지 않을 경우 기본 이미지 URL 반환
+            }
+        } else {
+            return "https://via.placeholder.com/100"; // 리뷰가 존재하지 않을 경우 기본 이미지 URL 반환
         }
     }
-
     public ReviewFormDto getImgAndName(Long prId){
         Product product = productRepository.findById(prId).orElseThrow(()->new IllegalArgumentException("상품이 존재하지 않습니다"));
 
