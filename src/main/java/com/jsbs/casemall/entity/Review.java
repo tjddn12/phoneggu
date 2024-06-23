@@ -19,7 +19,7 @@ public class Review extends BaseEntity{
     @Id
     @Column(name = "review_no")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewNo; //: 리뷰 번호
+    private Long id; //: 리뷰 번호
     //    @Column(name = "option_no", nullable = false)
 //    private int optionNo; //: 옵션 번호, 필요시 추후 수정 가능.
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,8 +50,11 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "pr_id")
     private Product prId; //: 주문 정보(상품명, 이미지) 추출
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<ReviewImg> reviewImgs;
+
     public void update(ReviewFormDto reviewFormDto){
-        this.reviewNo = reviewFormDto.getId();
+        this.id = reviewFormDto.getId();
         this.revwTitle = reviewFormDto.getRevwTitle();
         this.revwContent = reviewFormDto.getRevwContent();
         this.revwRatings = reviewFormDto.getRevwRatings();
