@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @ToString
 @Getter
@@ -39,11 +40,11 @@ public class ArticleForm {
     public Article toEntity() {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 아이디입니다."));
-        return new Article(id, title, content, user);
+        return new Article(id, title, content, user, new ArrayList<>());
     }
 
     public Article toEntity(Users users) {
-        return new Article(id, title, content, users);
+        return new Article(id, title, content, users, new ArrayList<>());
     }
 
 

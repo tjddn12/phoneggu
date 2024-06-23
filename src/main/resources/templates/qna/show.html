@@ -29,7 +29,7 @@
             <div th:each="comment : ${comments}">
                 <div class="card" th:id="'comments-' + ${comment.id}">
                     <div class="card-header">
-                        <span th:text="${comment.nickname}"></span>
+                        <span th:text="관리자"></span>
                         <!-- Button trigger modal -->
                         <button type="button"
                                 class="btn btn-sm btn-outline-success m-2"
@@ -65,10 +65,10 @@
                     <div class="modal-body">
                         <!-- 답변 수정 폼-->
                         <form>
-                            <!-- 닉네임 입력 -->
+                            <!-- 닉네임 입력: 관리자 계정만 접속 가능하므로 닉네임을 입력할 필요가 없음. -->
                             <div class="mb-3">
-                                <label class="form-label">닉네임</label>
-                                <input type="text" class="form-control form-control-sm" id="edit-comment-nickname">
+                                <label class="form-label">관리자</label>
+                                <input type="hidden" class="form-control form-control-sm" id="edit-comment-nickname">
                             </div>
 
                             <!-- 답변 본문 입력 -->

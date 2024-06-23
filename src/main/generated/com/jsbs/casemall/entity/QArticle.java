@@ -24,6 +24,8 @@ public class QArticle extends EntityPathBase<Article> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final ListPath<Comment, QComment> comments = this.<Comment, QComment>createList("comments", Comment.class, QComment.class, PathInits.DIRECT2);
+
     public final StringPath content = createString("content");
 
     //inherited
