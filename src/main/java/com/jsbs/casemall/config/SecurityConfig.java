@@ -44,9 +44,9 @@ public class SecurityConfig {
 //                .sessionManagement(session -> session
 //                        .invalidSessionUrl("/login?invalid-session=true"))
         // http > https 설정
-                .requiresChannel(channel ->
-                        channel.anyRequest().requiresSecure()
-                );
+//                .requiresChannel(channel ->
+//                        channel.anyRequest().requiresSecure()
+//                );
         ;
 
 

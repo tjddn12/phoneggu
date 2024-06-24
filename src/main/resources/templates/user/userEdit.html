@@ -53,6 +53,7 @@
             <input type="email" id="email" name="email" th:value="*{email}">
 
             <div class="button-container">
+                <button type="button" class="btn1" onclick="deleteUser()">회원탈퇴</button>
                 <button type="submit" class="btn1">회원정보수정</button>
                 <button type="button" onclick="location.href='#'" class="btn2">취소</button>
             </div>
@@ -156,6 +157,28 @@
                         }
                     }
                 }).open();
+            }
+
+            // 회원탈퇴 함수
+            function deleteUser() {
+                if (confirm('회원 탈퇴를 진행하시겠습니까?')) {
+                    // 회원탈퇴 API를 호출합니다.
+                    fetch('/userDelete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ userId: document.getElementById('userId').value })
+                    })
+                        .then(() => {
+                            alert('탈퇴되었습니다.');
+                            window.location.href = '/login';
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('회원 탈퇴 중 오류가 발생하였습니다.');
+                        });
+                }
             }
         </script>
     </section>
