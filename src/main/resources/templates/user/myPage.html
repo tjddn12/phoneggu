@@ -31,32 +31,26 @@
             </div>
             <div class="balance-item">
                 <p>총주문</p>
-                <p>0원(0회)</p>
+                <p th:text="'('+${count.getCount()} + '회)'"></p>
+
             </div>
         </section>
 
         <section class="order-status">
-            <h2>나의 주문처리 현황 <span>(최근 3개월 기준)</span></h2>
+            <h2>나의 주문처리 현황 </h2>
             <div class="order-status-details">
                 <div class="order-item"><p>입금전</p> <span>0</span></div>
                 <div class="order-item"><p>배송준비중</p> <span>0</span></div>
                 <div class="order-item"><p>배송중 </p><span>0</span></div>
-                <div class="order-item"><p>배송완료</p> <span>0</span></div>
-                <div class="order-item-cancel">
-                    <ul>
-                        <li>● 취소 : 0</li>
-                        <li>● 교환 : 0</li>
-                        <li>● 반품 : 0</li>
-                    </ul>
-                </div>
+                <div class="order-item"><p>배송완료</p> <span th:text="${count.getCount()}"> </span></div>
             </div>
         </section>
 
         <section class="myPage-nav-links">
-            <a href="/order/history" class="nav-item"> <img src="/images/마이페이지 1.png" alt="" class="items"><strong>ORDER</strong><br>주문내역 조회</a>
-            <a href="/userEdit" class="nav-item"><img src="/images/마이페이지 2.png" alt="" class="items"><strong>PROFILE</strong><br>회원정보</a>
+            <a href="/order/history" class="nav-item"> <img src="/images/mainImg/마이페이지 1.png" alt="" class="items"><strong>ORDER</strong><br>주문내역 조회</a>
+            <a href="/userEdit" class="nav-item"><img src="/images/mainImg/마이페이지 2.png" alt="" class="items"><strong>PROFILE</strong><br>회원정보</a>
             <a href="/cart" class="nav-item "><i class="fa-solid fa-cart-shopping  custom-size items"></i><strong>CART</strong><br>장바구니</a>
-            <a href="/reviewWrite" class="nav-item"><img src="/images/마이페이지6.png" alt="" class="items"><strong>BOARD</strong><br>게시글 관리</a>
+<!--            <a href="/reviewWrite" class="nav-item"><img src="/images/mainImg/마이페이지6.png" alt="" class="items"><strong>BOARD</strong><br>게시글 관리</a>-->
         </section>
     </section>
 </div>

@@ -1,27 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Find User</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>비밀번호 찾기</title>
+    <link rel="stylesheet" th:href="@{/css/findUser.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-<h1>Find User</h1>
-<form action="/findPw" method="post">
-    <div class="form-group">
-        <label>이메일</label>
-        <input type="email" name="userEmail" class="form-control" placeholder="이메일을 입력해 주세요" required>
+<th:block layout:fragment="content">
+    <div class="main-content">
+        <h1>비밀번호 찾기</h1>
+        <form action="/findPw" method="post" id="findPwForm">
+            <div class="all-container">
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="text" id="email" name="email" placeholder="이메일로 찾기" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>아이디</label>
+                    <input type="text" name="userId" class="form-control" placeholder="아이디를 입력해 주세요" required>
+                </div>
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" name="userName" class="form-control" placeholder="이름을 입력해 주세요" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="submitButton">
+                    확인
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label>아이디</label>
-        <input type="text" name="userId" class="form-control" placeholder="아이디를 입력해 주세요" required>
-    </div>
-    <div class="form-group">
-        <label>이름</label>
-        <input type="text" name="userName" class="form-control" placeholder="이름을 입력해 주세요" required>
-    </div>
-    <button type="submit" class="btn btn-primary">찾기</button>
-</form>
+</th:block>
 
-
+<script>
+    $(document).ready(function() {
+        $('#findPwForm').on('submit', function() {
+            $('#submitButton').attr('disabled', 'disabled');
+            $('#loadingSpinner').show();
+        });
+    });
+</script>
 </body>
 </html>

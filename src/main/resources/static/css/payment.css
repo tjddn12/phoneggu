@@ -17,15 +17,18 @@ body {
     text-align: center;
     vertical-align: middle;
 }
-
-.table-group-divider td:nth-child(2) img{
+.table-group-divider td:nth-child(2){
     padding: 5px;
-    width: 100px;
-    height: 100px;
+    width: 15%;
+    max-height: 100px;
+
+}
+.table-group-divider td:nth-child(2) img{
+    width: 100%;
 }
 
 .table-group-divider td:nth-child(3) {
-    width: 500px; 
+    width: 30%;
 }
 
 .table-group-divider td:nth-child(3) .prName {
@@ -38,18 +41,19 @@ body {
     margin: 0;
 }
 .table-group-divider td:nth-child(4),
+.table-group-divider td:nth-child(5),
 .table-group-divider td:nth-child(6),
 .table-group-divider td:nth-child(7),
-.table-group-divider td:nth-child(8){
-    width: 130px;
+.table-group-divider td:nth-child(8),
+.table-group-divider td:nth-child(9){
+    width: 10%;
     font-weight: bold;    
 }
-.table-group-divider td:nth-child(5){width: 150px;}
+
 .prCount input[type="number"] {
     width: 80px;
 }
 
-.table-group-divider td:nth-child(9){width: 90px;}
 .select button {
     font-size: 11px;
     width: 90px;
@@ -125,4 +129,56 @@ li {
 }
 .submit-btn{
     margin: 0 auto;
+}
+
+.phone-actionOn{display: none}
+
+@media (max-width: 767px) {
+    .phone-actionOff{display: none}
+    .phone-actionOn{display: block}
+
+    .phone-order-item {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+
+    .phone-order-item .phone-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .phone-order-item .phone-row img {
+        max-width: 30%;
+        margin-right: 15px;
+    }
+
+    .phone-order-item .phone-row .phone-prInfo {
+        width: 60%;
+    }
+
+    .phone-order-item .phone-prInfo {
+        flex-grow: 1;
+    }
+
+    .phone-order-item .phone-price-details,
+    .phone-order-item .phone-shipping-details,
+    .phone-order-item .phone-total-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .phone-order-item .btn-danger {
+        width: 100%;
+    }
+
+    .phone-order-item .phone-item-count {
+        width: 20%;
+    }
+
 }

@@ -165,3 +165,33 @@ h1 {
     font-size: 30px;
     color: #333;
 }
+
+@media (max-width: 767px) {
+    .order-status {
+        width: 100%;
+    }
+    .order-status h2 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+    .order-status-details {
+        display: flex;
+        flex-direction: column;
+    }
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+    .order-item-cancel ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .order-item-cancel ul li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+}

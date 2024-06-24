@@ -1,6 +1,8 @@
 package com.jsbs.casemall.service;
 
 import com.jsbs.casemall.constant.ProductCategory;
+import com.jsbs.casemall.constant.ProductModelSelect;
+import com.jsbs.casemall.constant.ProductSellStatus;
 import com.jsbs.casemall.constant.ProductType;
 import com.jsbs.casemall.dto.*;
 import com.jsbs.casemall.entity.Product;
@@ -13,7 +15,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,8 +53,9 @@ public class ProductService {
         for (ProductModelDto productModelDto : productModelDtoList) {
             //기종이 선택되지 않았어도 저장
             ProductModel productModel = new ProductModel();
-            productModel.setProductModelSelect(productModelDto.getProductModelSelect());
-            productModel.setPrStock(productModelDto.getPrStock());
+            productModel.setProductModelSelect(
+                    productModelDto.getProductModelSelect() != null ? productModelDto.getProductModelSelect() : ProductModelSelect.DEFAULT_MODEL);
+            productModel.setPrStock(productModelDto.getPrStock() != null ? productModelDto.getPrStock() : 0);
             productModel.setProduct(product);
             product.addProductModel(productModel);
             log.info("유효한 상품 모델 추가 완료: {}", productModel);
@@ -78,6 +83,10 @@ public class ProductService {
         productModelRepository.deleteByPrIdIsNull();
 
         log.info("pr_id가 null인 모델 삭제 완료");
+
+        // 재고 상태를 기반으로 판매 상태 업데이트
+        updateProductSellStatus(product);
+        productRepository.save(product); // 상태 업데이트 후 저장
 
         return product.getId();
     }
@@ -128,8 +137,9 @@ public class ProductService {
         for (ProductModelDto productModelDto : productModelDtoList) {
             //기종이 선택되지 않았어도 저장
             ProductModel productModel = new ProductModel();
-            productModel.setProductModelSelect(productModelDto.getProductModelSelect());
-            productModel.setPrStock(productModelDto.getPrStock());
+            productModel.setProductModelSelect(
+                    productModelDto.getProductModelSelect() != null ? productModelDto.getProductModelSelect() : ProductModelSelect.DEFAULT_MODEL);
+            productModel.setPrStock(productModelDto.getPrStock() != null ? productModelDto.getPrStock() : 0);
             productModel.setProduct(product);
             product.addProductModel(productModel);
             log.info("유효한 상품 모델 추가 완료: {}", productModel);
@@ -165,10 +175,15 @@ public class ProductService {
 
         productRepository.save(product);
         log.info("상품 정보가 성공적으로 업데이트되었습니다. 상품 ID: {}", product.getId());
+
+        // 재고 상태를 기반으로 판매 상태 업데이트
+        updateProductSellStatus(product);
+        productRepository.save(product); // 상태 업데이트 후 저장
     }
 
     @Transactional(readOnly = true)
-    public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, Pageable pageable) {
+    public Page<Product> getAdminProductPage(ProductSearchDto productSearchDto, int page) {
+        Pageable pageable = PageRequest.of(page, 5);
         log.info("관리 페이지에서 페이징된 상품 목록을 가져옵니다. 페이징 정보: {}", pageable);
         return productRepository.getAdminProductPage(productSearchDto, pageable);
     }
@@ -184,6 +199,7 @@ public class ProductService {
 
         Product product = productRepository.findById(prId)
                 .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
+
 
         List<ProductImg> productImgList = productImgRepository.findByProductId(prId);
 
@@ -212,20 +228,16 @@ public class ProductService {
         }
     }
 
-    public List<Product> getProductsByCategory(ProductCategory category) {
+    public List<Product> getListProductsByCategory(ProductCategory category) {
         return productRepository.findByProductCategory(category);
     }
 
-    public List<Product> getProductsByType(ProductType type) {
+    public List<Product> getListProductsByType(ProductType type) {
         return productRepository.findByProductType(type);
     }
 
-    public List<Product> getAllProducts() {
+    public List<Product> getAllListProducts() {
         return productRepository.findAll();
-    }
-
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
     }
 
     public List<ProductModelDto> getProductModelsByProductId(Long productId) {
@@ -241,5 +253,42 @@ public class ProductService {
         productModelDto.setProductModelSelect(productModel.getProductModelSelect());
         productModelDto.setPrStock(productModel.getPrStock());
         return productModelDto;
+    }
+
+    // 재고 상태에 따른 판매 상태 업데이트 로직
+    private void updateProductSellStatus(Product product) {
+        boolean allStocksZero = product.getProductModelList().stream()
+                .allMatch(model -> {
+                    Integer stock = model.getPrStock();
+                    log.info("ProductModel ID: {}, prStock: {}", model.getId(), stock);
+                    return stock == null || stock == 0;
+                });
+
+        if (allStocksZero) {
+            product.setProductSellStatus(ProductSellStatus.SOLD_OUT);
+        } else {
+            product.setProductSellStatus(ProductSellStatus.SELL);
+        }
+        log.info("Product ID: {}, ProductSellStatus: {}", product.getId(), product.getProductSellStatus());
+        productRepository.save(product); // 상태 업데이트 후 저장
+    }
+
+    public List<Product> findAll(Sort sort) {
+        List<Product> list = productRepository.findAll(sort);
+        log.info("Products found: {}", list.size());
+        return list;
+    }
+
+    // ver2
+    public List<Product> findAllByCategoryAndType(ProductCategory category, ProductType type, Sort sort) {
+        if (category != null && type != null) {
+            return productRepository.findByProductCategoryAndProductType(category, type, sort);
+        } else if (category != null) {
+            return productRepository.findByProductCategory(category, sort);
+        } else if (type != null) {
+            return productRepository.findByProductType(type, sort);
+        } else {
+            return productRepository.findAll(sort);
+        }
     }
 }

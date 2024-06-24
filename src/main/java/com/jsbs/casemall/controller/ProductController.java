@@ -14,8 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -115,9 +114,10 @@ public class ProductController {
     @GetMapping(value = {"/admin/product/management", "/admin/product/management/{page}"})
     public String productManage(ProductSearchDto productSearchDto,
                                 @PathVariable(name = "page", required = false) Integer page, Model model) {
-
-        Pageable pageable = PageRequest.of(page != null ? page : 0, 5);
-        Page<Product> management = productService.getAdminProductPage(productSearchDto, pageable);
+        if (page == null) {
+            page = 0; // 기본값 설정
+        }
+        Page<Product> management = productService.getAdminProductPage(productSearchDto, page);
 
         model.addAttribute("management", management);
         model.addAttribute("productSearchDto", productSearchDto);
@@ -126,7 +126,7 @@ public class ProductController {
         return "product/productManagement";
     }
 
-    @PostMapping("/admin/product/delete/{prId}")
+    @PostMapping(value = "/admin/product/delete/{prId}")
     public String deleteProduct(@PathVariable("prId") Long prId, Model model) {
         log.info("상품 삭제 요청 받음, 상품 ID: {}", prId);
         try {
@@ -136,7 +136,7 @@ public class ProductController {
         } catch (Exception e) {
             log.error("상품 삭제 중 오류 발생, 상품 ID: {}", prId, e);
             model.addAttribute("errorMessage", "상품 삭제 중 오류가 발생했습니다.");
-            return "admin/product/management";
+            return "/admin/product/management";
         }
     }
 
@@ -160,40 +160,87 @@ public class ProductController {
         return "product/productDetail";
     }
 
-    @GetMapping("/products")
-    public String getProducts(@RequestParam(required = false) ProductCategory category,
-                              @RequestParam(required = false) ProductType type,
-                              Model model) {
-        List<Product> products;
-        if (type != null) {
-            products = productService.getProductsByType(type);
-        } else if (category != null) {
-            products = productService.getProductsByCategory(category);
-        } else {
-            products = productService.getAllProducts();
-        }
-        model.addAttribute("products", products);
-        model.addAttribute("mainCategory", category);
-        model.addAttribute("subCategory", type);
+    // 기존 리스트 페이지
+//    @GetMapping("/listProducts")
+//    public String getListProducts(@RequestParam(required = false) ProductCategory category,
+//                                  @RequestParam(required = false) ProductType type,
+//                                  Model model) {
+//        List<Product> listProducts;
+//        if (type != null) {
+//            listProducts = productService.getListProductsByType(type);
+//        } else if (category != null) {
+//            listProducts = productService.getListProductsByCategory(category);
+//        } else {
+//            listProducts = productService.getAllListProducts();
+//        }
+//        model.addAttribute("listProducts", listProducts);
+//        model.addAttribute("mainCategory", category);
+//        model.addAttribute("subCategory", type);
+//
+//        log.info("mainCategory: {}", category);
+//        log.info("subCategory: {}", type);
+//        log.info("Number of products: {}", listProducts.size());
+//
+//        return "product/productList";
+//    }
 
-        log.info("mainCategory: {}", category);
-        log.info("subCategory: {}", type);
-        log.info("Number of products: {}", products.size());
-
-        return "product/productList";
-    }
-
-    @GetMapping("/products/{mainCategory}")
+    @GetMapping("/listProducts/{mainCategory}")
     public String showCategory(@PathVariable ProductCategory mainCategory, Model model) {
         model.addAttribute("mainCategory", mainCategory);
         model.addAttribute("subCategory", null);
         return "product/productList";
     }
 
-    @GetMapping("/products/{mainCategory}/{subCategory}")
+    @GetMapping("/listProducts/{mainCategory}/{subCategory}")
     public String showSubCategory(@PathVariable ProductCategory mainCategory, @PathVariable ProductType subCategory, Model model) {
         model.addAttribute("mainCategory", mainCategory);
         model.addAttribute("subCategory", subCategory);
         return "product/productList";
     }
+
+    @GetMapping("/")
+    public String getAllProducts(Model model) {
+        List<Product> indexProducts = productService.getAllListProducts();
+        model.addAttribute("indexProducts", indexProducts);
+        return "index";
+    }
+
+
+    // 상품 정렬
+//    @GetMapping("/list")
+//    public String listProducts(@RequestParam(required = false, defaultValue = "createdBy") String sortBy,
+//                               @RequestParam(required = false, defaultValue = "asc") String direction, Model model) {
+//        Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+//        List<Product> list = productService.findAll(sort);
+//
+//        log.info("Sort By: {}", sortBy);
+//        log.info("Direction: {}", direction);
+//        log.info("Number of list: {}", list.size());
+//
+//        model.addAttribute("list", list);
+//        return "product/productList";
+//    }
+
+
+    // 상품 정렬(ver2)
+    @GetMapping("/listProducts")
+    public String getListProductsByDirection(
+                                  @RequestParam(required = false, defaultValue = "createdBy") String sortBy,
+                                  @RequestParam(required = false, defaultValue = "asc") String direction,
+                                  @RequestParam(required = false) ProductCategory category,
+                                  @RequestParam(required = false) ProductType type,
+                                  Model model) {
+        Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        List<Product> listProducts = productService.findAllByCategoryAndType(category, type, sort);
+
+
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("mainCategory", category);
+        model.addAttribute("subCategory", type);
+
+        return "product/productList";
+    }
+
+
 }

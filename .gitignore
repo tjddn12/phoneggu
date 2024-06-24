@@ -37,3 +37,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### 제외 목록 ###
+application.properties
+.env

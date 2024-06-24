@@ -7,80 +7,111 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>주문내역</title>
     <link rel="stylesheet" th:href="@{/css/orderHistory.css}">
+    <script defer th:src="@{/js/orderHistory.js}"></script>
 </head>
 <body>
 <th:block layout:fragment="content">
     <div class="orderHistory">
         <h1>주문내역조회</h1>
-        <div class="tab_menu">
-            <div class="active">주문내역조회 (0)</div>
-            <div>취소/반품/교환 내역 (0)</div>
-        </div>
-
-        <div class="search_bar">
-            <div class="dropdown">
-                <select class="form-select">
-                    <option selected>전체 주문처리상태</option>
-                    <option value="1">옵션 1</option>
-                    <option value="2">옵션 2</option>
-                    <option value="3">옵션 3</option>
-                </select>
+        <form th:action="@{/order/history}" method="get" class="Tform">
+            <div class="search_bar">
+                <div aria-label="Date range" class="btn_group" role="group">
+                    <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('today')">오늘</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('week')">1주일</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('month')">1개월</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('three_months')">3개월</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="setDateRange('six_months')">6개월</button>
+                </div>
+                <input id="startDate" class="form-control phone-actionOff" placeholder="달력" type="date" name="startDate">
+                <span class="actionOff">~</span>
+                <input id="endDate" class="form-control phone-actionOff" placeholder="달력" type="date" name="endDate">
+                <button class="btn btn-primary" type="submit">조회</button>
             </div>
-            <div aria-label="Date range" class="btn_group" role="group">
-                <button class="btn btn-outline-secondary" type="button">오늘</button>
-                <button class="btn btn-outline-secondary" type="button">1주일</button>
-                <button class="btn btn-outline-secondary" type="button">1개월</button>
-                <button class="btn btn-outline-secondary" type="button">3개월</button>
-                <button class="btn btn-outline-secondary" type="button">6개월</button>
-            </div>
-            <input class="form-control" placeholder="달력" type="date">
-            <span>~</span>
-            <input class="form-control" placeholder="달력" type="date">
-            <button class="btn btn-primary">조회</button>
-        </div>
 
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>주문일자<br>[주문번호]</th>
-                <th>이미지</th>
-                <th>상품정보</th>
-                <th>수량</th>
-                <th>상품구매금액</th>
-                <th>주문처리상태</th>
-                <th>리뷰쓰기</th>
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="order : ${orders}">
-                <tr th:each="item : ${order.items}">
-                    <td><span th:text="${order.getOrderTime()}">0</span></td>
-                    <td><img alt="상품이미지" class="" th:src="${item.getImgUrl()}" width="50"></td>
-                    <td>
-                        <p><span class="" th:text="${item.getProductName()}">상품이름</span></p>
-                        <p><span class="" th:text="${item.getModelName()}">상품이름</span></p>
-                    </td>
-                    <td><span class="" th:text="${item.getCount()}">0</span></td>
-                    <td><span class="" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
-                    <td><span class="">주문완료</span></td>
-                    <td>
-                        <button class="btn btn-primary" type="button">리뷰쓰기</button>
-                    </td>
+            <table class="table table-hover phone-actionOff">
+                <thead>
                 <tr>
-            </th:block>
-            </tbody>
-        </table>
+                    <th>주문일자<br>[주문번호]</th>
+                    <th>이미지</th>
+                    <th>상품정보</th>
+                    <th>수량</th>
+                    <th>상품구매금액</th>
+                    <th>주문처리상태</th>
+                    <th>리뷰쓰기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="order : ${orders}">
+                    <tr th:each="item : ${order.items}">
+                        <td><span th:text="${order.getOrderTime()}">0</span></td>
+                        <td><img alt="상품이미지" class="" th:src="${item.getImgUrl()}" width="50"></td>
+                        <td>
+                            <p><span class="" th:text="${item.getProductName()}">상품이름</span></p>
+                            <p><span class="" th:text="${item.getModelName()}">상품이름</span></p>
+                        </td>
+                        <td><span class="" th:text="${item.getCount()}">0</span></td>
+                        <td><span class="" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</td>
+                        <td><span class="">주문완료</span></td>
+                        <td>
+                            <input type="hidden" id="orderNo_${item.orderNo}" value="${order.getOrderNo()}">
+                            <button class="btn btn-primary reviewButton" type="button"
+                                    th:onclick="'location.href=\'/reviews/reviewWrite?prId=' + ${item.getProductId()} + '\''">리뷰쓰기</button>
+                        </td>
+                    <tr>
+                </th:block>
+                </tbody>
+            </table>
 
-        <!--페이징 처리 -->
-        <div class="pagination_container">
-            <button class="pagination_btn">&lt;</button>
-            <button class="pagination_btn active">1</button>
-<!--            <button class="pagination_btn">2</button>-->
-<!--            <button class="pagination_btn">3</button>-->
-<!--            <button class="pagination_btn">4</button>-->
-<!--            <button class="pagination_btn">5</button>-->
-            <button class="pagination_btn">&gt;</button>
-        </div>
+            <div class="phone-actionOn">
+                <div th:each="order : ${orders}">
+                    <div th:each="item : ${order.Items}" class="phone-order-item">
+                        <div class="phone-order-header">
+                            <span th:text="${order.getOrderTime()}">2023-01-01 12:00</span>
+                            <span>주문완료</span>
+                        </div>
+                        <div class="phone-product-header">
+                            <img alt="상품 이미지" class="phone-img-fluid" th:src="${item.getImgUrl()}">
+                            <div class="phone-product-info">
+                                <p class="phone-prName" th:text="${item.getProductName()}">상품 이름</p>
+                                <p class="phone-prDetail" th:text="${item.getModelName()}">상품 기종</p>
+                            </div>
+                        </div>
+                        <div class="phone-order-details">
+                            <span>수량: <span th:text="${item.getCount()}">1</span></span>
+                            <span>총 가격: <span th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</span>
+                        </div>
+                        <div class="phone-review-button">
+                            <button class="btn btn-primary btn-sm phone-btn-review" type="button">리뷰쓰기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <div th:with="maxPage=5,
+                          start=${T(java.lang.Math).floor(currentPage / maxPage) * maxPage + 1},
+                          end=${(totalPages == 0) ? 1 : (start + (maxPage - 1) < totalPages ? start + (maxPage - 1) : totalPages)}">
+                <ul class="pagination justify-content-center">
+                    <!-- 이전 페이지 링크 -->
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a th:href="@{'/order/history?page=' + ${currentPage - 1}}" aria-label="Previous" class="page-link">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <!-- 페이지 번호 링크 -->
+                    <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}" th:classappend="${currentPage == page - 1} ? 'active' : ''">
+                        <a th:href="@{'/order/history?page=' + ${page - 1}}" class="page-link" th:text="${page}">1</a>
+                    </li>
+                    <!-- 다음 페이지 링크 -->
+                    <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                        <a th:href="@{'/order/history?page=' + ${currentPage + 1}}" aria-label="Next" class="page-link">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </form>
     </div>
 </th:block>
 </body>

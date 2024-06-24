@@ -14,7 +14,7 @@
 <div layout:fragment="content">
     <div class="container payment-container my-4">
         <h1 class="text-center my-4">ORDER</h1>
-        <table class="table">
+        <table class="table phone-actionOff">
             <thead>
             <tr>
                 <td></td>
@@ -55,8 +55,43 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="phone-actionOn">
+            <div th:each="item : ${order.items}" class="phone-order-item">
+                <input type="hidden" name="orderId" th:value="${order.orderNo}" class="phone-cart-item-checkbox">
+                <div class="phone-row">
+                    <img alt="상품 이미지" class="phone-img-fluid" th:src="@{${item.getImgUrl()}}">
+                    <div class="phone-prInfo">
+                        <p class="phone-prName" th:text="${item.productName}">상품 이름</p>
+                        <p class="phone-prDetail" th:text="${item.modelName}">상품 기종</p>
+                    </div>
+                </div>
+                <div class="phone-price-details">
+                    <span>가격:</span>
+                    <span class="phone-prPrice" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'COMMA')}">0</span>원
+                </div>
+                <div class="phone-price-details">
+                    <span>수량:</span>
+                    <input class="form-control d-inline-block phone-item-count" name="count" min="1" th:value="${item.count}" type="number" th:data-order-detail-id="${item.getOrderItemId()}">
+                    <span>개 </span>
+                </div>
+                <div class="phone-shipping-details">
+                    <span>배송비:</span>
+                    <span class="phone-shippingCost">0</span>원
+                </div>
+                <div class="phone-total-details">
+                    <span>합계:</span>
+                    <span class="phone-totalPrice" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원
+                </div>
+                <div class="phone-select">
+                    <button class="btn btn-danger btn-sm phone-remove-item" th:data-order-id="${order.orderNo}" th:data-order-detail-id="${item.getOrderItemId()}">삭제</button>
+                </div>
+            </div>
+        </div>
+
+
         <table class="table tbBot">
-            <th>[<span class="shipping">기본배송</span>]</th>
+            <th class="actionOff">[<span class="shipping">기본배송</span>]</th>
             <td>상품구매금액 <span class="sumPrice bb " th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
                     class="sumTotalPrice bb" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원
             </td>
@@ -97,11 +132,11 @@
                         <div class="col-sm-10">
                             <div class="input-group mb-2">
                                 <input class="form-control" id="address" placeholder="우편번호" style="max-width: 150px;"
-                                       type="text">
-                                <button class="btn btn-outline-secondary" type="button">우편번호</button>
+                                       type="text"  th:value="${order.getPCode()}">
+                                <button class="btn btn-outline-secondary" type="button" >우편번호</button>
                             </div>
-                            <input class="form-control mb-2" placeholder="기본주소" type="text">
-                            <input class="form-control" placeholder="나머지주소 (선택입력가능)" type="text">
+                            <input class="form-control mb-2" placeholder="기본주소" type="text" th:value="${order.getLoadAddress()}">
+                            <input class="form-control" placeholder="나머지주소 (선택입력가능)" type="text" th:value="${order.getDetailAddress()}">
                         </div>
                     </div>
                     <div class="mb-3 row">
@@ -121,11 +156,11 @@
                                 <span class="input-group-text">ㅡ</span>
                                 <input aria-label="Middle number" class="form-control phoneNumber"
                                        style="max-width: 100px;"
-                                       type="text">
+                                       type="text" th:value="${order.getTel2()}">
                                 <span class="input-group-text">ㅡ</span>
                                 <input aria-label="Last number" class="form-control phoneNumber"
                                        style="max-width: 100px;"
-                                       type="text">
+                                       type="text" th:value="${order.getTel3()}">
                             </div>
                         </div>
                     </div>
@@ -135,9 +170,9 @@
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <input class="form-control" id="email" placeholder="이메일" style="max-width: 150px;"
-                                       type="email">
+                                       type="email" th:value="${order.getEmail()}">
                                 <span class="input-group-text">@</span>
-                                <input class="form-control" placeholder="직접입력" style="max-width: 150px;" type="text">
+                                <input class="form-control" placeholder="직접입력" style="max-width: 150px;" type="text" th:value="${order.getDomain()}">
                                 <select class="form-select" style="max-width: 120px;">
                                     <option value="">직접입력</option>
                                     <option value="naver.com">naver.com</option>

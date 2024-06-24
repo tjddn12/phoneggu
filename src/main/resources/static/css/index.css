@@ -146,6 +146,9 @@ nav li ul li a {
     margin: 0 auto;
     padding-top: 30px;
     padding-left: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .circle-item {
     float: left;

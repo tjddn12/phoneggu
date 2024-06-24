@@ -38,13 +38,14 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             stockItem.style.display = 'none';
             const input = stockItem.querySelector("input[type='number']");
+            input.value = 0; // 체크 해제 시 수량을 0으로 설정
         }
+        updateSellStatus(); // 체크박스 상태 변경 시 판매 상태 업데이트
     }
 
     // 각 체크박스에 대해 초기 상태 설정 및 이벤트 리스너 추가
     modelCheckboxes.forEach((checkbox, index) => {
         const stockItem = stockItems[index];
-        const removeButton = stockItem.querySelector(".remove-stock");
 
         // 초기 상태 설정
         toggleStockInput(checkbox, stockItem);
@@ -53,6 +54,37 @@ document.addEventListener("DOMContentLoaded", function() {
             toggleStockInput(checkbox, stockItem);
         });
     });
+
+    // 재고 입력값 변경 시 판매 상태 업데이트
+    const stockInputs = document.querySelectorAll('.stock-input');
+    stockInputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            if (this.value < 1) {
+                this.value = 0; // 재고 0으로 설정
+            }
+            updateSellStatus();
+        });
+    });
+
+    // 판매 상태 업데이트 함수
+    const sellStatusSelect = document.getElementById('productSellStatus');
+
+    function updateSellStatus() {
+        let allStocksZero = true;
+        stockInputs.forEach(function(input) {
+            if (parseInt(input.value, 10) > 0) {
+                allStocksZero = false;
+            }
+        });
+        if (allStocksZero) {
+            sellStatusSelect.value = 'SOLD_OUT';
+        } else {
+            sellStatusSelect.value = 'SELL';
+        }
+    }
+
+    // 페이지 로드 시 초기 판매 상태 업데이트
+    updateSellStatus();
 
     // 이미지 처리
     let fileIndex = 0;

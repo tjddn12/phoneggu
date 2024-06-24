@@ -1,37 +1,62 @@
 package com.jsbs.casemall.entity;
 
+import com.jsbs.casemall.dto.CommentDto;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
-@Data
+//QnA 게시판 답변 엔티티
 @Entity
-@Table(name = "comments")
-public class Comment {
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class Comment extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long commentNo;
-    @Column(name = "member_id", nullable = false)
-    private String memberId;
-    @Column(name = "ref_board", nullable = false)
-    private String refBoard;
-    @Column(name = "ref_post_no", nullable = false)
-    private int refPostNo;
-    @Column(name = "comment_content", nullable = false)
-    private String commentContent;
-    @Column(name = "comment_reg_date", nullable = false)
-    private LocalDateTime commentRegDate;
-    @Column(name = "comment_chg_date", nullable = false)
-    private LocalDateTime commentChgDate;
-    @Column(name = "comment_del_date", nullable = false)
-    private LocalDateTime commentDelDate;
-    @Column(name = "comment_nest_level", nullable = false)
-    private int commentNestLevel;
-    @Column(name = "comment_nested_to")
-    private Integer commentNestedTo; //: 상단 댓글 정보(NULL 허용)
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(cascade = CascadeType.ALL) // 해당 댓글 엔티티 여러개가 하나의 Article에 연관된다!!
+    @JoinColumn(name = "article_id") // article 테이블의 id를 가져올떄 name
+    private Article article; // 댓글의 부모 게시글
+
+    @Column
+    private String nickname; //: 유저 ID로 수정 필요
+
+    @Column
+    private String body;
+
+    public static Comment createComment(CommentDto dto, Article article) {
+        // 예외 발생
+        if(dto.getId() != null) // 받아온 데이터에 id가 있다면
+            throw new IllegalArgumentException("댓글 생성 실패! 댓글의 id가 없어야 합니다.");
+
+        if(dto.getArticleId() != article.getId()) // 요청url의 id(articleId)와 요청데이터에 article_id가 다르면
+            throw new IllegalArgumentException("댓글 생성 실패! 게시글의 id가 잘못되었습니다.");
+
+        // 엔티티 생성 및 반환
+        return new Comment(
+                dto.getId(),
+                article,
+                dto.getNickname(),
+                dto.getBody()
+        );
+    }
+
+    public void patch(CommentDto dto) {
+        //예외 발생
+        if(this.id != dto.getId()){
+            throw new IllegalArgumentException("댓글 수정 실패! 잘못된 id가 입력되었습니다.");
+        }
+        //객체를 갱신
+        if(dto.getNickname() != null){
+            this.nickname = dto.getNickname();
+        }
+        if(dto.getBody() != null) {
+            this.body = dto.getBody();
+        }
+
+    }
 }

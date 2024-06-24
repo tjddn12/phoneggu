@@ -13,7 +13,7 @@ a {text-decoration: none;}
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 1500px;
+    max-width: 1500px;
     text-align: center;
 }
 .orderComplete h1 {
@@ -67,15 +67,18 @@ a {text-decoration: none;}
     text-align: center;
     vertical-align: middle;
 }
-
+.table-group-divider td:nth-child(1){
+    padding: 5px;
+    width: 15%;
+    max-height: 100px;
+}
 .table-group-divider td:nth-child(1) img{
     padding: 5px;
-    width: 100px;
-    height: 100px;
+    width: 100%;
 }
 
 .table-group-divider td:nth-child(2) {
-    width: 500px; 
+    width: 30%;
 }
 
 .table-group-divider td:nth-child(2) .prName {
@@ -88,13 +91,13 @@ a {text-decoration: none;}
     margin: 0;
 }
 .table-group-divider td:nth-child(3),
+.table-group-divider td:nth-child(4),
 .table-group-divider td:nth-child(5),
 .table-group-divider td:nth-child(6),
 .table-group-divider td:nth-child(7){
-    width: 130px;
-    font-weight: bold;    
+    width: 10%;
+    font-weight: bold;
 }
-.table-group-divider td:nth-child(4){width: 150px;}
 
 .tbBot th{text-align: left;}
 .tbBot td{text-align: end;}
@@ -151,4 +154,65 @@ a {text-decoration: none;}
 }
 .usage-info ul li {
     margin-bottom: 5px;
+}
+
+.actionOn{display: none;}
+
+@media (max-width: 767px) {
+    .actionOff{display: none;}
+    .actionOn{display: block;}
+
+    .small-order-item {
+        border-bottom: 1px solid #ddd;
+        padding: 15px 0;
+    }
+
+    .product-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .product-header img {
+        max-width: 100px;
+        margin-right: 15px;
+    }
+
+    .product-header .prName {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .product-header .prDetail {
+        font-size: 1em;
+        color: #666;
+    }
+
+    .product-info p {
+        margin-bottom: 5px;
+    }
+
+    .product-info .txtCount {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .product-info input {
+        width: 80px;
+        display: inline-block;
+    }
+
+    .product-info .btn-danger {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .price-details, .shipping-details, .total-details {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .shipping-details, .total-details {
+        font-weight: bold;
+    }
 }

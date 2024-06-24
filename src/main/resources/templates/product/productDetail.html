@@ -25,15 +25,26 @@
             <div class="product-details">
                 <h1> [ <span th:text="${product.productType}"></span> ] <span th:text="${product.prName}"></span></h1>
                 <div>브랜드: 자사브랜드</div>
-                <div class="price">판매가 : <span th:text="${product.prPrice}"></span> 원</div>
+<!--                <div class="product-sell-status" th:classappend="${product.productSellStatus.name() == 'SOLD_OUT' ? 'sold-out' : ''}">-->
+<!--                    판매 상태: <span th:text="${product.productSellStatus.name() == 'SELL' ? '판매중' : '품절'}"></span>-->
+<!--                </div>-->
+                <div class="price">판매가 : <span th:text="${#numbers.formatDecimal(product.prPrice, 0, 'COMMA', 0, 'COMMA')}"></span> 원</div>
                 <div class="shipping">배송비: 0원 (무료!!)</div>
 
                 <div class="options">
                     <label for="options">기종:</label>
                     <select id="options" name="selectedOption" onchange="addProduct(this)">
                         <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
-                        <option th:each="model : ${product.productModelDtoList}" th:if="${model.productModelSelect != null}"
-                                th:value="${model.id}" th:text="${model.productModelSelect}" th:attr="data-stock=${model.prStock}"></option>
+                        <option th:each="model : ${product.productModelDtoList}"
+                                th:if="${model.productModelSelect != null}"
+                                th:unless="${model.productModelSelect.name() == 'DEFAULT_MODEL'}"
+                                th:value="${model.id}"
+                                th:attr="data-stock=${model.prStock}"
+                                th:disabled="${model.prStock == 0}">
+                            <span th:if="${model.prStock == 0}" th:text="${model.productModelSelect + ' [재고 품절]'}" ></span>
+                            <span th:unless="${model.prStock == 0}" th:text="${model.productModelSelect}"></span>
+                        </option>
+
                     </select>
                 </div>
         
@@ -70,7 +81,7 @@
     </div>
 
     <div class="detailguide">
-        <img alt="" src="/images/detailguide.png">
+        <img alt="" src="/images/mainImg/detailguide.png">
     </div>
 
 </div>

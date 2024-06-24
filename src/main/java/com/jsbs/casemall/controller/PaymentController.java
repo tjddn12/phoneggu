@@ -1,6 +1,7 @@
 package com.jsbs.casemall.controller;
 
 import com.jsbs.casemall.dto.OrderDto;
+import com.jsbs.casemall.service.CartService;
 import com.jsbs.casemall.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +36,7 @@ import java.util.Map;
 public class PaymentController {
 
     private final OrderService orderService;
+    private final CartService cartService;
 
     @PostMapping(value = "/confirm")
     public String confirmPayment(@RequestBody String jsonBody) {
@@ -117,6 +119,7 @@ public class PaymentController {
                 // 검증시작
                 if (orderService.validatePayment(orderId, Integer.parseInt(amount))) {
                     orderService.updateOrderWithPaymentInfo(orderId, paymentMethod, payInfo);
+                    cartService.clearCart(orderId);
                     return "redirect:/success?orderId=" + orderId + "&amount=" + amount + "&paymentKey=" + paymentKey;
                 } else {
                     log.error("Payment validation failed for orderId: {}", orderId);

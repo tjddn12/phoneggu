@@ -2,16 +2,15 @@ package com.jsbs.casemall.oauth;
 
 import java.util.Map;
 
-public class NaverUserInfo implements OAuth2UserInfo {
-    private final Map<String, Object> responseAttributes;
+public class NaverUserInfo extends OAuth2UserInfo {
 
-    public NaverUserInfo(Map<String, Object> responseAttributes) {
-        this.responseAttributes = responseAttributes;
+    public NaverUserInfo(Map<String, Object> attributes) {
+        super(attributes);
     }
 
     @Override
     public String getProviderId() {
-        return (String) responseAttributes.get("id");
+        return (String) attributes.get("id");
     }
 
     @Override
@@ -21,16 +20,41 @@ public class NaverUserInfo implements OAuth2UserInfo {
 
     @Override
     public String getEmail() {
-        return (String) responseAttributes.get("email");
+        return (String) attributes.get("email");
     }
 
     @Override
     public String getName() {
-        return (String) responseAttributes.get("name");
+        return (String) attributes.get("name");
     }
 
     @Override
-    public Map<String, Object> getAttributes() {
-        return responseAttributes;
+    public String getPhone() {
+        return (String) attributes.get("phone");
+    }
+
+    @Override
+    public String getPCode() {
+        return (String) attributes.get("p_code");
+    }
+
+    @Override
+    public String getLoadAddr() {
+        return (String) attributes.get("loadAddr");
+    }
+
+    @Override
+    public String getLotAddr() {
+        return (String) attributes.get("lotAddr");
+    }
+
+    @Override
+    public String getDetailAddr() {
+        return (String) attributes.get("detailAddr");
+    }
+
+    @Override
+    public String getExtraAddr() {
+        return (String) attributes.get("extraAddr");
     }
 }

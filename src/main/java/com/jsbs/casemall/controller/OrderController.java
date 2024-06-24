@@ -2,18 +2,23 @@ package com.jsbs.casemall.controller;
 
 import com.jsbs.casemall.dto.CartDto;
 import com.jsbs.casemall.dto.OrderDto;
+import com.jsbs.casemall.dto.OrderItemDto;
+import com.jsbs.casemall.entity.Order;
 import com.jsbs.casemall.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,10 +94,21 @@ public class OrderController {
 
     // 주문확인
     @GetMapping("/history")
-    public String history(Model model, Principal principal) {
+    public String history(@RequestParam(value = "page", defaultValue = "0") int page,
+                          Model model, Principal principal) {
+        if (page < 0) {
+            page = 0;
+        }
+
         String userId = principal.getName();
         List<OrderDto> order = orderService.history(userId);
-        model.addAttribute("orders", order);
+        Page<OrderDto> orderPage = orderService.orderPage(order, page);
+        log.info("orderPage = {}", orderPage);
+//        model.addAttribute("orders", order);
+        model.addAttribute("orders", orderPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", orderPage.getTotalPages());
+        model.addAttribute("maxPage", 5);
         return "order/orderHistory";
     }
 
@@ -106,6 +122,18 @@ public class OrderController {
         OrderDto order = orderService.createOrderByNow(dto,prId,id);
         model.addAttribute("order", order);
         return "redirect:/order";
+    }
+
+    @GetMapping("/search")
+    public String searchOrders(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            Model model
+    ) {
+//        log.info("{},{}",startDate,endDate);
+        List<OrderDto> orders = orderService.findOrdersByDateRange(startDate, endDate);
+        model.addAttribute("orders", orders);
+        return "order/orderHistory";
     }
 
 }

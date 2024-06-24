@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px; /* 원하는 최대 너비 설정 */
+    margin: 0 auto;
+    text-align: center;
+}
+#big{
+    font-size: 2em;
+}
+
+.review-images {
+    text-align: center; /* 이미지 요소들을 중앙 정렬 */
+}
+
+.review-images img {
+    max-width: 100%; /* 이미지 크기 조절 */
+    height: auto;
+}
+
+.rating {
+    display: inline-block;
+    text-align: left; /* 평점 별은 왼쪽 정렬 */
+    font-size: 1.2rem;
+    margin-top: 10px;
+    white-space: nowrap;
+}
+.rating span {
+    color: #ccc; /* 기본 색상 */
+}
+.rating span.active {
+    color: #f5b301; /* 활성화된 별 색상 */
+}

@@ -21,10 +21,10 @@ public class ProductModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "product_model_select")
-    private ProductModelSelect productModelSelect;
+    private ProductModelSelect productModelSelect = ProductModelSelect.DEFAULT_MODEL; // 기본값 설정
 
     @Column(name = "pr_stock")
-    private Integer prStock;
+    private Integer prStock=0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pr_id")

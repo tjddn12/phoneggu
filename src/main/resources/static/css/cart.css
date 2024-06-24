@@ -11,8 +11,6 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 1500px;
-    min-height: 1000px;
-
 }
 
 .table th, .table td {
@@ -21,18 +19,18 @@ body {
 }
 
 .table-group-divider td:nth-child(2){
-    width: 150px;
+    width: 15%;
     max-height: 100px;
 }
 
 .prImg img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
     display: block;
 }
 
 .table-group-divider td:nth-child(3) {
-    width: 450px;
+    max-width: 30%;
 }
 
 .table-group-divider td:nth-child(3) .prName {
@@ -45,25 +43,29 @@ body {
     margin: 0;
 }
 .table-group-divider td:nth-child(4),
+.table-group-divider td:nth-child(5),
 .table-group-divider td:nth-child(6),
 .table-group-divider td:nth-child(7),
-.table-group-divider td:nth-child(8){
-    width: 130px;
+.table-group-divider td:nth-child(8),
+.table-group-divider td:nth-child(9){
+    max-width: 10%;
     font-weight: bold;    
 }
-.table-group-divider td:nth-child(5){width: 150px;}
 .prCount input[type="number"] {
-    width: 80px;
+    max-width: 80px;
 }
 
-.table-group-divider td:nth-child(9){width: 90px;}
 .select button {
     font-size: 11px;
-    width: 90px;
+    max-width: 90px;
 }
+.tbBot{max-width: 1500px}
 .tbBot th{text-align: left;}
-.tbBot td{text-align: end;}
+.tbBot td{
+    text-align: right;
+}
 .tbBot .bb{font-weight: bold;}
+
 .summary .table th, .summary .table td {
     font-size: 1.2em;
     font-weight: bold;
@@ -74,3 +76,56 @@ body {
     padding: 10px 20px;
 }
 
+.phone-actionOn{display: none}
+
+@media (max-width: 767px) {
+    .phone-actionOff { display: none; }
+    .phone-actionOn { display: block; }
+    .phone-cart-container {
+        padding: 0;
+        border-radius: 0;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        max-width: 1500px;
+    }
+    .phone-cart-item {
+        border: 1px solid #dee2e6;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .phone-product-header {
+        display: flex;
+        align-items: center;
+    }
+    .phone-product-header .phone-prName {
+        margin: 0;
+        flex: 1;
+    }
+    .phone-product-header .phone-select {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .phone-prInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .phone-prInfo p {
+        padding: 5px;
+    }
+    .phone-txtCount {
+        vertical-align: center;
+        text-align: center;
+    }
+    .phone-item-count {
+        width: 150px;
+        text-align: center;
+    }
+    .img-fluid {
+        display: block;
+        margin: 0 auto;
+    }
+    .phone-cart-item p {
+        margin: 0;
+    }
+
+}

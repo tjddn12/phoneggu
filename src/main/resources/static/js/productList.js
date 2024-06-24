@@ -1,46 +1,60 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('category');
-    const type = urlParams.get('type');
+$(document).ready(function() {
+    let currentIndex = 0;
+    const initialDisplayCount = 10; // 초기 표시할 제품 수
+    const increment = 5; // "more" 버튼 클릭 시 추가로 표시할 제품 수
+    const totalProducts = $('.product-item').length; // 전체 제품 수
 
-    if (category && type) {
-        updateTopLeft(category, type);
+    function showNextProducts() {
+        const endIndex = currentIndex + increment;
+        for (let i = currentIndex; i < endIndex && i < totalProducts; i++) {
+            $('.product-item').eq(i).show();
+        }
+        currentIndex = endIndex;
+        if (currentIndex >= totalProducts) {
+            $('#load-more').hide();
+        }
     }
 
-    document.querySelectorAll('.nav-link').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-            // e.preventDefault(); // Preventing default behavior is no longer needed
-            const category = link.getAttribute('data-category');
-            const type = link.getAttribute('data-type');
-            updateTopLeft(category, type);
-        });
+    // 처음 10개의 제품 표시
+    for (let i = 0; i < initialDisplayCount && i < totalProducts; i++) {
+        $('.product-item').eq(i).show();
+    }
+    currentIndex = initialDisplayCount;
+
+    $('#load-more').on('click', function() {
+        showNextProducts();
     });
 
-    function updateTopLeft(mainCategory, subCategory) {
-        const mainCategoryMap = {
-            PHONE_CASE: '폰 케이스',
-            TOK: '톡',
-            AIRPODS: '에어팟/버즈',
-            DIGITAL: '디지털'
-        };
-
-        const subCategoryMap = {
-            HARD: '하드',
-            JELLY: '젤리',
-            CARD: '카드 수납',
-            ZFLIP: 'Z플립',
-            ROUND: '원형톡',
-            HEART: '하트톡',
-            ACRYLIC: '아크릴톡',
-            AIRPODS_1_2: '에어팟1/2세대',
-            AIRPODS_PRO: '에어팟PRO',
-            AIRPODS_3: '에어팟3세대',
-            BUDS: '버즈',
-            APPLE_WATCH: '애플워치'
-        };
-
-        const mainCategoryText = mainCategoryMap[mainCategory] || '';
-        const subCategoryText = subCategoryMap[subCategory] || '';
-        document.getElementById('main-category').innerText = `${mainCategoryText} (${subCategoryText})`;
+    // URL에서 category와 type을 가져오는 함수
+    function getParameterByName(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
     }
+
+    const category = getParameterByName('category');
+    const type = getParameterByName('type');
+
+    // 모든 이미지를 숨기고 해당하는 이미지를 표시
+    $('.top_img img').each(function() {
+        const imgCategory = $(this).data('category');
+        const imgType = $(this).data('type');
+        if (imgCategory === category && imgType === type) {
+            $(this).addClass('action');
+        } else {
+            $(this).removeClass('action');
+        }
+    });
+
+    $('.sort-link').click(function(e) {
+        e.preventDefault();
+        let sortBy = $(this).data('sort-by');
+        let direction = $(this).data('direction');
+        let category = $('#main-category').text();
+        let type = $('#sub-category').text().replace(/[()]/g, '');
+
+        window.location.href = `/listProducts?sortBy=${sortBy}&direction=${direction}&category=${category}&type=${type}#anchor`;
+
+
+    });
+
 });

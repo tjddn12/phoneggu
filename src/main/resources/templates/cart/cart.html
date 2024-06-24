@@ -13,7 +13,7 @@
 <div layout:fragment="content">
     <div class="container cart-container">
         <h1 class="text-center my-4">장바구니</h1>
-        <table class="table">
+        <table class="table phone-actionOff">
             <thead>
             <tr>
                 <td><input type="checkbox" id="selectAll"></td>
@@ -56,7 +56,49 @@
             </tr>
             </tbody>
         </table>
-        <table class="table tbBot">
+
+        <div class="phone-actionOn">
+            <div th:if="${cart.items == null or #lists.isEmpty(cart.items)}">
+                <p class="text-center">장바구니가 비어 있습니다.</p>
+            </div>
+            <div th:each="item : ${cart.items}" class="phone-cart-item">
+                <div class="row mb-3 phone-product-header">
+                    <div class="col-2">
+                        <input type="checkbox" name="cartId" th:value="${item.cartItemId}" class="phone-cart-item-checkbox">
+                    </div>
+                    <div class="col-8">
+                        <p class="phone-prName" th:text="${item.productName}">상품 이름</p>
+                    </div>
+                    <div class="col-2 phone-select">
+                        <form method="post" th:action="@{/cart/remove}">
+                            <input name="cartItemId" th:value="${item.cartItemId}" type="hidden">
+                            <button class="btn btn-danger btn-sm" type="submit">삭제</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <img alt="상품 이미지" class="img-fluid" th:src="@{${item.getImgUrl()}}">
+                    </div>
+                    <div class="col-8 phone-prInfo">
+                        <p class="phone-prDetail" th:text="${item.modelName}">상품 기종</p>
+                        <p><span class="phone-shipping">무료배송</span></p>
+                        <p>가격: <span class="phone-totalPrice" th:text="${#numbers.formatDecimal(item.getPrice() * item.count, 0, 'COMMA', 0, 'COMMA')}">0</span>원</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <p class="phone-txtCount">수량</p>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control d-inline-block phone-item-count" name="count" min="1" th:value="${item.count}" type="number" th:data-cart-id="${item.cartItemId}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <table class="table tbBot phone-actionOff">
             <th>[<span class="shipping">기본배송</span>]</th>
             <td>상품구매금액 <span class="sumPrice bb" th:text="${#numbers.formatDecimal(cart.getTotalPrice(),0, 'COMMA', 0, 'COMMA')}">0</span>원 + 배송비 <span
                     class="cost bb">0</span>원 = 합계 <span class="sumTotalPrice bb" th:text="${#numbers.formatDecimal(cart.getTotalPrice(),0, 'COMMA', 0, 'COMMA')}">0</span>원
@@ -68,7 +110,7 @@
                 <thead>
                 <tr>
                     <th>총 상품금액</th>
-                    <th>총 배송비</th>
+                    <th>배송비</th>
                     <th>결제예정금액</th>
                 </tr>
                 </thead>

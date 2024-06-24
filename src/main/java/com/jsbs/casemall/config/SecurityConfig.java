@@ -1,6 +1,5 @@
 package com.jsbs.casemall.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
 
     // 인증 인가 부여
     @Bean
@@ -22,28 +21,32 @@ public class SecurityConfig  {
                 .csrf(AbstractHttpConfigurer::disable)
                 // 요청에 따른 인가 설정
                 .authorizeHttpRequests((request) -> request
-                        .requestMatchers("/user/**", "/order/**","/pay/**").authenticated() // 로그인성공한 사람만  user /밑에 모든  경로에 접근 가능 예를 들면 마이페이지 구매 진행 이런거
+                        .requestMatchers("/user/**", "/order/**","/pay/**","/cart/**","/userEdit","/myPage","/qnas/create","/qnas/edit","qnas/new").authenticated() // 로그인성공한 사람만  user /밑에 모든  경로에 접근 가능 예를 들면 마이페이지 구매 진행 이런거
                         .requestMatchers("/admin/**") // 관리자로 저장된 회원만 admin / 아래 모든 모든곳에 접근 가능
                         .hasRole("ADMIN")
-                        .requestMatchers("/test/**").authenticated()
                         .anyRequest().permitAll() // 그 외에 는 접근 허용
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .loginPage("/login")
-                                .defaultSuccessUrl("/", true)
+                                .loginPage("/login")  // 로그인 페이지 설정
+//                                .defaultSuccessUrl("/userEdit", true) // 성공 시 이동할 페이지 설정
+                                .defaultSuccessUrl("/loginSuccess") // 성공 시 이동할 페이지 설정
                 )
                 .formLogin(login -> login
                         .usernameParameter("userId")
                         .passwordParameter("userPw")
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/"))
-
+                        .loginPage("/login") // 로그인 페이지 설정
+                        .defaultSuccessUrl("/") // 성공 시 이동할 페이지 설정
+                )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/") // 로그아웃 성공시 메인페이지로 갈수있게
+                        .logoutSuccessUrl("/") // 로그아웃 성공 시 메인페이지로 갈 수 있게
                         .invalidateHttpSession(true)) // 세션에 정보 삭제
 //                .sessionManagement(session -> session
 //                        .invalidSessionUrl("/login?invalid-session=true"))
+        // http > https 설정
+                .requiresChannel(channel ->
+                        channel.anyRequest().requiresSecure()
+                );
         ;
 
 
@@ -56,6 +59,4 @@ public class SecurityConfig  {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }

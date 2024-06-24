@@ -14,7 +14,6 @@
     <section class="signup">
         <h2 class="tit">회원가입</h2>
         <p class="back-login">이미 계정이 있으신가요? <a class="bk-link" href="/login">로그인 하러 가기</a></p>
-        <button class="kakao-login">카카오 로그인</button>
 
         <form action="/join" method="post" onsubmit="return validateForm();">
             <label for="userId">아이디 <strong>*</strong></label>
@@ -36,32 +35,32 @@
             <label for="phone">휴대전화 <strong>*</strong></label>
             <label for="phone">
                 <input id="phone" name="phone" type="hidden" value="">
-                <input id="phone1" name="phone1" maxlength="3" size="3" type="tel" required> -
-                <input id="phone2" name="phone2" maxlength="4" size="4" type="tel" required> -
-                <input id="phone3" name="phone3" maxlength="4" size="4" type="tel" required>
+                <input id="phone1" name="phone1" maxlength="3" size="3" type="tel" required pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');"> -
+                <input id="phone2" name="phone2" maxlength="4" size="4" type="tel" required pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');"> -
+                <input id="phone3" name="phone3" maxlength="4" size="4" type="tel" required pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
             </label>
             <br><br>
 
             <label class="col-sm-2 col-form-label">주소 <span class="text-danger">*</span></label>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_postcode" name="p_code" placeholder="우편번호" required>
-                <input type="button" class="address" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
+                <input type="text" class="address form-control" id="sample4_postcode" name="p_code" placeholder="우편번호" required>
+                <input type="button" class="address btn-secondary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" required>
-                <input type="text" class="address" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" required>
+                <input type="text" class="address form-control" id="sample4_roadAddress" name="loadAddr" placeholder="도로명주소" required>
+                <input type="text" class="address form-control" id="sample4_jibunAddress" name="lotAddr" placeholder="지번주소" required>
             </div>
             <div class="address-group">
-                <input type="text" class="address" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" required>
-                <input type="text" class="address" id="sample4_extraAddress" placeholder="참고항목">
+                <input type="text" class="address form-control" id="sample4_detailAddress" name="detailAddr" placeholder="상세주소" required>
+                <input type="text" class="address form-control" id="sample4_extraAddress" placeholder="참고항목">
             </div>
             <span id="guide" style="color:#999;display:none"></span>
 
             <label for="email">이메일 <strong>*</strong></label>
             <div class="input-group">
-                <input class="form-control" id="email" placeholder="이메일" style="max-width: 150px;" type="text" required>
+                <input class="form-control" id="email" placeholder="이메일" type="text" required>
                 <span class="input-group-text">@</span>
-                <input class="form-control" id="email-domain" placeholder="직접입력" style="max-width: 150px;" type="text" required>
+                <input class="form-control" id="email-domain" placeholder="직접입력" type="text" required>
                 <select class="form-select" style="max-width: 120px;" id="domain-select" onchange="updateEmailValue()">
                     <option value="">직접입력</option>
                     <option value="naver.com">naver.com</option>
@@ -74,18 +73,22 @@
 
             <div>
                 <label>이메일 수신여부 <strong>*</strong></label>
-                <input id="receive-email" name="email-opt" type="radio" value="receive">
-                <label for="receive-email">수신함</label>
-                <input checked id="no-receive-email" name="email-opt" type="radio" value="no-receive">
-                <label for="no-receive-email">수신안함</label>
+                <div>
+                    <input id="receive-email" name="email-opt" type="radio" value="receive">
+                    <label for="receive-email">수신함</label>
+                    <input checked id="no-receive-email" name="email-opt" type="radio" value="no-receive">
+                    <label for="no-receive-email">수신안함</label>
+                </div>
             </div>
 
             <div>
                 <label>SMS 수신여부 <strong>*</strong></label>
-                <input id="receive-sms" name="sms-opt" type="radio" value="receive">
-                <label for="receive-sms">수신함</label>
-                <input checked id="no-receive-sms" name="sms-opt" type="radio" value="no-receive">
-                <label for="no-receive-sms">수신안함</label>
+                <div>
+                    <input id="receive-sms" name="sms-opt" type="radio" value="receive">
+                    <label for="receive-sms">수신함</label>
+                    <input checked id="no-receive-sms" name="sms-opt" type="radio" value="no-receive">
+                    <label for="no-receive-sms">수신안함</label>
+                </div>
             </div>
 
             <div>
@@ -98,6 +101,7 @@
 
             // 모든 필드가 채워져 있는지 확인하는 함수
             function validateForm() {
+                removeWhitespace();
                 const requiredFields = document.querySelectorAll("input[required]");
                 for (let field of requiredFields) {
                     if (!field.value) {
@@ -149,9 +153,9 @@
                 return true;
             }
 
-            document.getElementById("phone1").addEventListener("change", updatePhoneValue);
-            document.getElementById("phone2").addEventListener("change", updatePhoneValue);
-            document.getElementById("phone3").addEventListener("change", updatePhoneValue);
+            document.getElementById("phone1").addEventListener("input", updatePhoneValue);
+            document.getElementById("phone2").addEventListener("input", updatePhoneValue);
+            document.getElementById("phone3").addEventListener("input", updatePhoneValue);
 
             // 이메일 도메인 선택 시 값 업데이트 함수
             function updateEmailValue() {
@@ -180,17 +184,6 @@
             document.getElementById("email").addEventListener("input", emailHiddenInput);
             document.getElementById("email-domain").addEventListener("input", emailHiddenInput);
 
-            document.querySelector('.kakao-login').addEventListener('click', function () {
-                var width = 500;
-                var height = 600;
-                var left = (screen.width / 2) - (width / 2);
-                var top = (screen.height / 2) - (height / 2);
-
-                var popupUrl = 'http://localhost/join'; // 여기에 팝업으로 띄울 URL을 입력하세요
-
-                window.open(popupUrl, '로그인 팝업', 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
-            });
-
             // 아이디 중복 확인 함수
             document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('checkDuplicate').addEventListener('click', function (event) {
@@ -200,6 +193,10 @@
                         alert('아이디를 입력해 주세요.');
                         return;
                     }
+                    // 서버에 보내기전에 공백 제거
+                    userId = userId.replace(/\s+/g, '');
+                    document.getElementById('userId').value = userId;
+
 
                     let xhr = new XMLHttpRequest();
                     xhr.open('GET', '/checkUserId?userId=' + encodeURIComponent(userId), true);
@@ -323,6 +320,15 @@
                 );
                 google.accounts.id.prompt(); // also display the One Tap dialog
             }
+
+            // 공백 제거 함수
+            function removeWhitespace() {
+                const userIdField = document.getElementById('userId');
+                userIdField.value = userIdField.value.replace(/\s+/g, '');
+            }
+
+
+
         </script>
     </section>
 </div>

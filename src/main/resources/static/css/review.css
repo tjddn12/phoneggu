@@ -12,6 +12,17 @@
     padding: 70px 0;
 }
 /* 본문 */
+.input-group{
+    margin-bottom: 15px;
+}
+.img-div{
+    margin-bottom: 10px;
+}
+.filedError{
+    color: #bd2130;
+}
+
+
 .content-wrapper{
     width: 700px !important;
 }
@@ -132,4 +143,28 @@ li{
 }
 .buttonBox .writeBtn:hover{
     opacity: 93%;
+}
+
+.preview-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin: 10px;
+}
+
+.img-container {
+    position: relative;
+    display: inline-block;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 5px;
 }

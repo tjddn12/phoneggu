@@ -10,9 +10,14 @@ import com.jsbs.casemall.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -107,7 +112,6 @@ public class OrderService {
         return orderDtos;
     }
 
-
     // 기존에 있는 오더 있는지 확인
     @Transactional(readOnly = true)
     public OrderDto getExistingOrderDto(Users user) {
@@ -118,8 +122,7 @@ public class OrderService {
             List<OrderItemDto> orderItemDtos = existingOrder.getOrderItems().stream()
                     .map(OrderItemDto::new)
                     .collect(Collectors.toList());
-
-            return OrderDto.builder()
+            OrderDto dto =  OrderDto.builder()
                     .orderNo(existingOrder.getId())
                     .totalPrice(existingOrder.getOrderItems().stream().mapToInt(OrderDetail::getTotalPrice).sum())
                     .items(orderItemDtos)
@@ -127,7 +130,13 @@ public class OrderService {
                     .orderId(existingOrder.getOrderId())
                     .email(user.getEmail())
                     .phone(user.getPhone())
+                    .pCode(user.getPCode())
+                    .loadAddress(user.getLoadAddr())
+                    .lotAddress(user.getLotAddr())
+                    .detailAddress(user.getDetailAddr())
                     .build();
+            dto.tranceOther(dto.getPhone(),dto.getEmail());
+            return dto;
         }
         return null; // 기존 주문이 없으면 null 반환
     }
@@ -197,8 +206,7 @@ public class OrderService {
         List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
                 .map(OrderItemDto::new)
                 .collect(Collectors.toList());
-
-        return OrderDto.builder()
+        OrderDto dto = OrderDto.builder()
                 .orderNo(order.getId())
                 .orderId(order.getOrderId())
                 .totalPrice(totalAmount)
@@ -206,7 +214,14 @@ public class OrderService {
                 .userName(user.getName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .pCode(user.getPCode())
+                .loadAddress(user.getLoadAddr())
+                .lotAddress(user.getLotAddr())
+                .detailAddress(user.getDetailAddr())
                 .build();
+        dto.tranceOther(dto.getPhone(),dto.getEmail());
+
+        return dto;
     }
 
     // 주문 아이템 삭제
@@ -410,4 +425,57 @@ public class OrderService {
         return dto;
     }
 
+    public List<OrderDto> findOrdersByDateRange(LocalDate startDate, LocalDate endDate) {
+        log.info("{}", orderRepository.findAllByOrderDateBetween(startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay()).size());
+        List<Order> orders = orderRepository.findAllByOrderDateBetween(startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay());
+        List<OrderDto> orderDtos = new ArrayList<>();
+        for (Order order : orders) {
+            List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
+                    .map(OrderItemDto::new)
+                    .collect(Collectors.toList());
+
+            OrderDto dto = OrderDto.builder()
+                    .orderNo(order.getId())
+                    .totalPrice(order.getOrderItems().stream().mapToInt(OrderDetail::getTotalPrice).sum())
+                    .items(orderItemDtos)
+                    .userName(order.getUsers().getName())
+                    .orderId(order.getOrderId())
+                    .email(order.getUsers().getEmail())
+                    .phone(order.getUsers().getPhone())
+                    .pCode(order.getUsers().getPCode())
+                    .loadAddress(order.getUsers().getLoadAddr())
+                    .lotAddress(order.getUsers().getLotAddr())
+                    .detailAddress(order.getUsers().getDetailAddr())
+                    .orderTime(order.getOrderDate().toLocalDate())
+                    .build();
+            dto.tranceOther(dto.getPhone(), dto.getEmail());
+
+            orderDtos.add(dto);
+        }
+        return orderDtos;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderDto> orderPage(List<OrderDto> orderDtos, int page) {
+        Pageable pageable = PageRequest.of(page, 5); // 한 페이지에 표시할 항목 수 5로 고정
+
+        // OrderDto 리스트를 펼쳐서 개별 OrderItemDto로 변환
+        List<OrderDto> allItems = orderDtos.stream()
+                .flatMap(orderDto -> orderDto.getItems().stream().map(item -> {
+                    return OrderDto.builder()
+                            .orderNo(orderDto.getOrderNo())
+                            .orderTime(orderDto.getOrderTime())
+                            .orderId(orderDto.getOrderId())
+                            .items(List.of(item))
+
+                            .build();
+                }))
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allItems.size());
+
+        List<OrderDto> subList = allItems.subList(start, end);
+        return new PageImpl<>(subList, pageable, allItems.size());
+    }
 }

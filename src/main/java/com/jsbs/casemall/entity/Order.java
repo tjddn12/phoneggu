@@ -2,10 +2,7 @@ package com.jsbs.casemall.entity;
 
 import com.jsbs.casemall.constant.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -87,10 +84,5 @@ public class Order {
         this.payInfo = payInfo; // 결제 방식 추가
         this.paymentMethod = paymentMethod; // 결제 수단을 업데이트
     }
-
-
-
-
-
 
 }
