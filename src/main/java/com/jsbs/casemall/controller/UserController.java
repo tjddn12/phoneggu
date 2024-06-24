@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -193,7 +194,17 @@ public class UserController {
         }
 
     }
+    // 탈퇴
+    @PostMapping
+    public ResponseEntity<?> deleteUser(@RequestBody Map<String, String> request) {
+        String userId = request.get("userId");
 
-
+        try {
+            userService.deleteUserById(userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 중 오류가 발생하였습니다.");
+        }
+    }
 
 }

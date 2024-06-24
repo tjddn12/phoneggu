@@ -220,3 +220,8 @@ form button {
         font-size: 13px;
     }
 }
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+}

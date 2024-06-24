@@ -164,7 +164,10 @@ public class UserService implements UserDetailsService {
         return result;
     }
 
-
+    // 탈퇴
+        public void deleteUserById(String userId) {
+            userRepository.deleteById(userId);
+        }
 
 
 }

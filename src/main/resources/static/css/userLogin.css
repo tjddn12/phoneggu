@@ -101,8 +101,11 @@ input[type="text"], input[type="password"] {
   text-decoration: none;
   box-sizing: border-box;
 }
-
+.error-message{
+  color: red;
+}
 .kakao-login {
+  margin-top: 60px;
   background-color: #FFEB00;
   color: #000;
 }
