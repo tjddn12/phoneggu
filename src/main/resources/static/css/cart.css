@@ -128,4 +128,9 @@ body {
         margin: 0;
     }
 
+    .summary .table thead th {
+        font-size: 1em;
+        font-weight: bold;
+        white-space: nowrap;
+    }
 }

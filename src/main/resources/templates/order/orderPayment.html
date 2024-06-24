@@ -92,7 +92,7 @@
 
         <table class="table tbBot">
             <th class="actionOff">[<span class="shipping">기본배송</span>]</th>
-            <td>상품구매금액 <span class="sumPrice bb " th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원 + 배송비 <span class="cost bb">0</span>원 = 합계 <span
+            <td>상품<span class="sumPrice bb " th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원+배송비<span class="cost bb">0</span>원=합계<span
                     class="sumTotalPrice bb" th:text="${#numbers.formatDecimal(order.getTotalPrice(), 0, 'COMMA', 0, 'COMMA')}">0</span>원
             </td>
         </table>

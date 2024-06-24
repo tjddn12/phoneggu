@@ -158,11 +158,14 @@ input[type="text"], input[type="password"] {
   form {
     width: 400px;
     height: 150px;
-    /* align-items: center; */
+    align-items: center;
     margin-bottom: 20px;
+    box-sizing: border-box;
+    position: relative;
   }
   input[type="text"], input[type="password"] {
-    width: 250px;
+    min-width: 100px;
+    max-width: 250px;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
