@@ -70,7 +70,7 @@
         <!-- 실제 DB에 저장된 상품 나열 -->
         <div class="product-list cf" id="product-list" th:fragment="product-list">
             <div class="product" th:each="product : ${indexProducts}">
-                <div class="product-item" style="display: none;">
+                <div class="product-item" th:if="${product.productImgList.size() > 0}" style="display: none;">
                     <div class="product-image">
                         <a th:href="@{'/product/' + ${product.id}}">
                             <img th:src="@{${product.productImgList[0].imgUrl}}" th:alt="${product.prName} + ' 이미지'">
