@@ -21,7 +21,7 @@ public class ProductModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "product_model_select")
-    private ProductModelSelect productModelSelect = ProductModelSelect.DEFAULT_MODEL; // 기본값 설정
+    private ProductModelSelect productModelSelect; // 기본값 설정
 
     @Column(name = "pr_stock")
     private Integer prStock=0;

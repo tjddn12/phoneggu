@@ -163,6 +163,7 @@ a { text-decoration: none;  color: #000; }
         left: 50%;
         transform: translate(-50%);
         bottom: 50px;
+        font-size: 10px;
     }
     .top_right{
         right: 50%;
@@ -174,7 +175,9 @@ a { text-decoration: none;  color: #000; }
     .navigation li {
         padding-left: 10px;
     }
-
+    .navigation li a{
+        font-size: 12px;
+    }
     .top_right li {
         float: left;
         /*margin-right: 10px;*/
