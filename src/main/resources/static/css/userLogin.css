@@ -155,6 +155,27 @@ input[type="text"], input[type="password"] {
 }
 
 @media (max-width: 767px) {
+  form {
+    width: 400px;
+    height: 150px;
+    /* align-items: center; */
+    margin-bottom: 20px;
+  }
+  input[type="text"], input[type="password"] {
+    width: 250px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    height: 50px;
+  }
+  .login-button {
+    max-width: 80px;
+    height: 100px;
+    background-color: #003366;
+    color: #fff;
+    margin-bottom: 20px;
+    margin-left: -50px;
+  }
   .login-id {
     margin-left: 0;
   }
