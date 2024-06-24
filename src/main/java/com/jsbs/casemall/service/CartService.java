@@ -82,7 +82,9 @@ public class CartService {
 //
 
     // 비우기 메소드
-    public void clearCart(String userId) {
+    public void clearCart(String orderId) {
+        Order order = orderRepository.findByOrderId(orderId).orElseThrow(()-> new IllegalArgumentException("주문 정보가 없습니다!"));
+        String userId = order.getUsers().getUserId();
         Users user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을수 없습니다"));
         Cart cart = cartRepository.findByUser(user);
         if (cart != null) {

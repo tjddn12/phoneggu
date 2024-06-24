@@ -1,9 +1,6 @@
 package com.jsbs.casemall.controller;
 
-import com.jsbs.casemall.dto.AddUserRequest;
-import com.jsbs.casemall.dto.UserDto;
-import com.jsbs.casemall.dto.UserEditDto;
-import com.jsbs.casemall.dto.UserPwRequestDto;
+import com.jsbs.casemall.dto.*;
 import com.jsbs.casemall.entity.Users;
 import com.jsbs.casemall.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,7 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -22,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -98,7 +98,11 @@ public class UserController {
 
     // 마이페이지
     @GetMapping("/myPage")
-    public String myPage() {
+    public String myPage(Principal principal, Model model) {
+        String userId = principal.getName();
+        MypageDto dto = userService.myPageCompleteCount(userId);
+        model.addAttribute("count", dto);
+
         return "user/myPage";
     }
 
@@ -173,4 +177,34 @@ public class UserController {
                 SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/login";
     }
+
+    // 소셜 로그인 성공시 정보수정한 사람과 아닌 사람 구분
+    @GetMapping("/loginSuccess")
+    public String loginSuccess(Principal principal) throws Exception {
+        String userid = principal.getName();
+        log.info("소셜 아이디 존재 여부 : {} ",userid);
+        boolean edit = userService.isProfileComplete(userid);
+        log.info("리턴값 : {} ",edit);
+        if(edit){
+            // true 반환시 메인 페이지로
+            return "redirect:/";
+        }else{
+            // false 회원수정 페이지로
+            return "redirect:userEdit";
+        }
+
+    }
+    // 탈퇴
+    @PostMapping
+    public ResponseEntity<?> deleteUser(@RequestBody Map<String, String> request) {
+        String userId = request.get("userId");
+
+        try {
+            userService.deleteUserById(userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 중 오류가 발생하였습니다.");
+        }
+    }
+
 }

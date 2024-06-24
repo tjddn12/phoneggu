@@ -28,7 +28,7 @@
 <!--                <div class="product-sell-status" th:classappend="${product.productSellStatus.name() == 'SOLD_OUT' ? 'sold-out' : ''}">-->
 <!--                    판매 상태: <span th:text="${product.productSellStatus.name() == 'SELL' ? '판매중' : '품절'}"></span>-->
 <!--                </div>-->
-                <div class="price">판매가 : <span th:text="${product.prPrice}"></span> 원</div>
+                <div class="price">판매가 : <span th:text="${#numbers.formatDecimal(product.prPrice, 0, 'COMMA', 0, 'COMMA')}"></span> 원</div>
                 <div class="shipping">배송비: 0원 (무료!!)</div>
 
                 <div class="options">

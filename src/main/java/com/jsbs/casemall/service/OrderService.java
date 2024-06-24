@@ -122,8 +122,7 @@ public class OrderService {
             List<OrderItemDto> orderItemDtos = existingOrder.getOrderItems().stream()
                     .map(OrderItemDto::new)
                     .collect(Collectors.toList());
-
-            return OrderDto.builder()
+            OrderDto dto =  OrderDto.builder()
                     .orderNo(existingOrder.getId())
                     .totalPrice(existingOrder.getOrderItems().stream().mapToInt(OrderDetail::getTotalPrice).sum())
                     .items(orderItemDtos)
@@ -131,7 +130,13 @@ public class OrderService {
                     .orderId(existingOrder.getOrderId())
                     .email(user.getEmail())
                     .phone(user.getPhone())
+                    .pCode(user.getPCode())
+                    .loadAddress(user.getLoadAddr())
+                    .lotAddress(user.getLotAddr())
+                    .detailAddress(user.getDetailAddr())
                     .build();
+            dto.tranceOther(dto.getPhone(),dto.getEmail());
+            return dto;
         }
         return null; // 기존 주문이 없으면 null 반환
     }
@@ -201,8 +206,7 @@ public class OrderService {
         List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
                 .map(OrderItemDto::new)
                 .collect(Collectors.toList());
-
-        return OrderDto.builder()
+        OrderDto dto = OrderDto.builder()
                 .orderNo(order.getId())
                 .orderId(order.getOrderId())
                 .totalPrice(totalAmount)
@@ -210,7 +214,14 @@ public class OrderService {
                 .userName(user.getName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .pCode(user.getPCode())
+                .loadAddress(user.getLoadAddr())
+                .lotAddress(user.getLotAddr())
+                .detailAddress(user.getDetailAddr())
                 .build();
+        dto.tranceOther(dto.getPhone(),dto.getEmail());
+
+        return dto;
     }
 
     // 주문 아이템 삭제
@@ -456,6 +467,7 @@ public class OrderService {
                             .orderTime(orderDto.getOrderTime())
                             .orderId(orderDto.getOrderId())
                             .items(List.of(item))
+
                             .build();
                 }))
                 .collect(Collectors.toList());

@@ -1,0 +1,21 @@
+/* 전체 콘텐츠 영역 가운데 정렬 */
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 개별 요소들 가운데 정렬 */
+.container {
+    max-width: 800px; /* 원하는 최대 너비 설정 */
+    margin: 0 auto;
+    text-align: center;
+}
+
+#big{
+    font-size: 2em; /* 기존 폰트 크기의 1.2배 */
+}
+
+/* 버튼들 사이 간격 조정 */
+.btn {
+  margin-right: 10px;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>phoneGGU</title>
     <link rel="stylesheet" th:href="@{/css/index2.css}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script defer th:src="@{/js/index.js}"></script>
@@ -81,7 +81,7 @@
                             <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
                         </p>
                         <div class="price-info">
-                            <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${product.prPrice}"></span>원</a></span>
+                            <span class="original-price"><a class="no-click" href="#"><span th:text="'KRW ' + ${#numbers.formatDecimal(product.prPrice, 0, 'COMMA', 0, 'COMMA')}"></span>원</a></span>
                         </div>
                     </div>
                 </div>

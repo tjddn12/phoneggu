@@ -16,6 +16,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${productImgLocation}")
     private String productImgLocation;
 
+    @Value("${reviewuploadPath}")
+    String reviewuploadPath;
+    @Value("${reviewImgLocation}")
+    private String reviewImgLocation;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
@@ -27,6 +32,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/product/**")
                 .addResourceLocations("file:///" + uploadPath + "/")
                 .addResourceLocations("file:" + productImgLocation + "/");
+
+        registry.addResourceHandler("/images/review/**")
+                .addResourceLocations("file:///" + reviewuploadPath + "/")
+                .addResourceLocations("file:" + reviewImgLocation + "/");
 
         registry.addResourceHandler("/order/pay/**")
                 .addResourceLocations("classpath:/templates/pay/")

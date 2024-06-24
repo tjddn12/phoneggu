@@ -93,7 +93,7 @@ public class Users {
                 .detailAddr(userDto.getDetailAddr())
                 .extraAddr(userDto.getExtraAddr()) // 추가된 필드
                 .userPw(encodedPassword)
-                .role(Role.ADMIN)
+                .role(Role.USER)
                 .build();
     }
 }

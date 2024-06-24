@@ -26,3 +26,6 @@ function search() {
     let endDate = document.getElementById('endDate').value;
     window.location.href = `/order/search?startDate=${startDate}&endDate=${endDate}`;
 }
+
+
+

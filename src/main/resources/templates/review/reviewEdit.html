@@ -1,0 +1,52 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="ko" layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta content="width=device-width, initial-scale=1.0" name="viewport">-->
+<!--    <title>리뷰 수정 | 폰꾸</title>-->
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--    &lt;!&ndash;    JAVAScript: JQuery 라이브러리가 먼저 로드되고 바로 JS 코드가 로드되어야 작동함.&ndash;&gt;-->
+<!--    &lt;!&ndash;    CSS&ndash;&gt;-->
+<!--    <link rel="stylesheet" th:href="@{/css/reviewDetail.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div layout:fragment="content">-->
+<!--    <div class="container my-5">-->
+<!--        <h1>리뷰 수정</h1>-->
+<!--        <form th:action="@{/reviews/{id}/edit(id=${reviewFormDto.id})}" th:object="${reviewFormDto}" method="post"-->
+<!--              enctype="multipart/form-data">-->
+<!--            <div class="form-group">-->
+<!--                <label for="revwTitle">제목</label>-->
+<!--                <input type="text" id="revwTitle" class="form-control" th:field="*{revwTitle}" required>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="revwContent">내용</label>-->
+<!--                <textarea id="revwContent" class="form-control" rows="5" th:field="*{revwContent}" required></textarea>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="revwRatings">평점</label>-->
+<!--                <input type="number" id="revwRatings" class="form-control" th:field="*{revwRatings}" required>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; 이미지 업로드 관련 필드 &ndash;&gt;-->
+<!--            <div class="form-group">-->
+<!--                <label for="reviewImgFile">리뷰 이미지 업로드</label>-->
+<!--                <input type="file" id="reviewImgFile" class="form-control-file" name="reviewImgFile" multiple>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; 현재 리뷰 이미지 미리 보기 &ndash;&gt;-->
+<!--            <div th:if="${reviewImgs != null && reviewImgs.size() > 0}">-->
+<!--                <h5>현재 리뷰 이미지</h5>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-md-3" th:each="img : ${reviewImgs}">-->
+<!--                        <img th:src="@{|/images/${img.filename}|}" class="img-thumbnail" alt="Review Image">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <button type="submit" class="btn btn-primary">수정 완료</button>-->
+<!--        </form>-->
+<!--        <a th:href="@{/reviews}" class="btn btn-secondary">목록으로 돌아가기</a>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
