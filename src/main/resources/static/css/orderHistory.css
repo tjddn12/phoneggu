@@ -118,6 +118,20 @@ table{
     .phone-actionOff{display: none;}
     .phone-actionOn{display: block;}
 
+    .search_bar {
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        white-space: nowrap;
+    }
+    .search_bar button{
+        font-size: 12px;
+    }
+
     .phone-order-item {
         border: 1px solid #ddd;
         border-radius: 5px;

@@ -38,7 +38,7 @@ public class HomeController {
     // 주문시 비로그인 일때 나오는 페이지
     @GetMapping("/test/login")
     String test4(){
-        return "user/orderLogin";
+        return "user/userLogin";
     }
     // 로그인
     @GetMapping("/test/login2")

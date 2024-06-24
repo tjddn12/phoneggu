@@ -167,6 +167,9 @@ h1 {
 }
 
 @media (max-width: 767px) {
+    .balance-item p {
+        font-size: 12px;
+    }
     .order-status {
         width: 100%;
     }

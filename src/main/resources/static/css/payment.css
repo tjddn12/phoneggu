@@ -181,4 +181,10 @@ li {
         width: 20%;
     }
 
+    .summary .table thead th {
+        font-size: 1em;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
 }
