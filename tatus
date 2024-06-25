@@ -1,0 +1,30 @@
+[33mcommit aae01cebd158241ea3057eb1e02fd5f94587b801[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: sungwoo <hwang55285@naver.com>
+Date:   Tue Jun 25 21:11:46 2024 +0900
+
+    회원가입 수정
+
+[33mcommit 128450a9484b095b034f7301f5fc6efca3e4dbc9[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: sungwoo <144875842+tjddn12@users.noreply.github.com>
+Date:   Tue Jun 25 12:52:11 2024 +0900
+
+    폰꾸 소개
+
+[33mcommit 41fa8791fde0adf8c4777c360b678f3d7c09bb4d[m[33m ([m[1;31morigin/reviewfixed[m[33m)[m
+Author: sungwoo <hwang55285@naver.com>
+Date:   Tue Jun 25 12:39:05 2024 +0900
+
+    Remove application.properties from repository
+
+[33mcommit 99d77686705afb77dcffa7d1364b4a9f8f9b80bd[m
+Author: sungwoo <hwang55285@naver.com>
+Date:   Tue Jun 25 12:31:04 2024 +0900
+
+    최종작업
+
+[33mcommit e0d5c89d4bf61b211967062d66d3090ffd7bd337[m
+Merge: 55d71f9 0c6e623
+Author: sungwoo <hwang55285@naver.com>
+Date:   Tue Jun 25 11:15:27 2024 +0900
+
+    Merge remote-tracking branch 'refs/remotes/origin/kbcTest'
