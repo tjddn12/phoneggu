@@ -3,6 +3,7 @@ package com.jsbs.casemall.service;
 import com.jsbs.casemall.entity.ReviewImg;
 import com.jsbs.casemall.repository.ReviewImgRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ReviewImgService {
     @Value("${reviewImgLocation}")
     private String reviewImgLocation;
@@ -19,11 +21,6 @@ public class ReviewImgService {
     private final ReviewImgRepository reviewImgRepository;
     private final FileService fileService;
 
-    @Autowired
-    public ReviewImgService(ReviewImgRepository reviewImgRepository, FileService fileService) {
-        this.reviewImgRepository = reviewImgRepository;
-        this.fileService = fileService;
-    }
 
     public void saveReviewImg(ReviewImg reviewImg, MultipartFile reviewImgFile) throws Exception{
         //reviewImg: 리뷰 이미지 정보
@@ -39,6 +36,7 @@ public class ReviewImgService {
         //리뷰 이미지 정보 저장
         reviewImg.updateReviewImg(oriImgName, imgName, imgUrl);
         //원본 이미지 이름, 이미지 이름, 이미지 URL 업데이트
+
         reviewImgRepository.save(reviewImg);
     }
     public void updateReviewImg(Long reviewImgId, MultipartFile reviewImgFile) throws Exception{

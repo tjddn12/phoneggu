@@ -3,6 +3,7 @@ package com.jsbs.casemall.controller;
 import com.jsbs.casemall.dto.ArticleForm;
 import com.jsbs.casemall.entity.Article;
 import com.jsbs.casemall.service.ArticleService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,9 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class ArticleApiController {
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
     //전체 게시글 불러오기
     @GetMapping("/api/qnas")
     public List<Article> index(){
@@ -26,6 +27,7 @@ public class ArticleApiController {
     public Article show(@PathVariable Long id){
         return articleService.show(id);
     }
+
     @PostMapping("/api/qnas")
     public ResponseEntity<Article> create(@RequestBody ArticleForm dto){
         Article created = articleService.create(dto);

@@ -69,7 +69,7 @@ public class ReviewService {
         // 사용자 찾기
         Users user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾는 사용자가 없습니다"));
         Product product = productRepository.findById(reviewFormDto.getProductId()).orElseThrow(()->new IllegalArgumentException("상품이 없습니다"));
-
+        log.info("들어온 이미지 리스트 : {} ",reviewImgFileList);
 
         //리뷰 등록
         Review review = reviewFormDto.createReview();
@@ -79,11 +79,12 @@ public class ReviewService {
 
         reviewRepository.save(review);
         //이미지 등록
-//        for(int i = 0; i < reviewImgFileList.size(); i++){
-//            ReviewImg reviewImg = new ReviewImg();
-//            reviewImg.setReview(review);
-//            reviewImgService.saveReviewImg(reviewImg, reviewImgFileList.get(i));
-//        }
+        for(int i = 0; i < reviewImgFileList.size(); i++){
+            ReviewImg reviewImg = new ReviewImg();
+            reviewImg.setReview(review);
+            reviewImgService.saveReviewImg(reviewImg, reviewImgFileList.get(i));
+            log.info("img : {} ",reviewImg);
+        }
     }
     @Transactional
     public void deleteReview(Long reviewNo){

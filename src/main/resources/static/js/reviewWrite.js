@@ -50,3 +50,60 @@ $(document).ready(function() {
         }
     }
 });
+// 유효성 검사
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('writeForm');
+    form.addEventListener('submit', function(event) {
+        let isEmpty = true; // 모든 필드가 비어있는지 확인하는 플래그
+
+        // 리뷰 제목 검증
+        const title = document.querySelector('input[name="revwTitle"]');
+        if (!title.value.trim()) {
+            alert('제목을 입력해주세요.');
+            title.focus();
+            event.preventDefault(); // 폼 제출 막기
+            return;
+        } else {
+            isEmpty = false;
+        }
+
+        // 별점 검증
+        const ratings = document.querySelector('input[name="revwRatings"]:checked');
+        if (!ratings) {
+            alert('별점을 선택해주세요.');
+            document.querySelector('input[name="revwRatings"]').focus();
+            event.preventDefault(); // 폼 제출 막기
+            return;
+        } else {
+            isEmpty = false;
+        }
+
+        // 리뷰 내용 검증
+        const content = document.querySelector('textarea[name="revwContent"]');
+        if (!content.value.trim()) {
+            alert('내용을 입력해주세요.');
+            content.focus();
+            event.preventDefault(); // 폼 제출 막기
+            return;
+        } else {
+            isEmpty = false;
+        }
+        // 이미지 파일 검증
+        const images = document.getElementById('reviewImgFile').files;
+        if (images.length === 0) {
+            alert('이미지를 추가해주세요.');
+            document.getElementById('reviewImgFile').focus();
+            event.preventDefault(); // 폼 제출 막기
+            return;
+        } else {
+            isEmpty = false;
+        }
+
+        // 모든 필드가 비어있는 경우
+        if (isEmpty) {
+            alert('리뷰를 입력해주세요.');
+            title.focus();
+            event.preventDefault(); // 폼 제출 막기
+        }
+    });
+});

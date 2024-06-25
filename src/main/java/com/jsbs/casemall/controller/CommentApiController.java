@@ -2,6 +2,7 @@ package com.jsbs.casemall.controller;
 
 import com.jsbs.casemall.dto.CommentDto;
 import com.jsbs.casemall.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class CommentApiController {
-    @Autowired
-    private CommentService commentService;
+
+    private final CommentService commentService;
     //댓글 목록 조회
     @GetMapping("/api/qnas/{articleId}/comments")
     public ResponseEntity<List<CommentDto>> comment(@PathVariable Long articleId) {

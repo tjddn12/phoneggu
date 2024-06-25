@@ -6,6 +6,7 @@ import com.jsbs.casemall.entity.Comment;
 import com.jsbs.casemall.repository.ArticleRepository;
 import com.jsbs.casemall.repository.CommentRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,10 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CommentService {
-    @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
+    private final ArticleRepository articleRepository;
     //댓글이 달린 게시글도 가져와야하므로 ArticleRepository도 함께 가져오기
     public List<CommentDto> comments(Long articleId){
         //조회: 댓글 목록 조회(게시글 아이디를 통해 해당 게시글의 댓글 목록 조회)

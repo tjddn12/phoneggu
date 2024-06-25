@@ -32,7 +32,12 @@ public class FileService {
 
         return savedFileName; //업로드된 파일 이름 반환
     }
+
     public String reviewUploadFile(String reviewUploadPath,String originalFileName, byte[] fileData) throws Exception{
+        Path path = Paths.get(reviewUploadPath).toAbsolutePath().normalize();
+        if (!Files.exists(path)) {
+            Files.createDirectories(path); // 디렉토리가 없으면 생성
+        }
         UUID uuid = UUID.randomUUID(); //파일 이름 생성
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         //lastIndexOf() 메서드는 문자열에서 지정된 문자또는  문자열이 마지막으로 등장하는 위치 인덱스 반환

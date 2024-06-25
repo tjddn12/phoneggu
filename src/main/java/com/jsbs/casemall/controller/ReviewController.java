@@ -76,6 +76,7 @@ public class ReviewController {
         }
 
         try {
+            log.info("리뷰 이미지 확인 : {}",reviewImgFileList.size());
             reviewService.saveReview(reviewFormDto, reviewImgFileList, userId);
         } catch (Exception e) {
             log.info("문제 발생 {} " , e.getMessage());
