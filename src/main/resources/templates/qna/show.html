@@ -25,13 +25,14 @@
         </th:block>
         <a th:href="@{/qnas}">질문 목록으로</a>
         <!--------------- 답변 --------------->
-        <div id="comments-list"  sec:authorize="hasRole('ADMIN')">
+        <div id="comments-list" >
             <div th:each="comment : ${comments}">
                 <div class="card" th:id="'comments-' + ${comment.id}">
                     <div class="card-header">
                         <span th:text="관리자"></span>
                         <!-- Button trigger modal -->
                         <button type="button"
+                                sec:authorize="hasRole('ADMIN')"
                                 class="btn btn-sm btn-outline-success m-2"
                                 data-bs-toggle="modal"
                                 data-bs-target="#comment-edit-modal"
@@ -43,6 +44,7 @@
                         </button>
                         <!-- 수정버튼 옆에 삭제 버튼 추가 -->
                         <button type="button"
+                                sec:authorize="hasRole('ADMIN')"
                                 class="btn btn-sm btn-outline-danger m-2 comment-delete-btn"
                                 th:attr="data-comment-id=${comment.id}">
                             삭제

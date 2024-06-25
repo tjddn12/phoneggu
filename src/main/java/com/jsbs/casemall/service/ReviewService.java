@@ -79,11 +79,11 @@ public class ReviewService {
 
         reviewRepository.save(review);
         //이미지 등록
-        for(int i = 0; i < reviewImgFileList.size(); i++){
-            ReviewImg reviewImg = new ReviewImg();
-            reviewImg.setReview(review);
-            reviewImgService.saveReviewImg(reviewImg, reviewImgFileList.get(i));
-        }
+//        for(int i = 0; i < reviewImgFileList.size(); i++){
+//            ReviewImg reviewImg = new ReviewImg();
+//            reviewImg.setReview(review);
+//            reviewImgService.saveReviewImg(reviewImg, reviewImgFileList.get(i));
+//        }
     }
     @Transactional
     public void deleteReview(Long reviewNo){

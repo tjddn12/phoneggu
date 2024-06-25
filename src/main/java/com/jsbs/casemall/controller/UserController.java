@@ -195,9 +195,11 @@ public class UserController {
 
     }
     // 탈퇴
-    @PostMapping
+    @PostMapping("/userDelete")
     public ResponseEntity<?> deleteUser(@RequestBody Map<String, String> request) {
         String userId = request.get("userId");
+        log.info("user id : {} ", userId);
+
 
         try {
             userService.deleteUserById(userId);

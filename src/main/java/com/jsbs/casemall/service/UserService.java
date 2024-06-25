@@ -166,7 +166,9 @@ public class UserService implements UserDetailsService {
 
     // 탈퇴
         public void deleteUserById(String userId) {
-            userRepository.deleteById(userId);
+            Users users = userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException("찾는 유저가 없습니다"));
+
+            userRepository.delete(users);
         }
 
 
