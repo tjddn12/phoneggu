@@ -17,16 +17,16 @@
 
         <form action="/join" method="post" onsubmit="return validateForm();">
             <label for="userId">아이디 <strong>*</strong></label>
-            <input id="userId" name="userId" type="text" required>
+            <input id="userId" name="userId" type="text" required placeholder="아이디 입력">
             <button type="button" id="checkDuplicate">중복 확인</button>
             <span id="duplicateCheckResult"></span>
             <br><br>
 
             <label for="userPw">비밀번호 <strong>*</strong></label>
-            <input id="userPw" name="userPw" type="password" required>
+            <input id="userPw" name="userPw" type="password" required  placeholder="비밀번호 입력(6 ~ 16자 사이)">
 
             <label for="confirm-userPw">비밀번호 확인 <strong>*</strong></label>
-            <input id="confirm-userPw" name="confirm-userPw" type="password" required>
+            <input id="confirm-userPw" name="confirm-userPw" type="password" required placeholder="비밀번호 재입력">
             <div id="passwordCheckResult"></div>
 
             <label for="name">이름 <strong>*</strong></label>
