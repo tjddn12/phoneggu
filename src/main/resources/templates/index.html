@@ -77,7 +77,7 @@
                         </a>
                     </div>
                     <div class="product-info">
-                        <p class="product-name">
+                        <p class="product-name" th:title="${product.prName}">
                             <a th:href="@{'/product/' + ${product.id}}"><span th:text="${product.prName}"></span></a>
                         </p>
                         <div class="price-info">
