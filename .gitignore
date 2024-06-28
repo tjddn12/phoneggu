@@ -40,4 +40,5 @@ out/
 
 
 ### 제외 목록 ###
+application.properties
 
