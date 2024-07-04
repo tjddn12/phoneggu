@@ -1,6 +1,6 @@
 # PhoneGgu
 
-- 이젠 아카테미 파이널 프로젝트 : PhoneGgu.
+- 이젠 아카데미 파이널 프로젝트 : PhoneGgu.
 - 사이트 : https://phoneggu.shop/
 
 ## 주요 기능
