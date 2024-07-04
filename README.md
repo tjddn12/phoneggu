@@ -1,4 +1,4 @@
-# PhoneGgu
+# PhoneGGu
 
 - 이젠 아카데미 파이널 프로젝트 : PhoneGgu.
 - 사이트 : https://phoneggu.shop/
